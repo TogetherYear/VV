@@ -9,7 +9,7 @@ Debug.Instance.Run()
 
 <template>
     <div class="Debug">
-        <canvas class="Canvas" ref="canvas"></canvas>
+        <canvas class="Canvas" ref="canvas" tabindex="1"></canvas>
     </div>
 </template>
 

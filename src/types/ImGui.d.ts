@@ -166,6 +166,7 @@ declare namespace ImGui {
     export function SameLine(posX?: number, spacingW?: number): void;
     export function Checkbox(label: string, v: ImScalar<boolean> | ImAccess<boolean>): boolean;
     export function InputText<T>(label: string, buf: ImStringBuffer | ImAccess<string> | ImScalar<string>, buf_size?: number, flags?: ImGuiInputTextFlags, callback?: ImGuiInputTextCallback<T> | null, user_data?: T | null): boolean;
+    export function InputTextMultiline<T>(label: string, buf: ImStringBuffer | ImAccess<string> | ImScalar<string>, buf_size?: number, size?: Readonly<ImVec2>, flags?: ImGuiInputTextFlags, callback?: ImGuiInputTextCallback<T> | null, user_data?: T | null): boolean;
     export class ImStringBuffer {
         size: number;
         buffer: string;

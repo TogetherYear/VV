@@ -17,6 +17,7 @@ class Debug extends AActor {
 
     private demoWindow = {
         isShow: false,
+        label: '',
     }
 
     public InitStates() {
@@ -120,6 +121,7 @@ class Debug extends AActor {
         if (this.demoWindow.isShow) {
             ImGui.Begin("Demo Window", (value = this.demoWindow.isShow) => this.demoWindow.isShow = value);
             ImGui.Text("Demo Window")
+            ImGui.InputText("Label", (value = this.demoWindow.label) => this.demoWindow.label = value);
             ImGui.End();
         }
     }
