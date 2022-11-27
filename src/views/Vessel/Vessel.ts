@@ -25,7 +25,7 @@ class Vessel extends AActor {
     }
 
     public Test() {
-        window.NE_Message.success("Together丨233")
+        Message.success("Together丨233")
     }
 }
 
