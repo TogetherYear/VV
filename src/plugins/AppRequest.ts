@@ -18,6 +18,8 @@ class AppRequest extends EventSystem {
 
     private static isLogSuccess = false
 
+    private static outCode = 401
+
     public Run() {
         this.request = axios.create({
             headers: {
@@ -59,7 +61,7 @@ class AppRequest extends EventSystem {
             err => {
                 // console.log(err.config)
                 // console.log(err.response)
-                if (err.response?.status == 401) {
+                if (err.response?.status == AppRequest.outCode) {
                     Dialog.destroyAll()
                     Dialog.error({
                         title: 'Token过期',
