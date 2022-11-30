@@ -1,17 +1,17 @@
 import { createApp } from 'vue'
 
-import App from './App.vue'
+import AppVue from './App.vue'
 
 import router from './router'
 
-import naive from './naive'
+import { naive } from './naive'
 
 import pinia from './pinia'
 
 import { AppRequest } from './plugins/AppRequest'
 AppRequest.Instance.Run()
 
-createApp(App)
+createApp(AppVue)
   .use(router)
   .use(naive)
   .use(pinia)
