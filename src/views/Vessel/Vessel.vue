@@ -12,7 +12,7 @@ instance.Run()
 
 <template>
     <div class="Vessel">
-        <n-button strong secondary type="success" class="Btn" @click="instance.Test()">Emit</n-button>
+        <n-button type="primary" class="Btn" @click="instance.Test()">Emit</n-button>
     </div>
 </template>
 
