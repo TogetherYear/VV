@@ -1,21 +1,22 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Vessel from '../views/Vessel/Vessel.vue'
+
+import VesselVue from '../views/Vessel/Vessel.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    redirect: '/Vessel'
-  },
-  {
-    path: '/Vessel',
-    name: 'Vessel',
-    component: Vessel
-  }
+    {
+        path: '/',
+        redirect: '/Vessel'
+    },
+    {
+        path: '/Vessel',
+        name: 'Vessel',
+        component: VesselVue
+    }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+    history: createWebHashHistory(),
+    routes
 })
 
 export default router
