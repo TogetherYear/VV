@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import PreloadVue from './preload/Preload.vue';
-import DebugVue from './debug/Debug.vue';
+import ExperimentVue from './experiment/Experiment.vue';
 import { zhCN, dateZhCN } from 'naive-ui'
 import { themeOverrides } from './naive/index'
 import { App } from './App'
-import { Debug } from './debug/Debug'
+import { Experiment } from './experiment/Experiment'
 
 const {
-  isDebug
-} = Debug.Instance.InitStates()
+  isShow
+} = Experiment.Instance.InitStates()
 
 App.Instance.Run()
 </script>
@@ -17,7 +17,7 @@ App.Instance.Run()
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme-overrides="themeOverrides">
     <n-message-provider>
       <n-dialog-provider>
-        <DebugVue v-if="isDebug"></DebugVue>
+        <ExperimentVue v-if="isShow"></ExperimentVue>
         <PreloadVue></PreloadVue>
         <router-view />
       </n-dialog-provider>

@@ -2,10 +2,10 @@ import { onMounted, onUnmounted, ref, watch } from "vue"
 import { AActor } from "@/libs/AActor"
 import * as THREE from 'three'
 
-class Debug extends AActor {
+class Experiment extends AActor {
     private constructor() { super() }
 
-    private static instance: Debug = new Debug()
+    private static instance: Experiment = new Experiment()
 
     public static get Instance() { return this.instance }
 
@@ -13,7 +13,7 @@ class Debug extends AActor {
 
     private renderer: THREE.WebGLRenderer | null = null;
 
-    private isDebug = ref<boolean>(true)
+    private isShow = ref<boolean>(true)
 
     private demoWindow = {
         isShow: false,
@@ -23,7 +23,7 @@ class Debug extends AActor {
     public InitStates() {
         return {
             canvas: this.canvas,
-            isDebug: this.isDebug,
+            isShow: this.isShow,
         }
     }
 
@@ -45,7 +45,7 @@ class Debug extends AActor {
     }
 
     private async CreateImGui() {
-        if (this.canvas.value && Debug.Instance.isDebug.value) {
+        if (this.canvas.value && Experiment.Instance.isShow.value) {
             //@ts-ignore
             await ImGui.default();
 
@@ -87,7 +87,7 @@ class Debug extends AActor {
     }
 
     private DebugLoop(time: number = 0.016) {
-        if (this.isDebug.value) {
+        if (this.isShow.value) {
             ImGui_Impl.NewFrame(time);
             ImGui.NewFrame();
 
@@ -110,7 +110,7 @@ class Debug extends AActor {
         ImGui.SetNextWindowPos(new ImGui.ImVec2(100, 100), ImGui.ImGuiCond.FirstUseEver);
         ImGui.SetNextWindowSize(new ImGui.ImVec2(600, 300), ImGui.ImGuiCond.FirstUseEver);
 
-        ImGui.Begin("Debug", (value = this.isDebug.value) => this.isDebug.value = value);
+        ImGui.Begin("Experiment", (value = this.isShow.value) => this.isShow.value = value);
 
         ImGui.Checkbox("Demo Window", (value = this.demoWindow.isShow) => this.demoWindow.isShow = value);
 
@@ -127,4 +127,4 @@ class Debug extends AActor {
     }
 }
 
-export { Debug }
+export { Experiment }
