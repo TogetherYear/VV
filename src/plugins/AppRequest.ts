@@ -1,5 +1,5 @@
 import { EventSystem } from "@/libs/EventSystem";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import router from "@/router"
 
 /**
@@ -79,39 +79,6 @@ class AppRequest extends EventSystem {
                     })
                 }
                 return Promise.reject(err)
-                /*
-                    const requestId = err?.config?.headers && err?.config?.headers['X-Request-Id']
-                    if (requestId) {
-                        console.error('X-Request-Id', '：', requestId)
-                    }
-                    console.error('url: ', err?.config?.url, `【${err?.config?.method}】 \n>>>> err: `, err)
-
-                    let description = '-'
-                    if (err.response?.data && err.response.data.message) {
-                        description = err.response.data.message
-                    }
-                    else if (err.response?.data && err.response.data.result) {
-                        description = err.response.data.result.message
-                    }
-                    // @See: https://github.com/axios/axios/issues/383
-                    else if (!err.response || !err.response.status) {
-                        // console.error('The network is abnormal, please check the backend service and try again')
-                        return
-                    }
-                    else if (err.response?.status !== 200) {
-                        // console.error(`ERROR_CODE: ${err.response?.status}`)
-                    }
-                    // if (err.response?.status === 403) {
-                    //   window.location.href = '/'
-                    // }
-                    else if (err.response?.status === 401) {
-                        console.error(err.response)
-                    }
-                    else {
-
-                    }
-                    return Promise.reject(err)
-                */
             },
         )
     }
