@@ -116,13 +116,13 @@ class AppRequest extends EventSystem {
         localStorage.setItem('ORIGINUSERNAME', name)
     }
 
-    public Get(url: string, config?: AxiosRequestConfig<any>) {
+    public Get(url: string, config?: AxiosRequestConfig) {
         if (this.R) {
             return this.R.get(url, config)
         }
     }
 
-    public Post(url: string, data?: { [key: string]: any }, config?: AxiosRequestConfig<any>) {
+    public Post(url: string, data?: { [key: string]: any }, config?: AxiosRequestConfig) {
         if (this.R) {
             return this.R.post(url, data, config)
         }
