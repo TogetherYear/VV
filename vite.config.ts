@@ -6,7 +6,9 @@ import path from 'path'
 export default defineConfig({
     plugins: [
         vue({
-            script: {}
+            script: {
+                defineModel: true
+            }
         })
     ],
     resolve: {
