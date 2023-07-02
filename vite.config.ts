@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-
 import path from 'path'
 
 export default defineConfig({
@@ -45,10 +44,10 @@ export default defineConfig({
         base: './',
         strictPort: true
         // proxy: {
-        //   '^/api': {
-        //     target: 'http://127.0.0.1',
+        //   '^/Application': {
+        //     target: 'http://192.168.0.76:6789',
         //     changeOrigin: true,
-        //     rewrite: (t) => t.replace(/^\/api/, '')
+        //     rewrite: (t) => t.replace(/^\/Application/, '')
         //   }
         // }
     }
