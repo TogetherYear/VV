@@ -17,8 +17,21 @@ export default defineConfig({
         }
     },
     build: {
+        outDir: path.join(__dirname, 'dist'),
+        emptyOutDir: true,
+        minify: 'esbuild',
+        assetsDir: '', // 相对路径 加载问题
         sourcemap: false,
-        target: 'esnext'
+        target: 'esnext',
+        rollupOptions: {
+            output: {
+                manualChunks: (id: string) => {
+                    if (id.includes('node_modules')) {
+                        return 'vendor'
+                    }
+                }
+            }
+        }
     },
     optimizeDeps: {
         include: ['axios']
