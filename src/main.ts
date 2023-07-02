@@ -8,6 +8,9 @@ import { naive } from './naive'
 
 import pinia from './pinia'
 
+import { Debug } from './libs/Debug'
+Debug.Instance.Run()
+
 import { AppRequest } from './libs/AppRequest'
 AppRequest.Instance.Run()
 
