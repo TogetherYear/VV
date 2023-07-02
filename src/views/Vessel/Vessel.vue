@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-// console.log(import.meta.env.VITE_APP_NAME)
 import { provide } from 'vue';
 import { Vessel } from './Vessel';
 
