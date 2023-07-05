@@ -1,7 +1,7 @@
-const author = {
-    name: 'Together'
+const Config = {
+    author: {
+        name: 'Together'
+    }
 }
 
-window.Config = {
-    author
-}
+window.Config = Config
