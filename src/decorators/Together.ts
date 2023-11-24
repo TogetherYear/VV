@@ -1,11 +1,38 @@
+import { onMounted, onUnmounted } from "vue"
+
 namespace Together {
-    export function ES<T extends { new(...args: any[]): Object }>(C: T) {
-        return class extends C {
-            constructor(...args: any[]) {
-                super(...args)
+    export function ClassDec() {
+        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+            return class extends C {
+                constructor(...args: Array<any>) {
+                    super(...args)
+                    this.Hooks()
+                }
+
+                private Hooks() {
+                    onMounted(() => {
+
+                    })
+
+                    onUnmounted(() => {
+
+                    })
+                }
+
             }
-            // ... Just do it ...
         }
     }
+
+    export function FunctionDec() {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+            const original = descriptor.value.bind(target)
+            descriptor.value = () => {
+                original()
+
+            }
+        }
+    }
+
 }
+
 export { Together }
