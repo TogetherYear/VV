@@ -1,8 +1,10 @@
 declare namespace ImGui {
     export function GetIO(): ImGuiIO;
+
     export class ImGuiIO {
         get Fonts(): ImFontAtlas
     }
+
     export class ImFontAtlas {
         AddFontFromMemoryTTF(data: ArrayBuffer, size_pixels: number, font_cfg?: ImFontConfig | null, glyph_ranges?: number | null): ImFont;
         GetGlyphRangesDefault(): number;
@@ -15,6 +17,7 @@ declare namespace ImGui {
         GetGlyphRangesVietnamese(): number;
         AddFontDefault(font_cfg?: ImFontConfig | null): ImFont;
     }
+
     export class ImFontConfig {
         readonly internal: ImFontConfig;
         constructor(internal?: ImFontConfig);
@@ -52,6 +55,7 @@ declare namespace ImGui {
         contains(value: T): boolean;
         find_erase_unsorted(value: T): void;
     }
+
     export class ImFontGlyph implements ImFontGlyph {
         readonly internal: ImFontGlyph;
         constructor(internal?: ImFontGlyph);
@@ -68,9 +72,11 @@ declare namespace ImGui {
         get U1(): number;
         get V1(): number;
     }
+
     export class ImDrawList {
 
     }
+
     export class ImFont {
         readonly native: ImFont;
         constructor(native: ImFont);
@@ -103,21 +109,37 @@ declare namespace ImGui {
         RenderText(draw_list: ImDrawList, size: number, pos: Readonly<ImVec2>, col: ImU32, clip_rect: Readonly<ImVec4>, text_begin: string, text_end?: number | null, wrap_width?: number, cpu_fine_clip?: boolean): void;
         IsGlyphRangeUnused(c_begin: number, c_last: number): boolean;
     }
+
     export type ImWchar = number;
+
     export function CreateContext(): void;
+
     export function StyleColorsDark(dst?: ImGuiStyle | null): void;
+
     export function StyleColorsLight(dst?: ImGuiStyle | null): void;
+
     export function StyleColorsClassic(dst?: ImGuiStyle | null): void;
+
     export type ImU32 = number;
+
     export function NewFrame(): void;
+
     export function Separator(): void;
+
     export function End(): void;
+
     export function EndFrame(): void;
+
     export function Render(): void;
+
     export function GetDrawData(): any;
+
     export type ImAccess<T> = (value?: T) => T;
+
     export type ImScalar<T> = [T];
+
     export function Begin(name: string, open?: ImScalar<boolean> | ImAccess<boolean> | null, flags?: ImGuiWindowFlags): boolean;
+
     export enum ImGuiWindowFlags {
         None = 0,
         NoTitleBar = 1,
@@ -150,28 +172,43 @@ declare namespace ImGui {
         Modal = 134217728,
         ChildMenu = 268435456
     }
+
     export function DestroyContext(): void;
+
     export function ColorEdit4(key: string, value: ImVec4): void;
+
     export function IsWindowFocused(): boolean;
+
     export function GetWindowSize(out?: ImVec2): ImVec2;
+
     export function GetWindowPos(out?: ImVec2): ImVec2;
+
     export class ImVec4 {
         constructor(r: number, g: number, b: number, a: number);
     }
+
     export class ImVec2 {
         constructor(x: number, y: number);
     }
+
     export function Button(label: string, size?: Readonly<ImVec2>): boolean;
+
     export function Text(text: string): void;
+
     export function SameLine(posX?: number, spacingW?: number): void;
+
     export function Checkbox(label: string, v: ImScalar<boolean> | ImAccess<boolean>): boolean;
+
     export function InputText<T>(label: string, buf: ImStringBuffer | ImAccess<string> | ImScalar<string>, buf_size?: number, flags?: ImGuiInputTextFlags, callback?: ImGuiInputTextCallback<T> | null, user_data?: T | null): boolean;
+
     export function InputTextMultiline<T>(label: string, buf: ImStringBuffer | ImAccess<string> | ImScalar<string>, buf_size?: number, size?: Readonly<ImVec2>, flags?: ImGuiInputTextFlags, callback?: ImGuiInputTextCallback<T> | null, user_data?: T | null): boolean;
+
     export class ImStringBuffer {
         size: number;
         buffer: string;
         constructor(size: number, buffer?: string);
     }
+
     export enum ImGuiInputTextFlags {
         None = 0,
         CharsDecimal = 1,
@@ -197,13 +234,17 @@ declare namespace ImGui {
         Multiline = 1048576,
         NoMarkEdited = 2097152
     }
+
     export type ImGuiInputTextCallback<T> = (data: ImGuiInputTextCallbackData<T>) => number;
+
     export class ImGuiInputTextCallbackData<T> {
 
     }
 
     export function SetNextWindowPos(pos: Readonly<ImVec2>, cond?: ImGuiCond, pivot?: Readonly<ImVec2>): void;
+
     export function SetNextWindowSize(pos: Readonly<ImVec2>, cond?: ImGuiCond): void;
+
     export enum ImGuiCond {
         None = 0,
         Always = 1,
@@ -211,11 +252,15 @@ declare namespace ImGui {
         FirstUseEver = 4,
         Appearing = 8
     }
+
     export function InputTextMultiline<T>(label: string, buf: ImStringBuffer | ImAccess<string> | ImScalar<string>, buf_size?: number, size?: Readonly<ImVec2>, flags?: ImGuiInputTextFlags, callback?: ImGuiInputTextCallback<T> | null, user_data?: T | null): boolean;
+
     export function RadioButton(label: string, active: boolean): boolean;
+
     export function RadioButton(label: string, v: ImAccess<number> | ImScalar<number>, v_button: number): boolean;
 
     export function GetStyle(): ImGuiStyle;
+
     export enum ImGuiDir {
         None = -1,
         Left = 0,
@@ -224,6 +269,7 @@ declare namespace ImGui {
         Down = 3,
         COUNT = 4
     }
+
     export enum ImGuiCol {
         Text = 0,
         TextDisabled = 1,
@@ -280,6 +326,7 @@ declare namespace ImGui {
         ModalWindowDimBg = 52,
         COUNT = 53
     }
+
     export class ImGuiStyle {
         readonly internal: ImGuiStyle;
         constructor(internal?: ImGuiStyle);

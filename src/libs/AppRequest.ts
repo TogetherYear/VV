@@ -21,6 +21,10 @@ class AppRequest extends EventSystem {
     private static outCode = 401
 
     public Run() {
+        this.CreatRequest()
+    }
+
+    private CreatRequest() {
         this.request = axios.create({
             headers: {
                 'Content-Type': 'application/json',
