@@ -21,6 +21,9 @@ class AppRequest extends EventSystem {
     private static outCode = 401
 
     public Run() {
+        if (!window.Debug) {
+            (window as any).AppRequest = this
+        }
         this.CreatRequest()
     }
 
@@ -73,10 +76,7 @@ class AppRequest extends EventSystem {
                         maskClosable: false,
                         onPositiveClick: () => {
                             this.ResetAccount()
-                            router.push({ path: '/Login' })
-                            setTimeout(() => {
-                                location.reload()
-                            }, 100);
+                            Message.error('登录凭证过期')
                         }
                     })
                 }
@@ -88,26 +88,14 @@ class AppRequest extends EventSystem {
     private ResetAccount() {
         this.SetAuthToken('')
         this.SetUserName('')
-        this.SetWorkSpaceId('')
     }
 
     public GetAuthToken() {
         return localStorage.getItem('ORIGINTOKEN') || ''
     }
 
-    /**
-     * 设置Token
-     */
     public SetAuthToken(token: string) {
         localStorage.setItem('ORIGINTOKEN', token)
-    }
-
-    public GetWorkSpaceId() {
-        return localStorage.getItem('ORIGINWORKSPACEID') || ''
-    }
-
-    public SetWorkSpaceId(id: string) {
-        localStorage.setItem('ORIGINWORKSPACEID', id)
     }
 
     public GetUserName() {
@@ -116,6 +104,15 @@ class AppRequest extends EventSystem {
 
     public SetUserName(name: string) {
         localStorage.setItem('ORIGINUSERNAME', name)
+    }
+
+    public SetRemember(e: boolean) {
+        localStorage.setItem('ORIGINREMEMBER', e ? '1' : '0')
+    }
+
+    public GetRemember() {
+        const r = localStorage.getItem('ORIGINREMEMBER')
+        return !r || r == '1'
     }
 
     public Get(url: string, config?: AxiosRequestConfig) {

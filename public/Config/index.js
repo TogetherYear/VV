@@ -1,7 +1,5 @@
 const Config = {
-    author: {
-        name: 'Together'
-    }
+    name: 'TSingleton'
 }
 
 window.Config = Config
