@@ -1,20 +1,26 @@
 <script lang="ts" setup>
 import { provide } from 'vue';
-import { Vessel } from './Vessel';
+import { Application } from './Application';
 
-const instance = new Vessel()
+const instance = new Application()
+
 provide('instance', instance)
-const { } = instance.InitStates()
+
+const {
+
+} = instance.InitStates()
+
 instance.InitHooks()
+
 instance.Run()
 </script>
 
 <template>
-    <div class="Vessel">
+    <div class="Application">
         <n-button type="primary" class="Btn" @click="instance.Test()">Emit</n-button>
     </div>
 </template>
 
 <style lang="scss" scoped>
-@import "./Vessel.scss";
+@import "./Application.scss";
 </style>
