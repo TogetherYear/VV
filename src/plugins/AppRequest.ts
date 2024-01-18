@@ -21,8 +21,9 @@ class AppRequest extends EventSystem {
     private static outCode = 401
 
     public Run() {
-        if (!window.Debug) {
-            (window as any).AppRequest = this
+        if (!window.AppRequest) {
+            //@ts-ignore
+            window.AppRequest = this
         }
         this.CreatRequest()
     }
