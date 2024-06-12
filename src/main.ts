@@ -6,8 +6,6 @@ import router from './router'
 
 import { naive } from './naive'
 
-import pinia from './pinia'
-
 import { Debug } from './plugins/Debug'
 Debug.Instance.Run()
 
@@ -20,5 +18,4 @@ FieldObserver.Instance.Run()
 createApp(AppVue)
   .use(router)
   .use(naive)
-  .use(pinia)
-  .mount('#app')
+  .mount('#App')
