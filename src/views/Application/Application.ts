@@ -26,9 +26,8 @@ class Application extends AActor {
 
     }
 
-    @DR.Throttle(1000)
-    public Test(a: number, b: string) {
-        Message.success(`${a}-${b}`)
+    public Test() {
+
     }
 }
 

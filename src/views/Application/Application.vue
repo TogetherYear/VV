@@ -17,7 +17,7 @@ instance.Run()
 
 <template>
     <div class="Application">
-        <n-button type="primary" class="Btn" @click="instance.Test(5, 'b')">Emit</n-button>
+        <n-button type="primary" class="Btn" @click="instance.Test()">Emit</n-button>
     </div>
 </template>
 
