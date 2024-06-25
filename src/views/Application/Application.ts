@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted } from "vue"
 import { AActor } from "@/libs/AActor"
+import { DR } from "@/decorators/DR"
 
 class Application extends AActor {
     public constructor() { super() }
@@ -25,8 +26,9 @@ class Application extends AActor {
 
     }
 
-    public Test() {
-        Message.success("Together丨233")
+    @DR.Throttle(1000)
+    public Test(a: number, b: string) {
+        Message.success(`${a}-${b}`)
     }
 }
 
