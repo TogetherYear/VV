@@ -1,6 +1,5 @@
 import { onMounted, onUnmounted } from "vue"
 import { AActor } from "@/libs/AActor"
-import { DR } from "@/decorators/DR"
 
 class Application extends AActor {
     public constructor() { super() }
@@ -27,7 +26,7 @@ class Application extends AActor {
     }
 
     public Test() {
-
+        Message.success("Hello World!")
     }
 }
 
