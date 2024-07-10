@@ -19,7 +19,7 @@ export default defineConfig({
         outDir: path.join(__dirname, 'dist'),
         emptyOutDir: true,
         minify: 'esbuild',
-        assetsDir: '', // 相对路径 加载问题
+        assetsDir: 'Source', // 相对路径 加载问题
         sourcemap: false,
         target: 'esnext',
         rollupOptions: {
@@ -41,7 +41,6 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 6768,
         open: true,
-        base: './',
         strictPort: true
         // proxy: {
         //   '^/Application': {
