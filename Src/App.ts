@@ -1,8 +1,12 @@
+import { EventSystem } from "./libs/EventSystem"
 import { onMounted, onUnmounted } from "vue"
-import { AActor } from "@/Libs/AActor"
 
-class Application extends AActor {
-    public constructor() { super() }
+class App extends EventSystem {
+    private constructor() { super() }
+
+    private static instance: App = new App()
+
+    public static get Instance() { return this.instance }
 
     public InitStates() {
         return {}
@@ -16,6 +20,7 @@ class Application extends AActor {
         onMounted(() => {
 
         })
+
         onUnmounted(() => {
             this.Destroy()
         })
@@ -24,10 +29,6 @@ class Application extends AActor {
     protected Destroy() {
 
     }
-
-    public Test() {
-        Message.success("Hello World!")
-    }
 }
 
-export { Application }
+export { App }

@@ -12,11 +12,11 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': path.resolve('src')
+            '@': path.resolve('Src')
         }
     },
     build: {
-        outDir: path.join(__dirname, 'dist'),
+        outDir: path.join(__dirname, 'Dist'),
         emptyOutDir: true,
         minify: 'esbuild',
         assetsDir: 'Source', // 相对路径 加载问题
@@ -26,17 +26,19 @@ export default defineConfig({
             output: {
                 manualChunks: (id: string) => {
                     if (id.includes('node_modules')) {
-                        return 'vendor'
+                        return 'Vendor'
                     }
                 }
             }
         }
     },
+    root: path.join(__dirname, ''),
+    publicDir: 'Public',
     optimizeDeps: {
         include: ['axios']
     },
     base: './',
-    envDir: './env',
+    envDir: './Env',
     server: {
         host: '0.0.0.0',
         port: 6768,
