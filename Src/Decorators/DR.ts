@@ -117,7 +117,7 @@ namespace DR {
 
                 private Get() {
                     const route = useRoute()
-                    this.currentUrl = route.path
+                    this.currentUrl = `${route.path}:${C.name}`
                     const current = cacheMap.get(this.currentUrl)
                     if (current) {
                         for (let c of current) {
