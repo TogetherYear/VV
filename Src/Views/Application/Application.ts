@@ -1,13 +1,7 @@
 import { onMounted, onUnmounted } from "vue"
 import { AActor } from "@/Libs/AActor"
-import { App } from "@/App"
-import { TEvent } from "@/Decorators/TEvent"
-import { Debug } from "@/Plugins/Debug"
 import { Preload } from "@/Preload/Preload"
 
-@TEvent.Listen([
-    [App, "Update", "Test"]
-])
 class Application extends AActor {
     public constructor() { super() }
 

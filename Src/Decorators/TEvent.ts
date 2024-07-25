@@ -1,16 +1,15 @@
 import { EventSystem } from "@/Libs/EventSystem"
-import { Debug } from "@/Plugins/Debug"
 import { onMounted, onUnmounted } from "vue"
+import { DR } from "./DR"
 
 /**
  * 事件相关
  */
 namespace TEvent {
-    const p = Promise.resolve()
     /**
      * @author Together
      * @param events 创建的事件名称
-     * @description 生成事件列表
+     * @description 生成事件列表 需要继承 EventSystem
      */
     export function Generate(events: Array<string>) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
@@ -45,13 +44,12 @@ namespace TEvent {
                 }
 
                 private Hooks() {
-                    onMounted(() => {
+                    DR.Resolve.then(() => {
                         for (let e of events) {
                             //@ts-ignore
                             e[0].AddListen(e[1], this, this[e[2]])
                         }
                     })
-
                     onUnmounted(() => {
                         for (let e of events) {
                             //@ts-ignore

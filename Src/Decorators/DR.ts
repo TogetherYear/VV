@@ -34,6 +34,8 @@ namespace DR {
         }
     }
 
+    export const Resolve = Promise.resolve()
+
     const debounceMap = new Map<string, NodeJS.Timeout>()
 
     const throttleMap = new Map<string, number>()

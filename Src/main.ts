@@ -6,12 +6,6 @@ import router from './Router'
 
 import { naive } from './Naive'
 
-import './Plugins/Debug'
-
-import './Plugins/AppRequest'
-
-import './Plugins/FieldObserver'
-
 createApp(AppVue)
   .use(router)
   .use(naive)
