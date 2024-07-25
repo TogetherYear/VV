@@ -3,7 +3,7 @@ import { EventSystem } from "./Libs/EventSystem"
 import { onMounted, onUnmounted } from "vue"
 import { Debug } from "./Plugins/Debug"
 
-@TEvent.CreateEvents('Update')
+@TEvent.Generate(['Update'])
 class App extends EventSystem {
     public InitStates() {
         return {}
@@ -14,6 +14,9 @@ class App extends EventSystem {
     }
 
     public Run() {
+        setInterval(() => {
+            this.Emit("Update")
+        }, 1000)
         onMounted(() => {
 
         })

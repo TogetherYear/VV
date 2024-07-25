@@ -2,6 +2,7 @@
 import { EventSystem } from "@/Libs/EventSystem";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Debug } from "./Debug";
+import { Preload } from "@/Preload/Preload";
 
 /**
  * Axios请求
@@ -14,6 +15,8 @@ class AppRequest extends EventSystem {
     private static isLogSuccess = false
 
     private static outCode = 401
+
+    private isOut = false
 
     public Run() {
         this.CreatRequest()
@@ -53,24 +56,28 @@ class AppRequest extends EventSystem {
                 }
                 if (response.data.code && response.data.code !== 0) {
                     Debug.Error(response.data.message)
-                    Message.error(response.data.message)
+                    Preload.message.error(response.data.message)
                 }
                 return response
             },
             err => {
                 if (err.response?.status == AppRequest.outCode) {
-                    Dialog.destroyAll()
-                    Dialog.error({
-                        title: 'Token过期',
-                        content: '请重新登录更新Token',
-                        positiveText: '确定',
-                        closable: false,
-                        maskClosable: false,
-                        onPositiveClick: () => {
-                            this.ResetAccount()
-                            Message.error('登录凭证过期')
-                        }
-                    })
+                    if (!this.isOut) {
+                        Preload.dialog.destroyAll()
+                        Preload.dialog.error({
+                            title: 'Token过期',
+                            content: '请重新登录更新Token',
+                            positiveText: '确定',
+                            closable: false,
+                            maskClosable: false,
+                            onPositiveClick: () => {
+                                this.ResetAccount()
+                                Preload.message.error('登录凭证过期')
+                            }
+                        })
+                        this.isOut = true
+                    }
+
                 }
                 return Promise.reject(err)
             },

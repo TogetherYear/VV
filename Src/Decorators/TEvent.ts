@@ -1,17 +1,18 @@
 import { EventSystem } from "@/Libs/EventSystem"
-
-type ListenActor = {
-    Destroy?: () => void
-}
+import { Debug } from "@/Plugins/Debug"
+import { onMounted, onUnmounted } from "vue"
 
 /**
  * 事件相关
  */
 namespace TEvent {
+    const p = Promise.resolve()
     /**
-     * 创建事件列表
+     * @author Together
+     * @param events 创建的事件名称
+     * @description 生成事件列表
      */
-    export function CreateEvents(...events: Array<string>) {
+    export function Generate(events: Array<string>) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
@@ -28,15 +29,36 @@ namespace TEvent {
         }
     }
 
-
     /**
-     * 监听事件
+     * @author Together
+     * @param target 需要监听的目标
+     * @param eventName 监听的事件
+     * @param emitFunc 触发的函数名称
+     * @description 监听事件
      */
-    export function ListenEvent(es: EventSystem, event: string) {
-        return function (target: ListenActor, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target)
-            descriptor.value = (...args: Array<unknown>) => {
-                original(...args)
+    export function Listen(events: Array<[target: EventSystem, eventName: string, emitFunc: string]>) {
+        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+            return class extends C {
+                constructor(...args: Array<any>) {
+                    super(...args)
+                    this.Hooks()
+                }
+
+                private Hooks() {
+                    onMounted(() => {
+                        for (let e of events) {
+                            //@ts-ignore
+                            e[0].AddListen(e[1], this, this[e[2]])
+                        }
+                    })
+
+                    onUnmounted(() => {
+                        for (let e of events) {
+                            //@ts-ignore
+                            e[0].RemoveListen(e[1], this, this[e[2]])
+                        }
+                    })
+                }
 
             }
         }
