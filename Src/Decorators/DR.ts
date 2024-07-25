@@ -1,3 +1,4 @@
+import { EventSystem } from "@/Libs/EventSystem"
 import { isRef, onMounted, onUnmounted } from "vue"
 import { useRoute } from "vue-router"
 
@@ -93,7 +94,7 @@ namespace DR {
     }
 
     /**
-     * 缓存页面 参数为字符串 如果只是普通的 只要 '属性名' 或者 '对象名' 即可 如果是对象的属性 则 '对象.属性名' (简单缓存 目前不支持嵌套)
+     * 缓存页面 参数为字符串 支持 普通类型 对象类型 ref reactive (不支持嵌套) 可以缓存对象单个属性 或者整个对象 比如 Object 或者 Object.pro 不需要写 .value
      */
     export function Cache(...needs: Array<string>) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
@@ -118,7 +119,6 @@ namespace DR {
                 private Get() {
                     const route = useRoute()
                     this.currentUrl = `${route.path}:${C.name}`
-                    Debug.Log(cacheMap)
                     const current = cacheMap.get(this.currentUrl)
                     if (current) {
                         for (let c of current) {
@@ -137,10 +137,25 @@ namespace DR {
                             if (typeof eval(es) == 'object') {
                                 if (isRef(eval(es))) {
                                     es += '.value'
-                                    cache.push({
-                                        key: es,
-                                        value: eval(es)
-                                    })
+                                    const temp = eval(es)
+                                    if (typeof temp == 'object') {
+                                        if (temp != null) {
+                                            const keys = Object.keys(eval(es))
+                                            for (let k of keys) {
+                                                const c = `${es}['${k}']`
+                                                cache.push({
+                                                    key: c,
+                                                    value: eval(c)
+                                                })
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        cache.push({
+                                            key: es,
+                                            value: temp
+                                        })
+                                    }
                                 }
                                 else {
                                     if (eval(es) != null) {
@@ -178,6 +193,38 @@ namespace DR {
                     }
                     cacheMap.set(this.currentUrl, cache)
                 }
+            }
+        }
+    }
+
+    export function ListenEvent(target: EventSystem, event: string) {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+            const original = descriptor.value.bind(target)
+            descriptor.value = (...args: Array<unknown>) => {
+                original(...args)
+
+            }
+        }
+    }
+
+    /**
+     * 创建事件 类需要继承 EventSystem 如果构造函数是 private 需要删除 private
+     */
+    export function CreateEvents(...events: Array<string>) {
+        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+            return class extends C {
+                constructor(...args: Array<any>) {
+                    super(...args)
+                    Debug.Log(this)
+                    // this.Hooks()
+                    // Debug.Log(this.C)
+                }
+
+                // private Hooks() {
+                //     for (let e of events) {
+                //         this.AddKey(e)
+                //     }
+                // }
             }
         }
     }

@@ -1,8 +1,7 @@
-import { EventSystem } from "./libs/EventSystem"
+import { EventSystem } from "./Libs/EventSystem"
 import { onMounted, onUnmounted } from "vue"
 
 class App extends EventSystem {
-    private constructor() { super() }
 
     private static instance: App = new App()
 
@@ -29,6 +28,7 @@ class App extends EventSystem {
     protected Destroy() {
 
     }
+
 }
 
 export { App }

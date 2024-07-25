@@ -1,5 +1,5 @@
 
-import { EventSystem } from "@/libs/EventSystem";
+import { EventSystem } from "@/Libs/EventSystem";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 /**

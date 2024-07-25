@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Preload } from './Preload';
+import { Preload } from '@/Preload/Preload'
 
 Preload.Instance.Run()
 </script>

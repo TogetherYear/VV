@@ -4,7 +4,7 @@ import AppVue from './App.vue'
 
 import router from './Router'
 
-import { naive } from './naive'
+import { naive } from './Naive'
 
 import { Debug } from './Plugins/Debug'
 Debug.Instance.Run()
