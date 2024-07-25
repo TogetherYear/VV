@@ -1,4 +1,3 @@
-import { EventSystem } from "@/Libs/EventSystem"
 import { isRef, onMounted, onUnmounted } from "vue"
 import { useRoute } from "vue-router"
 
@@ -193,38 +192,6 @@ namespace DR {
                     }
                     cacheMap.set(this.currentUrl, cache)
                 }
-            }
-        }
-    }
-
-    export function ListenEvent(target: EventSystem, event: string) {
-        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target)
-            descriptor.value = (...args: Array<unknown>) => {
-                original(...args)
-
-            }
-        }
-    }
-
-    /**
-     * 创建事件 类需要继承 EventSystem 如果构造函数是 private 需要删除 private
-     */
-    export function CreateEvents(...events: Array<string>) {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
-            return class extends C {
-                constructor(...args: Array<any>) {
-                    super(...args)
-                    Debug.Log(this)
-                    // this.Hooks()
-                    // Debug.Log(this.C)
-                }
-
-                // private Hooks() {
-                //     for (let e of events) {
-                //         this.AddKey(e)
-                //     }
-                // }
             }
         }
     }

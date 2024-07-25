@@ -1,17 +1,12 @@
 
 import { EventSystem } from "@/Libs/EventSystem";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { Debug } from "./Debug";
 
 /**
  * Axios请求
  */
 class AppRequest extends EventSystem {
-    private constructor() { super() }
-
-    private static instance = new AppRequest()
-
-    public static get Instance() { return this.instance }
-
     private request!: AxiosInstance
 
     public get R() { return this.request }
@@ -21,10 +16,6 @@ class AppRequest extends EventSystem {
     private static outCode = 401
 
     public Run() {
-        if (!window.AppRequest) {
-            //@ts-ignore
-            window.AppRequest = this
-        }
         this.CreatRequest()
     }
 
@@ -129,4 +120,6 @@ class AppRequest extends EventSystem {
     }
 }
 
-export { AppRequest }
+const AppRequestInstance = new AppRequest()
+
+export { AppRequestInstance as AppRequest }

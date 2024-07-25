@@ -61,17 +61,8 @@ class Observer {
 }
 
 class FieldObserver extends EventSystem {
-    private constructor() { super() }
-
-    private static instance = new FieldObserver()
-
-    public static get Instance() { return this.instance }
-
     public Run() {
-        if (!window.FieldObserver) {
-            //@ts-ignore
-            window.FieldObserver = this
-        }
+
     }
 
     public Generate(options: IObserver) {
@@ -79,4 +70,6 @@ class FieldObserver extends EventSystem {
     }
 }
 
-export { FieldObserver }
+const FieldObserverInstance = new FieldObserver()
+
+export { FieldObserverInstance as FieldObserver }

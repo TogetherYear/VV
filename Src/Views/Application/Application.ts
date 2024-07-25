@@ -1,9 +1,8 @@
 import { onMounted, onUnmounted } from "vue"
 import { AActor } from "@/Libs/AActor"
-import { DR } from "@/Decorators/DR"
 import { App } from "@/App"
+import { TEvent } from "@/Decorators/TEvent"
 
-@DR.CreateEvents("AAA")
 class Application extends AActor {
     public constructor() { super() }
 
@@ -24,11 +23,11 @@ class Application extends AActor {
         })
     }
 
-    protected Destroy() {
+    public Destroy() {
 
     }
 
-    @DR.ListenEvent(App.Instance, 'Update')
+    @TEvent.ListenEvent(App, 'Update')
     public Test() {
         Message.success("Hello World!")
     }

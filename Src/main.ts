@@ -6,15 +6,11 @@ import router from './Router'
 
 import { naive } from './Naive'
 
-import { Debug } from './Plugins/Debug'
-Debug.Instance.Run()
+import './Plugins/Debug'
 
-import { AppRequest } from './Plugins/AppRequest'
-AppRequest.Instance.Run()
+import './Plugins/AppRequest'
 
-import { FieldObserver } from './Plugins/FieldObserver'
-
-FieldObserver.Instance.Run()
+import './Plugins/FieldObserver'
 
 createApp(AppVue)
   .use(router)

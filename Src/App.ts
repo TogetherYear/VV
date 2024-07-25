@@ -1,12 +1,10 @@
+import { TEvent } from "./Decorators/TEvent"
 import { EventSystem } from "./Libs/EventSystem"
 import { onMounted, onUnmounted } from "vue"
+import { Debug } from "./Plugins/Debug"
 
+@TEvent.CreateEvents('Update')
 class App extends EventSystem {
-
-    private static instance: App = new App()
-
-    public static get Instance() { return this.instance }
-
     public InitStates() {
         return {}
     }
@@ -25,10 +23,11 @@ class App extends EventSystem {
         })
     }
 
-    protected Destroy() {
+    public Destroy() {
 
     }
-
 }
 
-export { App }
+const AppInstance = new App()
+
+export { AppInstance as App }
