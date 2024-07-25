@@ -93,7 +93,7 @@ namespace DR {
     }
 
     /**
-     * 缓存页面 参数为字符串 如果只是普通的 只要 '属性名' 或者 '对象名' 即可 如果是对象的属性 则 '对象.属性名' (目前不支持嵌套)
+     * 缓存页面 参数为字符串 如果只是普通的 只要 '属性名' 或者 '对象名' 即可 如果是对象的属性 则 '对象.属性名' (简单缓存 目前不支持嵌套)
      */
     export function Cache(...needs: Array<string>) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
@@ -118,6 +118,7 @@ namespace DR {
                 private Get() {
                     const route = useRoute()
                     this.currentUrl = `${route.path}:${C.name}`
+                    Debug.Log(cacheMap)
                     const current = cacheMap.get(this.currentUrl)
                     if (current) {
                         for (let c of current) {
@@ -163,7 +164,12 @@ namespace DR {
                         }
                         else {
                             let es = 'this'
-                            deep.forEach(d => es += `['${d}']`)
+                            deep.forEach(d => {
+                                es += `['${d}']`
+                                if (isRef(eval(es))) {
+                                    es += `.value`
+                                }
+                            })
                             cache.push({
                                 key: es,
                                 value: eval(es)
