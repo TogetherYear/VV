@@ -3,6 +3,8 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite",
+        "prettier:all": "prettier --write .",
+        "prettier": "prettier --write",
         "build": "vite build",
         "build:server": "vite build && node ./Server.js",
         "preview": "vite preview"
