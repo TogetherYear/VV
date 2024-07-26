@@ -1,72 +1,65 @@
-import { isRef, onMounted, onUnmounted } from "vue"
-import { useRoute } from "vue-router"
+import { isRef, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 namespace DR {
     export function ClassDec() {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
-                    super(...args)
-                    this.Hooks()
+                    super(...args);
+                    this.Hooks();
                 }
 
                 private Hooks() {
-                    onMounted(() => {
+                    onMounted(() => {});
 
-                    })
-
-                    onUnmounted(() => {
-
-                    })
+                    onUnmounted(() => {});
                 }
-
-            }
-        }
+            };
+        };
     }
 
     export function FunctionDec() {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target)
+            const original = descriptor.value.bind(target);
             descriptor.value = (...args: Array<unknown>) => {
-                original(...args)
-
-            }
-        }
+                original(...args);
+            };
+        };
     }
 
-    export const Resolve = Promise.resolve()
+    export const Resolve = Promise.resolve();
 
-    const debounceMap = new Map<string, NodeJS.Timeout>()
+    const debounceMap = new Map<string, NodeJS.Timeout>();
 
-    const throttleMap = new Map<string, number>()
+    const throttleMap = new Map<string, number>();
 
-    const cacheMap = new Map<string, Array<{ key: string, value: unknown }>>()
+    const cacheMap = new Map<string, Array<{ key: string; value: unknown }>>();
 
     /**
      * 防抖 默认 500 毫秒
      */
     export function Debounce(delta = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target)
+            const original = descriptor.value.bind(target);
             descriptor.value = (...args: Array<unknown>) => {
-                const key = `${target.constructor.name}:${propertyKey}`
-                let timer = debounceMap.get(key)
+                const key = `${target.constructor.name}:${propertyKey}`;
+                let timer = debounceMap.get(key);
                 if (timer) {
-                    clearTimeout(timer)
+                    clearTimeout(timer);
                     timer = setTimeout(() => {
-                        original(...args)
-                        debounceMap.delete(key)
+                        original(...args);
+                        debounceMap.delete(key);
+                    }, delta);
+                } else {
+                    timer = setTimeout(() => {
+                        original(...args);
+                        debounceMap.delete(key);
                     }, delta);
                 }
-                else {
-                    timer = setTimeout(() => {
-                        original(...args)
-                        debounceMap.delete(key)
-                    }, delta);
-                }
-                debounceMap.set(key, timer)
-            }
-        }
+                debounceMap.set(key, timer);
+            };
+        };
     }
 
     /**
@@ -74,24 +67,23 @@ namespace DR {
      */
     export function Throttle(delta = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target)
+            const original = descriptor.value.bind(target);
             descriptor.value = (...args: Array<unknown>) => {
-                const key = `${target.constructor.name}:${propertyKey}`
-                let lastTime = throttleMap.get(key)
+                const key = `${target.constructor.name}:${propertyKey}`;
+                let lastTime = throttleMap.get(key);
                 if (lastTime) {
-                    const currentTime = Date.now()
+                    const currentTime = Date.now();
                     if (currentTime - lastTime > delta) {
-                        lastTime = currentTime
-                        original(...args)
+                        lastTime = currentTime;
+                        original(...args);
                     }
+                } else {
+                    lastTime = Date.now();
+                    original(...args);
                 }
-                else {
-                    lastTime = Date.now()
-                    original(...args)
-                }
-                throttleMap.set(key, lastTime)
-            }
-        }
+                throttleMap.set(key, lastTime);
+            };
+        };
     }
 
     /**
@@ -101,101 +93,97 @@ namespace DR {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
-                    super(...args)
-                    this.needCache = needs
-                    this.Hooks()
+                    super(...args);
+                    this.needCache = needs;
+                    this.Hooks();
                 }
 
-                private currentUrl = ''
+                private currentUrl = '';
 
-                private needCache: Array<string> = []
+                private needCache: Array<string> = [];
 
                 private Hooks() {
-                    this.Get()
+                    this.Get();
                     onUnmounted(() => {
-                        this.Set()
-                    })
+                        this.Set();
+                    });
                 }
 
                 private Get() {
-                    const route = useRoute()
-                    this.currentUrl = `${route.path}:${C.name}`
-                    const current = cacheMap.get(this.currentUrl)
+                    const route = useRoute();
+                    this.currentUrl = `${route.path}:${C.name}`;
+                    const current = cacheMap.get(this.currentUrl);
                     if (current) {
                         for (let c of current) {
-                            const es = `${c.key} = ${typeof c.value == 'string' ? `'${c.value}'` : c.value}`
-                            eval(es)
+                            const es = `${c.key} = ${typeof c.value == 'string' ? `'${c.value}'` : c.value}`;
+                            eval(es);
                         }
                     }
                 }
 
                 private Set() {
-                    const cache: Array<{ key: string, value: unknown }> = []
+                    const cache: Array<{ key: string; value: unknown }> = [];
                     for (let c of this.needCache) {
-                        const deep = c.split('.')
+                        const deep = c.split('.');
                         if (deep.length == 1) {
-                            let es = `this['${deep}']`
+                            let es = `this['${deep}']`;
                             if (typeof eval(es) == 'object') {
                                 if (isRef(eval(es))) {
-                                    es += '.value'
-                                    const temp = eval(es)
+                                    es += '.value';
+                                    const temp = eval(es);
                                     if (typeof temp == 'object') {
                                         if (temp != null) {
-                                            const keys = Object.keys(eval(es))
+                                            const keys = Object.keys(eval(es));
                                             for (let k of keys) {
-                                                const c = `${es}['${k}']`
+                                                const c = `${es}['${k}']`;
                                                 cache.push({
                                                     key: c,
                                                     value: eval(c)
-                                                })
+                                                });
                                             }
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         cache.push({
                                             key: es,
                                             value: temp
-                                        })
+                                        });
                                     }
-                                }
-                                else {
+                                } else {
                                     if (eval(es) != null) {
-                                        const keys = Object.keys(eval(es))
+                                        const keys = Object.keys(eval(es));
                                         for (let k of keys) {
-                                            const c = `${es}['${k}']`
+                                            const c = `${es}['${k}']`;
                                             cache.push({
                                                 key: c,
                                                 value: eval(c)
-                                            })
+                                            });
                                         }
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 cache.push({
                                     key: es,
                                     value: eval(es)
-                                })
+                                });
                             }
-                        }
-                        else {
-                            let es = 'this'
-                            deep.forEach(d => {
-                                es += `['${d}']`
+                        } else {
+                            let es = 'this';
+                            deep.forEach((d) => {
+                                es += `['${d}']`;
                                 if (isRef(eval(es))) {
-                                    es += `.value`
+                                    es += `.value`;
                                 }
-                            })
+                            });
                             cache.push({
                                 key: es,
                                 value: eval(es)
-                            })
+                            });
                         }
                     }
-                    cacheMap.set(this.currentUrl, cache)
+                    cacheMap.set(this.currentUrl, cache);
                 }
-            }
-        }
+            };
+        };
     }
 }
-export { DR }
+export { DR };

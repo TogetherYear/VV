@@ -1,30 +1,24 @@
-import { EventSystem } from "./Libs/EventSystem"
-import { onMounted, onUnmounted } from "vue"
+import { EventSystem } from './Libs/EventSystem';
+import { onMounted, onUnmounted } from 'vue';
 
 class App extends EventSystem {
     public InitStates() {
-        return {}
+        return {};
     }
 
-    public InitHooks() {
-
-    }
+    public InitHooks() {}
 
     public Run() {
-        onMounted(() => {
-
-        })
+        onMounted(() => {});
 
         onUnmounted(() => {
-            this.Destroy()
-        })
+            this.Destroy();
+        });
     }
 
-    public Destroy() {
-
-    }
+    public Destroy() {}
 }
 
-const AppInstance = new App()
+const AppInstance = new App();
 
-export { AppInstance as App }
+export { AppInstance as App };

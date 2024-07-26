@@ -1,34 +1,30 @@
-import { onMounted, onUnmounted } from "vue"
-import { AActor } from "@/Libs/AActor"
-import { Preload } from "@/Preload/Preload"
+import { onMounted, onUnmounted } from 'vue';
+import { AActor } from '@/Libs/AActor';
+import { Preload } from '@/Preload/Preload';
 
 class Application extends AActor {
-    public constructor() { super() }
+    public constructor() {
+        super();
+    }
 
     public InitStates() {
-        return {}
+        return {};
     }
 
-    public InitHooks() {
-
-    }
+    public InitHooks() {}
 
     public Run() {
-        onMounted(() => {
-
-        })
+        onMounted(() => {});
         onUnmounted(() => {
-            this.Destroy()
-        })
+            this.Destroy();
+        });
     }
 
-    public Destroy() {
-
-    }
+    public Destroy() {}
 
     public Test() {
-        Preload.message.success("Hello World!")
+        Preload.message.success('Hello World!');
     }
 }
 
-export { Application }
+export { Application };

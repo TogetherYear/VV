@@ -1,5 +1,5 @@
 const Config = {
     name: 'TSingleton'
-}
+};
 
-window.Config = Config
+window.Config = Config;

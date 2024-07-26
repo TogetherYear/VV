@@ -1,6 +1,6 @@
-import { EventSystem } from "@/Libs/EventSystem"
-import { onMounted, onUnmounted } from "vue"
-import { DR } from "./DR"
+import { EventSystem } from '@/Libs/EventSystem';
+import { onMounted, onUnmounted } from 'vue';
+import { DR } from './DR';
 
 /**
  * 事件相关
@@ -15,17 +15,17 @@ namespace TEvent {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
-                    super(...args)
-                    this.Hooks()
+                    super(...args);
+                    this.Hooks();
                 }
 
                 private Hooks() {
                     for (let e of events) {
-                        this.AddKey(e)
+                        this.AddKey(e);
                     }
                 }
-            }
-        }
+            };
+        };
     }
 
     /**
@@ -39,28 +39,27 @@ namespace TEvent {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
-                    super(...args)
-                    this.Hooks()
+                    super(...args);
+                    this.Hooks();
                 }
 
                 private Hooks() {
                     DR.Resolve.then(() => {
                         for (let e of events) {
                             //@ts-ignore
-                            e[0].AddListen(e[1], this, this[e[2]])
+                            e[0].AddListen(e[1], this, this[e[2]]);
                         }
-                    })
+                    });
                     onUnmounted(() => {
                         for (let e of events) {
                             //@ts-ignore
-                            e[0].RemoveListen(e[1], this, this[e[2]])
+                            e[0].RemoveListen(e[1], this, this[e[2]]);
                         }
-                    })
+                    });
                 }
-
-            }
-        }
+            };
+        };
     }
 }
 
-export { TEvent }
+export { TEvent };

@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import path from 'path'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
     plugins: [
@@ -26,7 +26,7 @@ export default defineConfig({
             output: {
                 manualChunks: (id: string) => {
                     if (id.includes('node_modules')) {
-                        return 'Vendor'
+                        return 'Vendor';
                     }
                 }
             }
@@ -52,4 +52,4 @@ export default defineConfig({
         //   }
         // }
     }
-})
+});
