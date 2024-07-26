@@ -35,7 +35,9 @@ namespace TEvent {
      * @param emitFunc 触发的函数名称
      * @description 监听事件
      */
-    export function Listen(events: Array<[target: EventSystem, eventName: string, emitFunc: string]>) {
+    export function Listen(
+        events: Array<[target: EventSystem, eventName: string, emitFunc: string]>
+    ) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {

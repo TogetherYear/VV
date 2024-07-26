@@ -1,4 +1,13 @@
-import { create, NConfigProvider, NMessageProvider, NDialogProvider, NNotificationProvider, NButton, GlobalThemeOverrides, darkTheme } from 'naive-ui';
+import {
+    create,
+    NConfigProvider,
+    NMessageProvider,
+    NDialogProvider,
+    NNotificationProvider,
+    NButton,
+    GlobalThemeOverrides,
+    darkTheme
+} from 'naive-ui';
 
 /**
  * components
