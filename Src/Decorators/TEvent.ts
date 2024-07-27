@@ -31,7 +31,7 @@ namespace TEvent {
                     this.generate_Type = type;
                     this.Generate_CreatEvents();
                     this.Generate_ListenEvents();
-                    if (type == Lifecycle.Global) {
+                    if (type === Lifecycle.Global) {
                         this.Generate_Global_Hooks();
                     } else {
                         this.Generate_Temporary_Hooks();
@@ -72,9 +72,7 @@ namespace TEvent {
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            if (!e.once) {
-                                e.listenTarget.RemoveListen(e.eventName, this, e.emitFunc);
-                            }
+                            e.listenTarget.RemoveListen(e.eventName, this, e.emitFunc);
                         }
                     });
                 }
