@@ -1,8 +1,10 @@
 import { onMounted, onUnmounted } from 'vue';
-import { AActor } from '@/Libs/AActor';
+import { Component } from '@/Libs/Component';
 import { Preload } from '@/Preload/Preload';
+import { TEvent } from '@/Decorators/TEvent';
+import { App } from '@/App';
 
-class Application extends AActor {
+class Application extends Component {
     public constructor() {
         super();
     }
@@ -15,6 +17,7 @@ class Application extends AActor {
 
     public Run() {
         onMounted(() => {});
+
         onUnmounted(() => {
             this.Destroy();
         });
@@ -22,7 +25,8 @@ class Application extends AActor {
 
     public Destroy() {}
 
-    public Test() {
+    @TEvent.Listen(App, 'Update')
+    public OnUpdate() {
         Preload.message.success('Hello World!');
     }
 }

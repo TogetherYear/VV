@@ -6,23 +6,64 @@ import { DR } from './DR';
  * 事件相关
  */
 namespace TEvent {
+    export const enum Lifecycle {
+        Global,
+        Temporary
+    }
     /**
-     * @author Together
-     * @param events 创建的事件名称
-     * @description 生成事件列表 需要继承 EventSystem
+     * 事件循环体 只要使用的TEvent装饰器的 都要加上这个 放在最上面
      */
-    export function Generate(events: Array<string>) {
+    export function Generate(type = Lifecycle.Temporary) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.Hooks();
+                    this.Generate_CreatEvents();
+                    this.Generate_ListenEvents();
+                    if (type == Lifecycle.Global) {
+                        this.Generate_Global_Hooks();
+                    } else {
+                        this.Generate_Temporary_Hooks();
+                    }
                 }
 
-                private Hooks() {
-                    for (let e of events) {
+                private Generate_CreatEvents() {
+                    const create = (eval(`this['create_NeedCreateEvents']`) || []) as Array<string>;
+                    for (let e of create) {
                         this.AddKey(e);
                     }
+                }
+
+                private Generate_ListenEvents() {
+                    DR.Resolve.then(() => {
+                        const listen = (eval(`this['needListen']`) || []) as Array<{
+                            listenTarget: EventSystem;
+                            eventName: string;
+                            emitFunc: (e: Record<string, unknown> | unknown | any) => void;
+                            once: boolean;
+                        }>;
+                        for (let e of listen) {
+                            e.listenTarget.AddListen(e.eventName, this, e.emitFunc, e.once);
+                        }
+                    });
+                }
+
+                private Generate_Global_Hooks() {}
+
+                private Generate_Temporary_Hooks() {
+                    onUnmounted(() => {
+                        const listen = (eval(`this['needListen']`) || []) as Array<{
+                            listenTarget: EventSystem;
+                            eventName: string;
+                            emitFunc: (e: Record<string, unknown> | unknown | any) => void;
+                            once: boolean;
+                        }>;
+                        for (let e of listen) {
+                            if (!e.once) {
+                                e.listenTarget.RemoveListen(e.eventName, this, e.emitFunc);
+                            }
+                        }
+                    });
                 }
             };
         };
@@ -30,36 +71,50 @@ namespace TEvent {
 
     /**
      * @author Together
-     * @param target 需要监听的目标
-     * @param eventName 监听的事件
-     * @param emitFunc 触发的函数名称
-     * @description 监听事件
+     * @param events 创建的事件名称
+     * @description 生成事件列表 需要继承 EventSystem
      */
-    export function Listen(
-        events: Array<[target: EventSystem, eventName: string, emitFunc: string]>
-    ) {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+    export function Create(events: Array<string>) {
+        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.Hooks();
+                    this.create_NeedCreateEvents = events;
                 }
 
-                private Hooks() {
-                    DR.Resolve.then(() => {
-                        for (let e of events) {
-                            //@ts-ignore
-                            e[0].AddListen(e[1], this, this[e[2]]);
-                        }
-                    });
-                    onUnmounted(() => {
-                        for (let e of events) {
-                            //@ts-ignore
-                            e[0].RemoveListen(e[1], this, this[e[2]]);
-                        }
-                    });
-                }
+                public create_NeedCreateEvents!: Array<string>;
             };
+        };
+    }
+
+    /**
+     * 监听事件
+     */
+    export function Listen(es: EventSystem, eventName: string, once?: boolean) {
+        return function (
+            target: Object,
+            propertyKey: string | symbol,
+            descriptor: PropertyDescriptor
+        ) {
+            const original = descriptor.value.bind(target);
+            descriptor.value = (...args: Array<unknown>) => {
+                original(...args);
+            };
+            //@ts-ignore
+            if (target['needListen']) {
+                //@ts-ignore
+                target['needListen'].push({
+                    listenTarget: es,
+                    eventName,
+                    emitFunc: descriptor.value,
+                    once: once || false
+                });
+            } else {
+                //@ts-ignore
+                target['needListen'] = [
+                    { listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }
+                ];
+            }
         };
     }
 }

@@ -14,9 +14,7 @@ instance.Run();
 </script>
 
 <template>
-    <div class="Application">
-        <n-button type="primary" class="Btn" @click="instance.Test()">Emit</n-button>
-    </div>
+    <div class="Application"></div>
 </template>
 
 <style lang="scss" scoped>

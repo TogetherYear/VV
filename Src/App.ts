@@ -1,7 +1,10 @@
-import { EventSystem } from './Libs/EventSystem';
 import { onMounted, onUnmounted } from 'vue';
+import { Manager } from './Libs/Manager';
+import { TEvent } from './Decorators/TEvent';
 
-class App extends EventSystem {
+@TEvent.Generate(TEvent.Lifecycle.Global)
+@TEvent.Create(['Update'])
+class App extends Manager {
     public InitStates() {
         return {};
     }
@@ -9,7 +12,11 @@ class App extends EventSystem {
     public InitHooks() {}
 
     public Run() {
-        onMounted(() => {});
+        onMounted(() => {
+            setInterval(() => {
+                this.Emit('Update');
+            }, 1000);
+        });
 
         onUnmounted(() => {
             this.Destroy();
