@@ -6,18 +6,29 @@ import { DR } from './DR';
  * 事件相关
  */
 namespace TEvent {
+    /**
+     * 如果类不会销毁用 Global 其余用 Temporary
+     */
     export const enum Lifecycle {
+        /**
+         * 全局
+         */
         Global,
+        /**
+         * 临时
+         */
         Temporary
     }
+
     /**
-     * 事件循环体 只要使用的TEvent装饰器的 都要加上这个 放在最上面
+     * 事件循环体 只要使用了TEvent装饰器的 都要加上这个 放在最上面
      */
     export function Generate(type = Lifecycle.Temporary) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
+                    this.generate_Type = type;
                     this.Generate_CreatEvents();
                     this.Generate_ListenEvents();
                     if (type == Lifecycle.Global) {
@@ -26,6 +37,8 @@ namespace TEvent {
                         this.Generate_Temporary_Hooks();
                     }
                 }
+
+                public generate_Type!: Lifecycle;
 
                 private Generate_CreatEvents() {
                     const create = (eval(`this['create_NeedCreateEvents']`) || []) as Array<string>;
@@ -72,7 +85,7 @@ namespace TEvent {
     /**
      * @author Together
      * @param events 创建的事件名称
-     * @description 生成事件列表 需要继承 EventSystem
+     * @description 生成事件列表
      */
     export function Create(events: Array<string>) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {

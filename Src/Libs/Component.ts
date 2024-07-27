@@ -1,7 +1,8 @@
-import { TEvent } from '@/Decorators/TEvent';
 import { EventSystem } from '@/Libs/EventSystem';
 
-@TEvent.Generate(TEvent.Lifecycle.Temporary)
+/**
+ * 临时组件
+ */
 class Component extends EventSystem {}
 
 export { Component };
