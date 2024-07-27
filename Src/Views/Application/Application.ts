@@ -4,7 +4,6 @@ import { Preload } from '@/Preload/Preload';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
 
-@TEvent.Generate()
 class Application extends Component {
     public constructor() {
         super();

@@ -11,7 +11,7 @@ namespace TEvent {
      */
     export const enum Lifecycle {
         /**
-         * 全局
+         * 全局 不会触发 onUnmounted 钩子的使用这个
          */
         Global,
         /**
@@ -29,18 +29,23 @@ namespace TEvent {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.generate_Type = type;
-                    this.Generate_CreatEvents();
+                    this.generate_IsFinish = true;
                     this.Generate_ListenEvents();
-                    if (type === Lifecycle.Global) {
+                    if (this.generate_Type === Lifecycle.Global) {
                         this.Generate_Global_Hooks();
                     } else {
                         this.Generate_Temporary_Hooks();
+                    }
+                    if (eval(`this['create_IsFinish']`)) {
+                        this.Generate_CreatEvents();
                     }
                 }
 
                 public generate_Type!: Lifecycle;
 
-                private Generate_CreatEvents() {
+                public generate_IsFinish = false;
+
+                public Generate_CreatEvents() {
                     const create = (eval(`this['create_NeedCreateEvents']`) || []) as Array<string>;
                     for (let e of create) {
                         this.AddKey(e);
@@ -64,6 +69,8 @@ namespace TEvent {
                 private Generate_Global_Hooks() {}
 
                 private Generate_Temporary_Hooks() {
+                    onMounted(() => {});
+
                     onUnmounted(() => {
                         const listen = (eval(`this['needListen']`) || []) as Array<{
                             listenTarget: EventSystem;
@@ -91,7 +98,13 @@ namespace TEvent {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.create_NeedCreateEvents = events;
+                    this.create_IsFinish = true;
+                    if (eval(`this['generate_IsFinish']`)) {
+                        eval(`this['Generate_CreatEvents']()`);
+                    }
                 }
+
+                public create_IsFinish = false;
 
                 public create_NeedCreateEvents!: Array<string>;
             };

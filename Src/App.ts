@@ -2,7 +2,6 @@ import { onMounted, onUnmounted } from 'vue';
 import { Manager } from './Libs/Manager';
 import { TEvent } from './Decorators/TEvent';
 
-@TEvent.Generate(TEvent.Lifecycle.Global)
 @TEvent.Create(['Update'])
 class App extends Manager {
     public InitStates() {
