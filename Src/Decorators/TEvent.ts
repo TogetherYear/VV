@@ -21,7 +21,7 @@ namespace TEvent {
     }
 
     /**
-     * 事件循环体 只要使用了TEvent装饰器的 都要加上这个 放在最上面
+     * 事件循环体 只要使用了TEvent装饰器的 都要加上这个
      */
     export function Generate(type = Lifecycle.Temporary) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
