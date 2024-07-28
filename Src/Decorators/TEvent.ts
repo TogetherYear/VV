@@ -46,7 +46,7 @@ namespace TEvent {
                 public generate_IsFinish = false;
 
                 public Generate_CreatEvents() {
-                    const create = (eval(`this['create_NeedCreateEvents']`) || []) as Array<string>;
+                    const create = (eval(`this['create_NeedCreate']`) || []) as Array<string>;
                     for (let e of create) {
                         this.AddKey(e);
                     }
@@ -54,7 +54,7 @@ namespace TEvent {
 
                 private Generate_ListenEvents() {
                     DR.Resolve.then(() => {
-                        const listen = (eval(`this['needListen']`) || []) as Array<{
+                        const listen = (eval(`this['listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             emitFunc: (e: Record<string, unknown> | unknown | any) => void;
@@ -72,7 +72,7 @@ namespace TEvent {
                     onMounted(() => {});
 
                     onUnmounted(() => {
-                        const listen = (eval(`this['needListen']`) || []) as Array<{
+                        const listen = (eval(`this['listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             emitFunc: (e: Record<string, unknown> | unknown | any) => void;
@@ -97,7 +97,7 @@ namespace TEvent {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.create_NeedCreateEvents = events;
+                    this.create_NeedCreate = events;
                     this.create_IsFinish = true;
                     if (eval(`this['generate_IsFinish']`)) {
                         eval(`this['Generate_CreatEvents']()`);
@@ -106,7 +106,7 @@ namespace TEvent {
 
                 public create_IsFinish = false;
 
-                public create_NeedCreateEvents!: Array<string>;
+                public create_NeedCreate!: Array<string>;
             };
         };
     }
@@ -125,9 +125,9 @@ namespace TEvent {
                 original(...args);
             };
             //@ts-ignore
-            if (target['needListen']) {
+            if (target['listen_NeedListen']) {
                 //@ts-ignore
-                target['needListen'].push({
+                target['listen_NeedListen'].push({
                     listenTarget: es,
                     eventName,
                     emitFunc: descriptor.value,
@@ -135,7 +135,7 @@ namespace TEvent {
                 });
             } else {
                 //@ts-ignore
-                target['needListen'] = [
+                target['listen_NeedListen'] = [
                     { listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }
                 ];
             }
