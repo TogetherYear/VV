@@ -115,11 +115,7 @@ namespace TEvent {
      * 监听事件
      */
     export function Listen(es: EventSystem, eventName: string, once?: boolean) {
-        return function (
-            target: Object,
-            propertyKey: string | symbol,
-            descriptor: PropertyDescriptor
-        ) {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             const original = descriptor.value.bind(target);
             descriptor.value = (...args: Array<unknown>) => {
                 original(...args);
@@ -135,9 +131,7 @@ namespace TEvent {
                 });
             } else {
                 //@ts-ignore
-                target['listen_NeedListen'] = [
-                    { listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }
-                ];
+                target['listen_NeedListen'] = [{ listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }];
             }
         };
     }
