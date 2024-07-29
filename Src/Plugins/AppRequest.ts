@@ -1,6 +1,5 @@
 import { EventSystem } from '@/Libs/EventSystem';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Debug } from './Debug';
 import { Preload } from '@/Preload/Preload';
 
 /**
@@ -52,10 +51,10 @@ class AppRequest extends EventSystem {
         this.R.interceptors.response.use(
             (response) => {
                 if (AppRequest.isLogSuccess) {
-                    Debug.Warn('URL: ' + response.config.baseURL + response.config.url, '\nData: ', response.data, '\nResponse:', response);
+                    console.warn('URL: ' + response.config.baseURL + response.config.url, '\nData: ', response.data, '\nResponse:', response);
                 }
                 if (response.data.code && response.data.code !== 0) {
-                    Debug.Error(response.data.message);
+                    console.error(response.data.message);
                     Preload.message.error(response.data.message);
                 }
                 return response;

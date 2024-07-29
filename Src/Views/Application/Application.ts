@@ -28,6 +28,7 @@ class Application extends Component {
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
         Preload.message.success('Hello World!');
+        console.log('AAAAAA');
     }
 }
 
