@@ -3,7 +3,6 @@ import { Component } from '@/Libs/Component';
 import { Preload } from '@/Preload/Preload';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
-import { TTool } from '@/Decorators/TTool';
 
 class Application extends Component {
     public constructor() {

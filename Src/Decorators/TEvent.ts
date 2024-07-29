@@ -61,7 +61,6 @@ namespace TEvent {
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            console.log(e);
                             e.listenTarget.AddListen(e.eventName, this, e.emitFunc, e.once);
                         }
                     });
@@ -117,17 +116,13 @@ namespace TEvent {
      */
     export function Listen(es: EventSystem, eventName: string, once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target);
-            function NewFunc(...args: Array<unknown>) {
-                original(...args);
-            }
             //@ts-ignore
             if (target['listen_NeedListen']) {
                 //@ts-ignore
                 target['listen_NeedListen'].push({
                     listenTarget: es,
                     eventName,
-                    emitFunc: NewFunc.bind(target),
+                    emitFunc: descriptor.value,
                     once: once || false
                 });
             } else {
