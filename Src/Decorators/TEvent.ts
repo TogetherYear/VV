@@ -1,6 +1,6 @@
 import { EventSystem } from '@/Libs/EventSystem';
 import { onMounted, onUnmounted } from 'vue';
-import { DR } from './DR';
+import { Resolve } from './index';
 
 /**
  * 事件相关
@@ -53,7 +53,7 @@ namespace TEvent {
                 }
 
                 private Generate_ListenEvents() {
-                    DR.Resolve.then(() => {
+                    Resolve.then(() => {
                         const listen = (eval(`this['listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
