@@ -3,6 +3,7 @@ import { Component } from '@/Libs/Component';
 import { Preload } from '@/Preload/Preload';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
+import { TTool } from '@/Decorators/TTool';
 
 class Application extends Component {
     public constructor() {
@@ -14,6 +15,8 @@ class Application extends Component {
     }
 
     public InitHooks() {}
+
+    public currentCount = 0;
 
     public Run() {
         onMounted(() => {});
@@ -27,7 +30,8 @@ class Application extends Component {
 
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
-        Preload.message.success('Update!');
+        this.currentCount++;
+        Preload.message.success('Update：' + this.currentCount);
     }
 }
 
