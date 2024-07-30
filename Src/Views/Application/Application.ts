@@ -3,7 +3,9 @@ import { Component } from '@/Libs/Component';
 import { Preload } from '@/Preload/Preload';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
+import { TRouter } from '@/Decorators/TRouter';
 
+@TRouter.Root()
 class Application extends Component {
     public constructor() {
         super();

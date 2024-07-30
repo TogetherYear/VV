@@ -6,10 +6,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Application</title>
         <script src="/Config/index.js"></script>
+        <link rel="stylesheet" href="/Loading/index.css" />
     </head>
 
     <body>
         <div id="App"></div>
+        <div id="Loading">
+            <div class="Content"></div>
+        </div>
+        <svg>
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                <feColorMatrix
+                    values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    0 0 0 20 -10
+                "
+                />
+            </filter>
+        </svg>
         <script type="module" src="/Src/main.ts"></script>
+        <script src="/Loading/index.js"></script>
     </body>
 </html>
