@@ -3,6 +3,7 @@ import { Component } from '@/Libs/Component';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
 import { TRouter } from '@/Decorators/TRouter';
+import { ElMessage } from 'element-plus';
 
 @TRouter.Root()
 class Application extends Component {
@@ -31,6 +32,10 @@ class Application extends Component {
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
         this.currentCount.value++;
+        ElMessage({
+            type: 'info',
+            message: `OnUpdate:${this.currentCount.value}`
+        });
     }
 
     public OnTest() {}
