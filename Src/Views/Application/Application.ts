@@ -3,7 +3,7 @@ import { Component } from '@/Libs/Component';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
 import { TRouter } from '@/Decorators/TRouter';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 @TRouter.Root()
 class Application extends Component {
@@ -38,7 +38,15 @@ class Application extends Component {
         });
     }
 
-    public OnTest() {}
+    public OnTest() {
+        ElMessageBox.confirm('是否关闭?', '提示')
+            .then(() => {
+                console.log('Tes');
+            })
+            .catch(() => {
+                console.log('No');
+            });
+    }
 }
 
 export { Application };
