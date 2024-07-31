@@ -15,7 +15,7 @@ instance.Run();
 
 <template>
     <div class="Application">
-        <div class="Test" @click="instance.OnTest()"></div>
+        <el-button class="Test" @click="instance.OnTest()">Click Me!</el-button>
     </div>
 </template>
 
