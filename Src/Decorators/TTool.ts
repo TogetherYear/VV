@@ -2,7 +2,7 @@ import { isRef, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 namespace TTool {
-    const debounceMap = new Map<string, NodeJS.Timeout>();
+    const debounceMap = new Map<string, number>();
 
     const throttleMap = new Map<string, number>();
 
