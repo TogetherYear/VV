@@ -1,6 +1,5 @@
 import { EventSystem } from '@/Libs/EventSystem';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Preload } from '@/Preload/Preload';
 
 /**
  * Axios请求
@@ -55,25 +54,14 @@ class AppRequest extends EventSystem {
                 }
                 if (response.data.code && response.data.code !== 0) {
                     console.error(response.data.message);
-                    Preload.message.error(response.data.message);
                 }
                 return response;
             },
             (err) => {
                 if (err.response?.status == AppRequest.outCode) {
                     if (!this.isOut) {
-                        Preload.dialog.destroyAll();
-                        Preload.dialog.error({
-                            title: 'Token过期',
-                            content: '请重新登录更新Token',
-                            positiveText: '确定',
-                            closable: false,
-                            maskClosable: false,
-                            onPositiveClick: () => {
-                                this.ResetAccount();
-                                Preload.message.error('登录凭证过期');
-                            }
-                        });
+                        this.ResetAccount();
+                        console.error('登录凭证过期');
                         this.isOut = true;
                     }
                 }
