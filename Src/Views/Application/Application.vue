@@ -14,7 +14,9 @@ instance.Run();
 </script>
 
 <template>
-    <div class="Application"></div>
+    <div class="Application">
+        <div class="Test" @click="instance.OnTest()"></div>
+    </div>
 </template>
 
 <style lang="scss" scoped>

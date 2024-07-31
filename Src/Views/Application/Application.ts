@@ -1,6 +1,5 @@
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Component } from '@/Libs/Component';
-import { Preload } from '@/Preload/Preload';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
 import { TRouter } from '@/Decorators/TRouter';
@@ -17,7 +16,7 @@ class Application extends Component {
 
     public InitHooks() {}
 
-    public currentCount = 0;
+    public currentCount = ref<number>(0);
 
     public Run() {
         onMounted(() => {});
@@ -31,9 +30,10 @@ class Application extends Component {
 
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
-        this.currentCount++;
-        Preload.message.success('Update：' + this.currentCount);
+        this.currentCount.value++;
     }
+
+    public OnTest() {}
 }
 
 export { Application };
