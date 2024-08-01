@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 
 namespace TRouter {
     /**
-     * 给子路由用的
+     * 给子路由用的 如果你想在调试页面获取当前实例 就添加这个
      */
     export function Register() {
         return function <T extends new (...args: Array<any>) => Component>(C: T) {
@@ -12,13 +12,13 @@ namespace TRouter {
                 constructor(...args: Array<any>) {
                     super(...args);
                     const route = useRoute();
-                    this.register_Path = route.path;
-                    this.Register_Hooks();
+                    this.tRouter_register_Path = route.path;
+                    this.TRouter_Register_Hooks();
                 }
 
-                public register_Path!: string;
+                public tRouter_register_Path!: string;
 
-                private Register_Hooks() {
+                private TRouter_Register_Hooks() {
                     onMounted(() => {
                         //@ts-ignore
                         window.currentComponent = this;
@@ -41,10 +41,10 @@ namespace TRouter {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.Root_Hooks();
+                    this.TRouter_Root_Hooks();
                 }
 
-                private Root_Hooks() {
+                private TRouter_Root_Hooks() {
                     onMounted(() => {
                         //@ts-ignore
                         window.HideLoading();

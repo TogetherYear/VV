@@ -9,10 +9,6 @@ import { TTool } from '@/Decorators/TTool';
 @TRouter.Root()
 @TTool.Cache('currentCount')
 class Application extends Component {
-    public constructor() {
-        super();
-    }
-
     public InitStates() {
         return {};
     }
@@ -40,7 +36,10 @@ class Application extends Component {
         });
     }
 
+    @TTool.Debounce(2000)
     public OnTest() {
+        console.log(this.currentCount.value);
+        return;
         ElMessageBox.confirm('是否关闭?', '提示')
             .then(() => {
                 console.log('Tes');

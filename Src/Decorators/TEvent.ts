@@ -28,33 +28,33 @@ namespace TEvent {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.generate_Type = type;
-                    this.generate_IsFinish = true;
-                    this.Generate_ListenEvents();
-                    if (this.generate_Type === Lifecycle.Global) {
-                        this.Generate_Global_Hooks();
+                    this.tEvent_Generate_Type = type;
+                    this.tEvent_Generate_IsFinish = true;
+                    this.TEvent_Generate_ListenEvents();
+                    if (this.tEvent_Generate_Type === Lifecycle.Global) {
+                        this.TEvent_Generate_Global_Hooks();
                     } else {
-                        this.Generate_Temporary_Hooks();
+                        this.TEvent_Generate_Temporary_Hooks();
                     }
-                    if (eval(`this['create_IsFinish']`)) {
-                        this.Generate_CreatEvents();
+                    if (eval(`this['tEvent_Create_IsFinish']`)) {
+                        this.TEvent_Generate_CreatEvents();
                     }
                 }
 
-                public generate_Type!: Lifecycle;
+                public tEvent_Generate_Type!: Lifecycle;
 
-                public generate_IsFinish = false;
+                public tEvent_Generate_IsFinish = false;
 
-                public Generate_CreatEvents() {
-                    const create = (eval(`this['create_NeedCreate']`) || []) as Array<string>;
+                public TEvent_Generate_CreatEvents() {
+                    const create = (eval(`this['tEvent_Create_NeedCreate']`) || []) as Array<string>;
                     for (let e of create) {
                         this.AddKey(e);
                     }
                 }
 
-                private Generate_ListenEvents() {
+                private TEvent_Generate_ListenEvents() {
                     Resolve.then(() => {
-                        const listen = (eval(`this['listen_NeedListen']`) || []) as Array<{
+                        const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             emitFunc: (e: Record<string, unknown> | unknown | any) => void;
@@ -66,13 +66,13 @@ namespace TEvent {
                     });
                 }
 
-                private Generate_Global_Hooks() {}
+                private TEvent_Generate_Global_Hooks() {}
 
-                private Generate_Temporary_Hooks() {
+                private TEvent_Generate_Temporary_Hooks() {
                     onMounted(() => {});
 
                     onUnmounted(() => {
-                        const listen = (eval(`this['listen_NeedListen']`) || []) as Array<{
+                        const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             emitFunc: (e: Record<string, unknown> | unknown | any) => void;
@@ -97,16 +97,16 @@ namespace TEvent {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
-                    this.create_NeedCreate = events;
-                    this.create_IsFinish = true;
-                    if (eval(`this['generate_IsFinish']`)) {
-                        eval(`this['Generate_CreatEvents']()`);
+                    this.tEvent_Create_NeedCreate = events;
+                    this.tEvent_Create_IsFinish = true;
+                    if (eval(`this['tEvent_Generate_IsFinish']`)) {
+                        eval(`this['TEvent_Generate_CreatEvents']()`);
                     }
                 }
 
-                public create_IsFinish = false;
+                public tEvent_Create_IsFinish = false;
 
-                public create_NeedCreate!: Array<string>;
+                public tEvent_Create_NeedCreate!: Array<string>;
             };
         };
     }
@@ -117,9 +117,9 @@ namespace TEvent {
     export function Listen(es: EventSystem, eventName: string, once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
-            if (target['listen_NeedListen']) {
+            if (target['tEvent_Listen_NeedListen']) {
                 //@ts-ignore
-                target['listen_NeedListen'].push({
+                target['tEvent_Listen_NeedListen'].push({
                     listenTarget: es,
                     eventName,
                     emitFunc: descriptor.value,
@@ -127,7 +127,7 @@ namespace TEvent {
                 });
             } else {
                 //@ts-ignore
-                target['listen_NeedListen'] = [{ listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }];
+                target['tEvent_Listen_NeedListen'] = [{ listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }];
             }
         };
     }

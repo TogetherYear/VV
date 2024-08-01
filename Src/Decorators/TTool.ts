@@ -1,3 +1,4 @@
+import { Time } from '@/Utils/Time';
 import { isRef, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -9,28 +10,99 @@ namespace TTool {
     const cacheMap = new Map<string, Array<{ key: string; value: unknown }>>();
 
     /**
+     * 工具生成
+     */
+    export function Generate() {
+        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+            return class extends C {
+                constructor(...args: Array<any>) {
+                    super(...args);
+                    this.TTool_Generate_Debounce();
+                    this.TTool_Generate_Throttle();
+                }
+
+                private tTool_Generate_Id = Time.GenerateRandomUid();
+
+                private TTool_Generate_Debounce() {
+                    const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
+                        funcName: string;
+                        delta: number;
+                    }>;
+                    for (let e of create) {
+                        //@ts-ignore
+                        const original = this[`${e.funcName}`].bind(this);
+                        //@ts-ignore
+                        this[`${e.funcName}`] = function (...args: Array<unknown>) {
+                            const key = `${this.tTool_Generate_Id}:${e.funcName}`;
+                            let timer = debounceMap.get(key);
+                            if (timer) {
+                                clearTimeout(timer);
+                                timer = setTimeout(() => {
+                                    original(...args);
+                                    debounceMap.delete(key);
+                                }, e.delta);
+                            } else {
+                                timer = setTimeout(() => {
+                                    original(...args);
+                                    debounceMap.delete(key);
+                                }, e.delta);
+                            }
+                            debounceMap.set(key, timer);
+                        };
+                    }
+                }
+
+                private TTool_Generate_Throttle() {
+                    const create = (eval(`this['tTool_Throttle_NeedCreate']`) || []) as Array<{
+                        funcName: string;
+                        delta: number;
+                    }>;
+                    for (let e of create) {
+                        //@ts-ignore
+                        const original = this[`${e.funcName}`].bind(this);
+                        //@ts-ignore
+                        this[`${e.funcName}`] = function (...args: Array<unknown>) {
+                            const key = `${this.tTool_Generate_Id}:${e.funcName}`;
+                            let lastTime = throttleMap.get(key);
+                            if (lastTime) {
+                                const currentTime = Date.now();
+                                if (currentTime - lastTime > e.delta) {
+                                    lastTime = currentTime;
+                                    original(...args);
+                                }
+                            } else {
+                                lastTime = Date.now();
+                                original(...args);
+                            }
+                            throttleMap.set(key, lastTime);
+                        };
+                    }
+                }
+            };
+        };
+    }
+
+    /**
      * 防抖 默认 500 毫秒
      */
     export function Debounce(delta = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target);
-            descriptor.value = (...args: Array<unknown>) => {
-                const key = `${target.constructor.name}:${propertyKey}`;
-                let timer = debounceMap.get(key);
-                if (timer) {
-                    clearTimeout(timer);
-                    timer = setTimeout(() => {
-                        original(...args);
-                        debounceMap.delete(key);
-                    }, delta);
-                } else {
-                    timer = setTimeout(() => {
-                        original(...args);
-                        debounceMap.delete(key);
-                    }, delta);
-                }
-                debounceMap.set(key, timer);
-            };
+            //@ts-ignore
+            if (target['tTool_Debounce_NeedCreate']) {
+                //@ts-ignore
+                target['tTool_Debounce_NeedCreate'].push({
+                    funcName: propertyKey,
+                    delta
+                });
+            } else {
+                //@ts-ignore
+                target['tTool_Debounce_NeedCreate'] = [
+                    {
+                        funcName: propertyKey,
+                        delta
+                    }
+                ];
+            }
         };
     }
 
@@ -39,22 +111,22 @@ namespace TTool {
      */
     export function Throttle(delta = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
-            const original = descriptor.value.bind(target);
-            descriptor.value = (...args: Array<unknown>) => {
-                const key = `${target.constructor.name}:${propertyKey}`;
-                let lastTime = throttleMap.get(key);
-                if (lastTime) {
-                    const currentTime = Date.now();
-                    if (currentTime - lastTime > delta) {
-                        lastTime = currentTime;
-                        original(...args);
+            //@ts-ignore
+            if (target['tTool_Throttle_NeedCreate']) {
+                //@ts-ignore
+                target['tTool_Throttle_NeedCreate'].push({
+                    funcName: propertyKey,
+                    delta
+                });
+            } else {
+                //@ts-ignore
+                target['tTool_Throttle_NeedCreate'] = [
+                    {
+                        funcName: propertyKey,
+                        delta
                     }
-                } else {
-                    lastTime = Date.now();
-                    original(...args);
-                }
-                throttleMap.set(key, lastTime);
-            };
+                ];
+            }
         };
     }
 
@@ -67,21 +139,21 @@ namespace TTool {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.needCache = needs;
-                    this.Hooks();
+                    this.Cache_Hooks();
                 }
 
                 private currentUrl = '';
 
                 private needCache: Array<string> = [];
 
-                private Hooks() {
-                    this.Get();
+                private Cache_Hooks() {
+                    this.Cache_Get();
                     onUnmounted(() => {
-                        this.Set();
+                        this.Cache_Set();
                     });
                 }
 
-                private Get() {
+                private Cache_Get() {
                     const route = useRoute();
                     this.currentUrl = `${route.path}:${C.name}`;
                     const current = cacheMap.get(this.currentUrl);
@@ -93,7 +165,7 @@ namespace TTool {
                     }
                 }
 
-                private Set() {
+                private Cache_Set() {
                     const cache: Array<{ key: string; value: unknown }> = [];
                     for (let c of this.needCache) {
                         const deep = c.split('.');
