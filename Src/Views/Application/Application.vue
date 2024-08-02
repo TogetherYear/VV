@@ -18,6 +18,7 @@ instance.Run();
     <div class="Application">
         <el-button type="success" @click="instance.OnBtnClick()">Application:Click Me!</el-button>
         <TryVue></TryVue>
+        <span class="Application_Need"></span>
     </div>
 </template>
 

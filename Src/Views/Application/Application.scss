@@ -7,5 +7,17 @@
     background-color: #2b2b2b;
     color: #eeeeee;
     font-size: 20px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    .Application_Need {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        top: calc(100% + 100px);
+        left: 0;
+        background: #dd8080;
+    }
 }

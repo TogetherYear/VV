@@ -6,6 +6,7 @@ import { TRouter } from '@/Decorators/TRouter';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { Try } from './Component/Try/Try';
+import { TView } from '@/Decorators/TView';
 
 @TRouter.Root()
 @TTool.Cache('currentCount')
@@ -57,6 +58,14 @@ class Application extends Component {
         ElMessage({
             type: 'info',
             message: `From:Empty:Application`
+        });
+    }
+
+    @TView.Observer('.Application_Need')
+    public OnNeedState(flag: boolean) {
+        ElMessage({
+            type: 'info',
+            message: `OnNeedState:${flag}`
         });
     }
 }
