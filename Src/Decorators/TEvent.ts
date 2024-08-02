@@ -57,11 +57,12 @@ namespace TEvent {
                         const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
-                            emitFunc: (e: Record<string, unknown> | unknown | any) => void;
+                            funcName: string;
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            e.listenTarget.AddListen(e.eventName, this, e.emitFunc, e.once);
+                            //@ts-ignore
+                            e.listenTarget.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
                         }
                     });
                 }
@@ -75,11 +76,12 @@ namespace TEvent {
                         const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
-                            emitFunc: (e: Record<string, unknown> | unknown | any) => void;
+                            funcName: string;
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            e.listenTarget.RemoveListen(e.eventName, this, e.emitFunc);
+                            //@ts-ignore
+                            e.listenTarget.RemoveListen(e.eventName, this, this[`${e.funcName}`]);
                         }
                     });
                 }
@@ -122,12 +124,12 @@ namespace TEvent {
                 target['tEvent_Listen_NeedListen'].push({
                     listenTarget: es,
                     eventName,
-                    emitFunc: descriptor.value,
+                    funcName: propertyKey,
                     once: once || false
                 });
             } else {
                 //@ts-ignore
-                target['tEvent_Listen_NeedListen'] = [{ listenTarget: es, eventName, emitFunc: descriptor.value, once: once || false }];
+                target['tEvent_Listen_NeedListen'] = [{ listenTarget: es, eventName, funcName: propertyKey, once: once || false }];
             }
         };
     }
