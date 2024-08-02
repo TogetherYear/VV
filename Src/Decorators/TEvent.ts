@@ -11,11 +11,11 @@ namespace TEvent {
      */
     export const enum Lifecycle {
         /**
-         * 全局 不会触发 onUnmounted 钩子的使用这个
+         * 全局管理
          */
         Global,
         /**
-         * 临时
+         * 页面组件
          */
         Temporary
     }

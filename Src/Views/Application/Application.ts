@@ -5,6 +5,7 @@ import { App } from '@/App';
 import { TRouter } from '@/Decorators/TRouter';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
+import { Try } from './Component/Try/Try';
 
 @TRouter.Root()
 @TTool.Cache('currentCount')
@@ -14,6 +15,8 @@ class Application extends Component {
     }
 
     public InitHooks() {}
+
+    public try = new Try(this);
 
     public currentCount = ref<number>(0);
 
@@ -32,13 +35,13 @@ class Application extends Component {
         this.currentCount.value++;
         ElMessage({
             type: 'info',
-            message: `OnUpdate:${this.currentCount.value}`
+            message: `OnUpdate:Application:${this.currentCount.value}`
         });
     }
 
-    @TTool.Debounce(2000)
-    public OnTest() {
-        console.log(this.currentCount.value);
+    @TTool.Debounce(1000)
+    public OnBtnClick() {
+        console.log('Application:', this.currentCount.value);
         return;
         ElMessageBox.confirm('是否关闭?', '提示')
             .then(() => {

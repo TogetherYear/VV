@@ -4,11 +4,11 @@ import { TTool } from '@/Decorators/TTool';
 import { EventSystem } from '@/Libs/EventSystem';
 
 /**
- * 临时组件
+ * 页面组件
  */
-@TRouter.Register()
 @TEvent.Generate(TEvent.Lifecycle.Temporary)
 @TTool.Generate()
+@TRouter.Generate()
 class Component extends EventSystem {}
 
 export { Component };

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { provide } from 'vue';
 import { Application } from './Application';
+import TryVue from './Component/Try/Try.vue';
 
 const instance = new Application();
 
@@ -15,7 +16,8 @@ instance.Run();
 
 <template>
     <div class="Application">
-        <el-button class="Test" @click="instance.OnTest()">Click Me!</el-button>
+        <el-button @click="instance.OnBtnClick()">Application:Click Me!</el-button>
+        <TryVue></TryVue>
     </div>
 </template>
 
