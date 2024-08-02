@@ -5,6 +5,7 @@ import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App';
 import { ElMessage } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
+import { TRouter } from '@/Decorators/TRouter';
 
 class Try extends Component {
     public constructor(parent: Application) {
@@ -36,7 +37,7 @@ class Try extends Component {
     public OnUpdate() {
         this.currentCount.value++;
         ElMessage({
-            type: 'info',
+            type: 'error',
             message: `OnUpdate:Try:${this.currentCount.value}`
         });
     }
@@ -44,6 +45,14 @@ class Try extends Component {
     @TTool.Throttle(1000)
     public OnBtnClick() {
         console.log('Try:', this.currentCount.value);
+    }
+
+    @TRouter.To('Empty')
+    public OnTo() {
+        ElMessage({
+            type: 'info',
+            message: `To:Empty:Try`
+        });
     }
 }
 

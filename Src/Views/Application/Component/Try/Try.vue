@@ -13,7 +13,7 @@ instance.try.Run();
 
 <template>
     <div class="Try">
-        <el-button @click="instance.try.OnBtnClick()">Try:Click Me!</el-button>
+        <el-button type="danger" @click="instance.try.OnBtnClick()">Try:Click Me!</el-button>
     </div>
 </template>
 

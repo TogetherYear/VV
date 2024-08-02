@@ -34,7 +34,7 @@ class Application extends Component {
     public OnUpdate() {
         this.currentCount.value++;
         ElMessage({
-            type: 'info',
+            type: 'success',
             message: `OnUpdate:Application:${this.currentCount.value}`
         });
     }
@@ -50,6 +50,14 @@ class Application extends Component {
             .catch(() => {
                 console.log('No');
             });
+    }
+
+    @TRouter.From('Empty')
+    public OnFrom() {
+        ElMessage({
+            type: 'info',
+            message: `From:Empty:Application`
+        });
     }
 }
 
