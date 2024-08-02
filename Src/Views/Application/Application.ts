@@ -53,7 +53,7 @@ class Application extends Component {
             });
     }
 
-    @TRouter.From('Empty')
+    @TRouter.WhenFrom('Empty')
     public OnFrom() {
         ElMessage({
             type: 'info',

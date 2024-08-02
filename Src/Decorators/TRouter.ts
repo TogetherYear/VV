@@ -93,7 +93,7 @@ namespace TRouter {
     /**
      * 如果从 from 路由进来 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 不支持传参
      */
-    export function From(from: string) {
+    export function WhenFrom(from: string) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_From_NeedCreate']) {
@@ -117,7 +117,7 @@ namespace TRouter {
     /**
      * 如果进入 to 路由 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 不支持传参
      */
-    export function To(to: string) {
+    export function WhenTo(to: string) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_To_NeedCreate']) {

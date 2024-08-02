@@ -47,7 +47,7 @@ class Try extends Component {
         console.log('Try:', this.currentCount.value);
     }
 
-    @TRouter.To('Empty')
+    @TRouter.WhenTo('Empty')
     public OnTo() {
         ElMessage({
             type: 'info',
