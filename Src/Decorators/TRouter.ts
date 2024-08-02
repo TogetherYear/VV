@@ -2,7 +2,13 @@ import { onMounted, onUnmounted } from 'vue';
 import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
 namespace TRouter {
+    /**
+     * 上一次路由
+     */
     let lastPath = '';
+    /**
+     * 当前路由
+     */
     let currentPath = '';
     /**
      * 路由生成
