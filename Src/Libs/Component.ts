@@ -11,6 +11,16 @@ import { EventSystem } from '@/Libs/EventSystem';
 @TTool.Generate()
 @TRouter.Generate()
 @TView.Generate()
-class Component extends EventSystem {}
+class Component extends EventSystem {
+    /**
+     * 当前页面路由
+     */
+    public tRouter_Generate_Route!: string;
+
+    /**
+     * 当前页面参数
+     */
+    public tRouter_Generate_Query!: Record<string, unknown>;
+}
 
 export { Component };
