@@ -1,10 +1,14 @@
-import { EventSystem } from '@/Libs/EventSystem';
+import { Manager } from '@/Libs/Manager';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 /**
  * Axios请求
  */
-class AppRequest extends EventSystem {
+class AppRequest extends Manager {
+    constructor() {
+        super();
+        this.CreatRequest();
+    }
     private request!: AxiosInstance;
 
     public get R() {
@@ -16,10 +20,6 @@ class AppRequest extends EventSystem {
     private static outCode = 401;
 
     private isOut = false;
-
-    public Run() {
-        this.CreatRequest();
-    }
 
     private CreatRequest() {
         this.request = axios.create({

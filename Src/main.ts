@@ -4,4 +4,6 @@ import AppVue from './App.vue';
 
 import router from './Router';
 
+import './Plugins/AppRequest';
+
 createApp(AppVue).use(router).mount('#App');
