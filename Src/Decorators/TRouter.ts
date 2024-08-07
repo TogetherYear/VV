@@ -21,19 +21,7 @@ namespace TRouter {
                     this.TRouter_Generate_Hooks();
                 }
 
-                public tRouter_Generate_Route!: string;
-
-                public tRouter_Generate_Query!: Record<string, unknown>;
-
-                private TRouter_Generate_Page() {
-                    const route = useRoute();
-                    this.tRouter_Generate_Route = route.path;
-                    this.tRouter_Generate_Query = { ...route.query };
-                }
-
                 private TRouter_Generate_Hooks() {
-                    this.TRouter_Generate_Page();
-
                     onMounted(() => {
                         this.TRouter_Generate_EmitFrom();
                     });
