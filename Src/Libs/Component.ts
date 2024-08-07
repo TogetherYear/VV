@@ -1,3 +1,4 @@
+import { TComponent } from '@/Decorators/TComponent';
 import { TEvent } from '@/Decorators/TEvent';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTool } from '@/Decorators/TTool';
@@ -11,6 +12,7 @@ import { EventSystem } from '@/Libs/EventSystem';
 @TTool.Generate()
 @TRouter.Generate()
 @TView.Generate()
+@TComponent.Generate()
 class Component extends EventSystem {
     /**
      * 当前页面路由

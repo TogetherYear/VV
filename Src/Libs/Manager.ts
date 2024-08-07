@@ -1,5 +1,5 @@
 import { TEvent } from '@/Decorators/TEvent';
-import { TRouter } from '@/Decorators/TRouter';
+import { TManager } from '@/Decorators/TManager';
 import { TTool } from '@/Decorators/TTool';
 import { EventSystem } from '@/Libs/EventSystem';
 
@@ -8,6 +8,7 @@ import { EventSystem } from '@/Libs/EventSystem';
  */
 @TEvent.Generate(TEvent.Lifecycle.Global)
 @TTool.Generate()
+@TManager.Generate()
 class Manager extends EventSystem {}
 
 export { Manager };
