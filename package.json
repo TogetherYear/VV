@@ -6,7 +6,7 @@
         "prettier:all": "prettier --write .",
         "prettier": "prettier --write",
         "build": "vite build",
-        "AAA": "node ./Shell/Clean.js && node ./Shell/Compress.js",
+        "postbuild": "node ./Shell/Clean.js && node ./Shell/Compress.js",
         "preview": "vite preview"
     },
     "dependencies": {
