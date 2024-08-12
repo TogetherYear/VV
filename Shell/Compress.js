@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const inputPath = path.join(__dirname, '../Dist');
-const outputPath = path.join(__dirname, '../DistA.zip');
+const outputPath = path.join(__dirname, '../Dist.zip');
 
 const zipStream = new compressing.zip.Stream();
 
