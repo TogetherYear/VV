@@ -12,7 +12,7 @@ zipStream.addEntry(inputPath);
 
 const destStream = fs.createWriteStream(outputPath);
 
-const result = zipStream.pipe(destStream)
+const result = zipStream.pipe(destStream);
 
 result.on('finish', () => {
     cp.exec(`explorer.exe /select,"${outputPath}"`);
