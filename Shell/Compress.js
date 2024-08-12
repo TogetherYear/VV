@@ -16,4 +16,4 @@ const result = zipStream.pipe(destStream);
 
 result.on('finish', () => {
     cp.exec(`explorer.exe /select,"${outputPath}"`);
-})
+});

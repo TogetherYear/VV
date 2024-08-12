@@ -1,1 +1,1 @@
-console.log("Clean")
+console.log('Clean');
