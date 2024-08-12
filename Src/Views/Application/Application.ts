@@ -9,7 +9,7 @@ import { Try } from './Component/Try/Try';
 import { TView } from '@/Decorators/TView';
 
 @TRouter.Root()
-@TTool.Cache('currentCount')
+@TTool.Cache(['currentCount'])
 class Application extends Component {
     public InitStates() {
         return {};

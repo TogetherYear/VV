@@ -133,7 +133,7 @@ namespace TTool {
     /**
      * 缓存页面 参数为字符串 支持 普通类型 对象类型 ref reactive (不支持嵌套) 可以缓存对象单个属性 或者整个对象 比如 Object 或者 Object.pro 不需要写 .value
      */
-    export function Cache(...needs: Array<string>) {
+    export function Cache(needs: Array<string>) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
