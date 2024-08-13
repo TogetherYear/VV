@@ -2,10 +2,11 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { Component } from '@/Libs/Component';
 import { Application } from '../../Application';
 import { TEvent } from '@/Decorators/TEvent';
-import { App } from '@/App';
+import { App } from '@/App/App';
 import { ElMessage } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
+import { TTest } from '@/Decorators/TTest';
 
 class Try extends Component {
     public constructor(parent: Application) {
@@ -53,6 +54,11 @@ class Try extends Component {
             type: 'info',
             message: `To:Empty:Try`
         });
+    }
+
+    @TTest.Bind('测试:Try', { value: 'TSingleton', count: 24 }, true)
+    public BindTest(options: { value: string; count: number }, type: boolean) {
+        console.log(this, options, type);
     }
 }
 

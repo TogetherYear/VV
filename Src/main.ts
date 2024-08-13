@@ -1,9 +1,9 @@
 import { createApp } from 'vue';
 
-import AppVue from './App.vue';
+import RootVue from './Root.vue';
 
 import router from './Router';
 
 import './Plugins/AppRequest';
 
-createApp(AppVue).use(router).mount('#App');
+createApp(RootVue).use(router).mount('#App');

@@ -1,5 +1,4 @@
-import { Time } from '@/Utils/Time';
-import { isRef, onMounted, onUnmounted } from 'vue';
+import { isRef, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 namespace TTool {
@@ -21,8 +20,6 @@ namespace TTool {
                     this.TTool_Generate_Throttle();
                 }
 
-                private tTool_Generate_Id = Time.GenerateRandomUid();
-
                 private TTool_Generate_Debounce() {
                     const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
                         funcName: string;
@@ -33,7 +30,7 @@ namespace TTool {
                         const original = this[`${e.funcName}`].bind(this);
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
-                            const key = `${this.tTool_Generate_Id}:${e.funcName}`;
+                            const key = `${eval(`this.unique_Id`)}:${e.funcName}`;
                             let timer = debounceMap.get(key);
                             if (timer) {
                                 clearTimeout(timer);
@@ -62,7 +59,7 @@ namespace TTool {
                         const original = this[`${e.funcName}`].bind(this);
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
-                            const key = `${this.tTool_Generate_Id}:${e.funcName}`;
+                            const key = `${eval(`this.unique_Id`)}:${e.funcName}`;
                             let lastTime = throttleMap.get(key);
                             if (lastTime) {
                                 const currentTime = Date.now();

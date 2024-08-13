@@ -7,9 +7,7 @@ App.Run();
 </script>
 
 <template>
-    <el-config-provider>
-        <router-view />
-    </el-config-provider>
+    <router-view />
 </template>
 
 <style lang="scss">

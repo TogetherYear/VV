@@ -1,12 +1,12 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { Component } from '@/Libs/Component';
 import { TEvent } from '@/Decorators/TEvent';
-import { App } from '@/App';
 import { TRouter } from '@/Decorators/TRouter';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { Try } from './Component/Try/Try';
 import { TView } from '@/Decorators/TView';
+import { App } from '@/App/App';
 
 @TRouter.Root()
 @TTool.Cache(['currentCount'])

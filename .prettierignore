@@ -1,4 +1,4 @@
 Dist
-Public
+# Public 默认优化 Public 到时候如果需要依赖第三方 在 这里设置忽略
 auto-imports.d.ts
 components.d.ts

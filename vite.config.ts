@@ -7,6 +7,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import ElementPlus from 'unplugin-element-plus/vite';
 
 export default defineConfig(({ command, mode }) => {
+    const boundEnv = command === 'serve' ? 'Local' : process.argv.splice(-1)[0];
     return {
         plugins: [
             vue({
