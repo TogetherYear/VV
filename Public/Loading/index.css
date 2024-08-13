@@ -22,35 +22,35 @@
     margin: auto;
     perspective: 200px;
     transform: scale(1.2);
-  }
-  
-  .Content:before,
-  .Content:after {
+}
+
+.Content:before,
+.Content:after {
     position: absolute;
     width: 20px;
     height: 20px;
-    content: "";
+    content: '';
     animation: Jump 0.5s infinite alternate;
     background: #ffffff;
-  }
-  
-  .Content:before {
+}
+
+.Content:before {
     left: 0;
-  }
-  
-  .Content:after {
+}
+
+.Content:after {
     right: 0;
     animation-delay: 0.15s;
-  }
-  
-  @keyframes Jump {
+}
+
+@keyframes Jump {
     0% {
-      transform: scale(1) translateY(0px) rotateX(0deg);
-      box-shadow: 0 0 0 0 #aaaaaa;
+        transform: scale(1) translateY(0px) rotateX(0deg);
+        box-shadow: 0 0 0 0 #aaaaaa;
     }
-  
+
     100% {
-      transform: scale(1.2) translateY(-25px) rotateX(45deg);
-      box-shadow: 0px 24px 46px 8px #aaaaaa;
+        transform: scale(1.2) translateY(-25px) rotateX(45deg);
+        box-shadow: 0px 24px 46px 8px #aaaaaa;
     }
-  }
+}

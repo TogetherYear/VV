@@ -3,8 +3,7 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite",
-        "prettier:all": "prettier --write .",
-        "prettier": "prettier --write",
+        "prettier": "prettier --write .",
         "build:plus": "vite build -- Plus",
         "build:release": "vite build -- Release",
         "postbuild:plus": "node ./Shell/Clean.js Plus && node ./Shell/Config.js Plus && node ./Shell/Compress.js Plus",
