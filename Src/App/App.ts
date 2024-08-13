@@ -26,7 +26,7 @@ class App extends Manager {
 
     public Destroy() {}
 
-    @TTest.Bind('测试:App', 'App', '测试', true)
+    @TTest.BindFunction('测试:App', 'App', '测试', true)
     public BindTest(label: string, title: string, type: boolean) {
         console.log(this, label, title, type);
         router.push({

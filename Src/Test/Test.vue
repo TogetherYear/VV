@@ -3,14 +3,15 @@ import { TTest } from '@/Decorators/TTest';
 import { Test } from './Test';
 
 const { isShow } = Test.InitStates();
-const { testMap } = TTest;
+const { functionMap, propertyMap } = TTest;
 Test.InitHooks();
 Test.Run();
 </script>
 
 <template>
-    <div class="Test" v-show="testMap.size != 0 && isShow">
-        <span class="Item" v-for="t in testMap" :key="t[0]" @click="Test.OnClickTest(t[1])">{{ t[1].label }}</span>
+    <div class="Test" v-show="isShow && (functionMap.size != 0 || propertyMap.size != 0)">
+        <span class="FunctionItem" v-for="f in functionMap" :key="f[0]" @click="Test.OnClickTest(f[1])">{{ f[1].label }}</span>
+        <span class="PropertyItem" v-for="p in propertyMap" :key="p[0]">{{ p[1].label }} : {{ p[1].property }}</span>
     </div>
 </template>
 

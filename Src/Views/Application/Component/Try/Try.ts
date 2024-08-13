@@ -17,6 +17,7 @@ class Try extends Component {
 
     private parent!: Application;
 
+    @TTest.BindProperty('Try数量')
     public currentCount = ref<number>(0);
 
     public InitStates() {
@@ -57,7 +58,7 @@ class Try extends Component {
         });
     }
 
-    @TTest.Bind('测试:Try', { value: 'TSingleton' }, (instance: Try) => instance.currentCount.value)
+    @TTest.BindFunction('测试:Try', { value: 'TSingleton' }, (instance: Try) => instance.currentCount.value)
     public BindTest(options: { value: string }, count: number) {
         console.log(this, options, count);
         router.push({

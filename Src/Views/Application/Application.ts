@@ -7,6 +7,7 @@ import { TTool } from '@/Decorators/TTool';
 import { Try } from './Component/Try/Try';
 import { TView } from '@/Decorators/TView';
 import { App } from '@/App/App';
+import { TTest } from '@/Decorators/TTest';
 
 @TRouter.Root()
 @TTool.Cache(['currentCount'])
@@ -19,6 +20,7 @@ class Application extends Component {
 
     public try = new Try(this);
 
+    @TTest.BindProperty('Application数量')
     public currentCount = ref<number>(0);
 
     public Run() {
