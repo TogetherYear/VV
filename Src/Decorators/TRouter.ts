@@ -87,7 +87,7 @@ namespace TRouter {
     }
 
     /**
-     * 如果从 from 路由进来 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 不支持传参
+     * 如果从 from 路由进来 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( from 为 '/' 即只要进来就会触发)
      */
     export function WhenFrom(from: string) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
@@ -111,7 +111,7 @@ namespace TRouter {
     }
 
     /**
-     * 如果进入 to 路由 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 不支持传参
+     * 如果进入 to 路由 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( To 为 '/' 即只要离开就会触发)
      */
     export function WhenTo(to: string) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
