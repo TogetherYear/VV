@@ -54,7 +54,7 @@ namespace TTest {
     }
 
     /**
-     * 绑定测试函数
+     * 绑定测试函数 ...args 为需要传递的参数列表 如果需要传递类中变量 需要使用 函数 此函数只有一个参数 为 当前类实例 我会自动给你
      */
     export function Bind(label: string, ...args: Array<unknown>) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {

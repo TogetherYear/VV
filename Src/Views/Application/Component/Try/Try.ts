@@ -57,9 +57,9 @@ class Try extends Component {
         });
     }
 
-    @TTest.Bind('测试:Try', { value: 'TSingleton', count: 24 }, true)
-    public BindTest(options: { value: string; count: number }, type: boolean) {
-        console.log(this, options, type);
+    @TTest.Bind('测试:Try', { value: 'TSingleton' }, (instance: Try) => instance.currentCount.value)
+    public BindTest(options: { value: string }, count: number) {
+        console.log(this, options, count);
         router.push({
             path: '/Empty'
         });

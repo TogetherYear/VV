@@ -25,7 +25,14 @@ class Test extends Manager {
 
     public OnClickTest(e: { label: string; scope: Object; funcName: string; args: Array<unknown> }) {
         const r = toRaw(e);
-        eval(`r.scope['${r.funcName}'](...r.args)`);
+        const args = r.args.map((a) => {
+            if (typeof a === 'function') {
+                return a(r.scope);
+            } else {
+                return a;
+            }
+        });
+        eval(`r.scope['${r.funcName}'](...args)`);
     }
 }
 
