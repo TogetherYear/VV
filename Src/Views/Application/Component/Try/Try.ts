@@ -17,11 +17,14 @@ class Try extends Component {
 
     private parent!: Application;
 
+    @TTool.Range(0, 10)
     @TTest.BindProperty('Try数量')
     public currentCount = ref<number>(0);
 
     public InitStates() {
-        return {};
+        return {
+            currentCount: this.currentCount
+        };
     }
 
     public InitHooks() {}

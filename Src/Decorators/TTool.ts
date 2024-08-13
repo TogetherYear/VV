@@ -1,5 +1,8 @@
-import { isRef, onUnmounted } from 'vue';
+import { Mathf } from '@/Utils/Mathf';
+import { isRef, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { Resolve } from './index';
+import { TEvent } from './TEvent';
 
 namespace TTool {
     const debounceMap = new Map<string, number>();
@@ -18,7 +21,13 @@ namespace TTool {
                     super(...args);
                     this.TTool_Generate_Debounce();
                     this.TTool_Generate_Throttle();
+                    this.TTool_Generate_MountRange();
+                    if (eval(`this.tEvent_Generate_Type`) === TEvent.Lifecycle.Temporary) {
+                        this.TTool_Generate_Hooks();
+                    }
                 }
+
+                private tTool_Generate_Range: Array<() => void> = [];
 
                 private TTool_Generate_Debounce() {
                     const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
@@ -73,6 +82,32 @@ namespace TTool {
                             }
                             throttleMap.set(key, lastTime);
                         };
+                    }
+                }
+
+                private TTool_Generate_Hooks() {
+                    onUnmounted(() => {
+                        this.TTool_Generate_UnMountRange();
+                    });
+                }
+
+                private TTool_Generate_MountRange() {
+                    Resolve.then(() => {
+                        const range = (eval(`this['tTool_Range_Need']`) || []) as Array<{ propertyKey: string; min: number; max: number }>;
+                        for (let r of range) {
+                            this.tTool_Generate_Range.push(
+                                watch(eval(`this['${r.propertyKey}']`), (newValue) => {
+                                    //@ts-ignore
+                                    this[`${r.propertyKey}`].value = Mathf.Clamp(r.min, r.max, newValue);
+                                })
+                            );
+                        }
+                    });
+                }
+
+                private TTool_Generate_UnMountRange() {
+                    for (let stopHandle of this.tTool_Generate_Range) {
+                        stopHandle();
                     }
                 }
             };
@@ -224,6 +259,22 @@ namespace TTool {
                     cacheMap.set(this.currentUrl, cache);
                 }
             };
+        };
+    }
+
+    /**
+     * 限制变量范围 只支持 ref 定义的
+     */
+    export function Range(min: number, max: number) {
+        return function (target: Object, propertyKey: string | symbol) {
+            //@ts-ignore
+            if (target['tTool_Range_Need']) {
+                //@ts-ignore
+                target['tTool_Range_Need'].push({ propertyKey, min, max });
+            } else {
+                //@ts-ignore
+                target['tTool_Range_Need'] = [{ propertyKey, min, max }];
+            }
         };
     }
 }
