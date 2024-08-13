@@ -7,6 +7,7 @@ import { ElMessage } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
+import router from '@/Router';
 
 class Try extends Component {
     public constructor(parent: Application) {
@@ -59,6 +60,9 @@ class Try extends Component {
     @TTest.Bind('测试:Try', { value: 'TSingleton', count: 24 }, true)
     public BindTest(options: { value: string; count: number }, type: boolean) {
         console.log(this, options, type);
+        router.push({
+            path: '/Empty'
+        });
     }
 }
 

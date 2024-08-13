@@ -1,7 +1,7 @@
 .Test {
     position: fixed;
-    width: 300px;
-    height: 200px;
+    max-width: 300px;
+    height: min-content;
     right: 5px;
     top: 5px;
     background-color: #21212133;

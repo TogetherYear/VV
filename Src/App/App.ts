@@ -2,6 +2,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { Manager } from '../Libs/Manager';
 import { TEvent } from '../Decorators/TEvent';
 import { TTest } from '@/Decorators/TTest';
+import router from '@/Router';
 
 @TEvent.Create(['Update'])
 class App extends Manager {
@@ -28,6 +29,9 @@ class App extends Manager {
     @TTest.Bind('测试:App', 'App', '测试', 24)
     public BindTest(label: string, title: string, count: number) {
         console.log(this, label, title, count);
+        router.push({
+            path: '/Application'
+        });
     }
 }
 

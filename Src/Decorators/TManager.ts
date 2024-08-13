@@ -1,5 +1,5 @@
 namespace TManager {
-    const ManagerSet = new Set<Object>();
+    const Manager: Array<Object> = [];
 
     export function Generate() {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
@@ -7,10 +7,19 @@ namespace TManager {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.TManager_Generate_Hooks();
+                    this.Mount();
                 }
 
                 private TManager_Generate_Hooks() {
-                    ManagerSet.add(this);
+                    Manager.push(this);
+                }
+
+                private Mount() {
+                    //@ts-ignore
+                    if (!window.Manager) {
+                        //@ts-ignore
+                        window.Manager = Manager;
+                    }
                 }
             };
         };

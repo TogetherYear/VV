@@ -1,3 +1,3 @@
 declare namespace Config {
-    export const name: string;
+    export const env: 'Local' | 'Plus' | 'Release';
 }
