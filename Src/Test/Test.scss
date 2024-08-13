@@ -18,10 +18,14 @@
         padding-right: 5px;
         color: #ffffff;
         font-size: 13px;
-        background: #18a547aa;
+        background: #21611caa;
         margin-left: 10px;
         margin-top: 10px;
         border-radius: 2px;
         cursor: pointer;
+        transition: all 0.15s;
+        &:hover {
+            background: #38c22baa;
+        }
     }
 }
