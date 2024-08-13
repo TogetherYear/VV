@@ -7,8 +7,8 @@
         "prettier": "prettier --write",
         "build:plus": "vite build -- Plus",
         "build:release": "vite build -- Release",
-        "postbuild:plus": "node ./Shell/Clean.js && node ./Shell/Config.js Plus && node ./Shell/Compress.js",
-        "postbuild:release": "node ./Shell/Clean.js && node ./Shell/Config.js Release && node ./Shell/Compress.js",
+        "postbuild:plus": "node ./Shell/Clean.js Plus && node ./Shell/Config.js Plus && node ./Shell/Compress.js Plus",
+        "postbuild:release": "node ./Shell/Clean.js Release && node ./Shell/Config.js Release && node ./Shell/Compress.js Release",
         "preview": "vite preview"
     },
     "dependencies": {

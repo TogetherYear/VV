@@ -3,8 +3,10 @@ const path = require('path');
 const fs = require('fs');
 const cp = require('child_process');
 
+const boundEnv = process.argv.slice(-1)[0];
+
 const inputPath = path.join(__dirname, '../Dist');
-const outputPath = path.join(__dirname, '../Dist.zip');
+const outputPath = path.join(__dirname, `../Dist_${boundEnv}.zip`);
 
 const zipStream = new compressing.zip.Stream();
 
