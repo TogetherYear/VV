@@ -9,6 +9,7 @@ import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
 import router from '@/Router';
 
+@TTool.Cache(['inputName'])
 class Try extends Component {
     public constructor(parent: Application) {
         super();
@@ -17,13 +18,17 @@ class Try extends Component {
 
     private parent!: Application;
 
-    @TTool.Range(0, 10)
+    @TTool.LimitRange(0, 10)
     @TTest.BindProperty('Try数量')
     public currentCount = ref<number>(0);
 
+    @TTool.LimitLength(20)
+    public inputName = ref<string>('TSingleton');
+
     public InitStates() {
         return {
-            currentCount: this.currentCount
+            currentCount: this.currentCount,
+            inputName: this.inputName
         };
     }
 
@@ -67,6 +72,11 @@ class Try extends Component {
         router.push({
             path: '/Empty'
         });
+    }
+
+    @TTool.Watch('inputName', false)
+    public WatchInputName(newValue: string, oldValue: string) {
+        console.log(newValue);
     }
 }
 

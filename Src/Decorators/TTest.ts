@@ -118,7 +118,7 @@ namespace TTest {
     }
 
     /**
-     * 绑定测试属性 目前只接受 ref 和 reactive 定义的
+     * 绑定测试属性 只接受 ref 和 reactive 定义的
      */
     export function BindProperty(label: string) {
         return function (target: Object, propertyKey: string | symbol) {

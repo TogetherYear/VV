@@ -22,12 +22,18 @@ namespace TTool {
                     this.TTool_Generate_Debounce();
                     this.TTool_Generate_Throttle();
                     this.TTool_Generate_MountRange();
+                    this.TTool_Generate_MountLength();
+                    this.TTool_Generate_MountWatch();
                     if (eval(`this.tEvent_Generate_Type`) === TEvent.Lifecycle.Temporary) {
                         this.TTool_Generate_Hooks();
                     }
                 }
 
                 private tTool_Generate_Range: Array<() => void> = [];
+
+                private tTool_Generate_Length: Array<() => void> = [];
+
+                private tTool_Generate_Watch: Array<() => void> = [];
 
                 private TTool_Generate_Debounce() {
                     const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
@@ -88,6 +94,8 @@ namespace TTool {
                 private TTool_Generate_Hooks() {
                     onUnmounted(() => {
                         this.TTool_Generate_UnMountRange();
+                        this.TTool_Generate_UnMountLength();
+                        this.TTool_Generate_UnMountWatch();
                     });
                 }
 
@@ -105,8 +113,51 @@ namespace TTool {
                     });
                 }
 
+                private TTool_Generate_MountLength() {
+                    Resolve.then(() => {
+                        const length = (eval(`this['tTool_Length_Need']`) || []) as Array<{ propertyKey: string; length: number }>;
+                        for (let l of length) {
+                            this.tTool_Generate_Length.push(
+                                watch(eval(`this['${l.propertyKey}']`), (newValue: string) => {
+                                    //@ts-ignore
+                                    this[`${l.propertyKey}`].value = newValue.slice(0, l.length);
+                                })
+                            );
+                        }
+                    });
+                }
+
+                private TTool_Generate_MountWatch() {
+                    Resolve.then(() => {
+                        const needWatch = (eval(`this['tTool_Watch_Need']`) || []) as Array<{ targetKey: string; deep: boolean; propertyKey: string }>;
+                        for (let w of needWatch) {
+                            this.tTool_Generate_Watch.push(
+                                watch(
+                                    eval(`this['${w.targetKey}']`),
+                                    (newValue, oldValue) => {
+                                        eval(`this['${w.propertyKey}']('${newValue}','${oldValue}')`);
+                                    },
+                                    { deep: w.deep }
+                                )
+                            );
+                        }
+                    });
+                }
+
                 private TTool_Generate_UnMountRange() {
                     for (let stopHandle of this.tTool_Generate_Range) {
+                        stopHandle();
+                    }
+                }
+
+                private TTool_Generate_UnMountLength() {
+                    for (let stopHandle of this.tTool_Generate_Length) {
+                        stopHandle();
+                    }
+                }
+
+                private TTool_Generate_UnMountWatch() {
+                    for (let stopHandle of this.tTool_Generate_Watch) {
                         stopHandle();
                     }
                 }
@@ -265,7 +316,7 @@ namespace TTool {
     /**
      * 限制变量范围 只支持 ref 定义的
      */
-    export function Range(min: number, max: number) {
+    export function LimitRange(min: number, max: number) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Range_Need']) {
@@ -274,6 +325,38 @@ namespace TTool {
             } else {
                 //@ts-ignore
                 target['tTool_Range_Need'] = [{ propertyKey, min, max }];
+            }
+        };
+    }
+
+    /**
+     * 限制字符串长度 只支持 ref 定义的
+     */
+    export function LimitLength(length: number) {
+        return function (target: Object, propertyKey: string | symbol) {
+            //@ts-ignore
+            if (target['tTool_Length_Need']) {
+                //@ts-ignore
+                target['tTool_Length_Need'].push({ propertyKey, length });
+            } else {
+                //@ts-ignore
+                target['tTool_Length_Need'] = [{ propertyKey, length }];
+            }
+        };
+    }
+
+    /**
+     * 监听变量的变化 只接受 ref 和 reactive 定义的 ( deep：是否深度监听 )
+     */
+    export function Watch(targetKey: string, deep = false) {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+            //@ts-ignore
+            if (target['tTool_Watch_Need']) {
+                //@ts-ignore
+                target['tTool_Watch_Need'].push({ targetKey, deep, propertyKey });
+            } else {
+                //@ts-ignore
+                target['tTool_Watch_Need'] = [{ targetKey, deep, propertyKey }];
             }
         };
     }
