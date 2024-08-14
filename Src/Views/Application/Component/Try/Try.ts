@@ -18,15 +18,15 @@ class Try extends Component {
 
     private parent!: Application;
 
-    @TTool.LimitRange(0, 10)
+    @TTool.LimitRange<Try>((instance) => 0, ~~(Math.random() * 10 + 10))
     @TTest.BindProperty('Try数量')
     public currentCount = ref<number>(0);
 
+    @TTool.LimitLength<Try>((instance) => instance.currentCount.value + 10)
     @TTool.Watch<Try, string>((instance, newValue, oldValue) => {
-        console.log(instance.currentCount.value);
+        console.log(instance, newValue, oldValue);
     })
-    @TTool.LimitLength(20)
-    public inputName = ref<string>('TSingleton');
+    public inputName = ref<string>('TSingletonT');
 
     public InitStates() {
         return {
@@ -54,12 +54,12 @@ class Try extends Component {
         });
     }
 
-    @TTool.Throttle(1000)
+    @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)
     public OnBtnClick() {
         console.log('Try:', this.currentCount.value);
     }
 
-    @TRouter.WhenTo('Empty')
+    @TRouter.WhenTo<Try>((instance) => 'Empty')
     public OnTo() {
         ElMessage({
             type: 'info',

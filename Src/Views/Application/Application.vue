@@ -7,7 +7,7 @@ const instance = new Application();
 
 provide('instance', instance);
 
-const {} = instance.InitStates();
+const { dom } = instance.InitStates();
 
 instance.Run();
 </script>
@@ -16,7 +16,7 @@ instance.Run();
     <div class="Application">
         <el-button type="success" @click="instance.OnBtnClick()">Application:Click Me!</el-button>
         <TryVue></TryVue>
-        <span class="Application_Need"></span>
+        <span class="Observer" ref="dom"></span>
     </div>
 </template>
 

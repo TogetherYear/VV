@@ -39,7 +39,7 @@ namespace TTool {
                 private TTool_Generate_Debounce() {
                     const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
                         funcName: string;
-                        delta: number;
+                        delta: number | ((instance: Object) => number);
                     }>;
                     for (let e of create) {
                         //@ts-ignore
@@ -50,15 +50,21 @@ namespace TTool {
                             let timer = debounceMap.get(key);
                             if (timer) {
                                 clearTimeout(timer);
-                                timer = setTimeout(() => {
-                                    original(...args);
-                                    debounceMap.delete(key);
-                                }, e.delta);
+                                timer = setTimeout(
+                                    () => {
+                                        original(...args);
+                                        debounceMap.delete(key);
+                                    },
+                                    typeof e.delta === 'function' ? e.delta(this) : e.delta
+                                );
                             } else {
-                                timer = setTimeout(() => {
-                                    original(...args);
-                                    debounceMap.delete(key);
-                                }, e.delta);
+                                timer = setTimeout(
+                                    () => {
+                                        original(...args);
+                                        debounceMap.delete(key);
+                                    },
+                                    typeof e.delta === 'function' ? e.delta(this) : e.delta
+                                );
                             }
                             debounceMap.set(key, timer);
                         };
@@ -68,7 +74,7 @@ namespace TTool {
                 private TTool_Generate_Throttle() {
                     const create = (eval(`this['tTool_Throttle_NeedCreate']`) || []) as Array<{
                         funcName: string;
-                        delta: number;
+                        delta: number | ((instance: Object) => number);
                     }>;
                     for (let e of create) {
                         //@ts-ignore
@@ -79,7 +85,7 @@ namespace TTool {
                             let lastTime = throttleMap.get(key);
                             if (lastTime) {
                                 const currentTime = Date.now();
-                                if (currentTime - lastTime > e.delta) {
+                                if (currentTime - lastTime > (typeof e.delta === 'function' ? e.delta(this) : e.delta)) {
                                     lastTime = currentTime;
                                     original(...args);
                                 }
@@ -102,13 +108,22 @@ namespace TTool {
 
                 private TTool_Generate_MountRange() {
                     Resolve.then(() => {
-                        const range = (eval(`this['tTool_Range_Need']`) || []) as Array<{ propertyKey: string; min: number; max: number }>;
+                        const range = (eval(`this['tTool_Range_Need']`) || []) as Array<{
+                            propertyKey: string;
+                            immediate: boolean;
+                            min: number | ((instance: Object) => number);
+                            max: number | ((instance: Object) => number);
+                        }>;
                         for (let r of range) {
                             this.tTool_Generate_Range.push(
-                                watch(eval(`this['${r.propertyKey}']`), (newValue) => {
-                                    //@ts-ignore
-                                    this[`${r.propertyKey}`].value = Mathf.Clamp(r.min, r.max, newValue);
-                                })
+                                watch(
+                                    eval(`this['${r.propertyKey}']`),
+                                    (newValue) => {
+                                        //@ts-ignore
+                                        this[`${r.propertyKey}`].value = Mathf.Clamp(typeof r.min === 'function' ? r.min(this) : r.min, typeof r.max === 'function' ? r.max(this) : r.max, newValue);
+                                    },
+                                    { immediate: r.immediate }
+                                )
                             );
                         }
                     });
@@ -116,13 +131,17 @@ namespace TTool {
 
                 private TTool_Generate_MountLength() {
                     Resolve.then(() => {
-                        const length = (eval(`this['tTool_Length_Need']`) || []) as Array<{ propertyKey: string; length: number }>;
+                        const length = (eval(`this['tTool_Length_Need']`) || []) as Array<{ propertyKey: string; immediate: boolean; length: number | ((instance: Object) => number) }>;
                         for (let l of length) {
                             this.tTool_Generate_Length.push(
-                                watch(eval(`this['${l.propertyKey}']`), (newValue: string) => {
-                                    //@ts-ignore
-                                    this[`${l.propertyKey}`].value = newValue.slice(0, l.length);
-                                })
+                                watch(
+                                    eval(`this['${l.propertyKey}']`),
+                                    (newValue: string) => {
+                                        //@ts-ignore
+                                        this[`${l.propertyKey}`].value = newValue.slice(0, typeof l.length === 'function' ? l.length(this) : l.length);
+                                    },
+                                    { immediate: l.immediate }
+                                )
                             );
                         }
                     });
@@ -173,7 +192,7 @@ namespace TTool {
     /**
      * 防抖 默认 500 毫秒
      */
-    export function Debounce(delta = 500) {
+    export function Debounce<T extends EventSystem>(delta: number | ((instance: T) => number) = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tTool_Debounce_NeedCreate']) {
@@ -197,7 +216,7 @@ namespace TTool {
     /**
      * 节流 默认 500 毫秒
      */
-    export function Throttle(delta = 500) {
+    export function Throttle<T extends EventSystem>(delta: number | ((instance: T) => number) = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tTool_Throttle_NeedCreate']) {
@@ -219,7 +238,7 @@ namespace TTool {
     }
 
     /**
-     * 缓存页面 参数为字符串 支持 普通类型 对象类型 ref reactive (不支持嵌套) 可以缓存对象单个属性 或者整个对象 比如 Object 或者 Object.pro 不需要写 .value
+     * 缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串 支持 普通类型 对象类型 ref reactive (不支持嵌套) 可以缓存对象单个属性 或者整个对象 比如 Object 或者 Object.pro 不需要写 .value
      */
     export function Cache(needs: Array<string>) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
@@ -321,15 +340,15 @@ namespace TTool {
     /**
      * 限制变量范围 只支持 ref 定义的
      */
-    export function LimitRange(min: number, max: number) {
+    export function LimitRange<T extends EventSystem>(min: number | ((instance: T) => number), max: number | ((instance: T) => number), immediate = true) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Range_Need']) {
                 //@ts-ignore
-                target['tTool_Range_Need'].push({ propertyKey, min, max });
+                target['tTool_Range_Need'].push({ propertyKey, min, max, immediate });
             } else {
                 //@ts-ignore
-                target['tTool_Range_Need'] = [{ propertyKey, min, max }];
+                target['tTool_Range_Need'] = [{ propertyKey, min, max, immediate }];
             }
         };
     }
@@ -337,15 +356,15 @@ namespace TTool {
     /**
      * 限制字符串长度 只支持 ref 定义的
      */
-    export function LimitLength(length: number) {
+    export function LimitLength<T extends EventSystem>(length: number | ((instance: T) => number), immediate = true) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Length_Need']) {
                 //@ts-ignore
-                target['tTool_Length_Need'].push({ propertyKey, length });
+                target['tTool_Length_Need'].push({ propertyKey, length, immediate });
             } else {
                 //@ts-ignore
-                target['tTool_Length_Need'] = [{ propertyKey, length }];
+                target['tTool_Length_Need'] = [{ propertyKey, length, immediate }];
             }
         };
     }

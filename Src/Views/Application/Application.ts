@@ -12,14 +12,18 @@ import { TTest } from '@/Decorators/TTest';
 @TRouter.Root()
 @TTool.Cache(['currentCount'])
 class Application extends Component {
-    public InitStates() {
-        return {};
-    }
-
     public try = new Try(this);
+
+    private dom = ref<HTMLElement | null>(null);
 
     @TTest.BindProperty('Application数量')
     public currentCount = ref<number>(0);
+
+    public InitStates() {
+        return {
+            dom: this.dom
+        };
+    }
 
     public Run() {
         onMounted(() => {});
@@ -61,7 +65,7 @@ class Application extends Component {
         });
     }
 
-    @TView.Observer('.Application_Need')
+    @TView.Observer<Application>((instane) => instane.dom.value as HTMLElement)
     public OnNeedState(flag: boolean) {
         ElMessage({
             type: 'info',

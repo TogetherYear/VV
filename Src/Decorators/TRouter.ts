@@ -1,3 +1,4 @@
+import { EventSystem } from '@/Libs/EventSystem';
 import { onMounted, onUnmounted } from 'vue';
 import { onBeforeRouteLeave, useRoute } from 'vue-router';
 
@@ -38,9 +39,9 @@ namespace TRouter {
                 }
 
                 private TRouter_Generate_EmitFrom() {
-                    const from = (eval(`this['tRouter_From_NeedCreate']`) || []) as Array<{ funcName: string; from: string }>;
+                    const from = (eval(`this['tRouter_From_NeedCreate']`) || []) as Array<{ funcName: string; from: string | ((instance: Object) => string) }>;
                     for (let f of from) {
-                        if (lastPath.indexOf(f.from) !== -1) {
+                        if (lastPath.indexOf(typeof f.from === 'function' ? f.from(this) : f.from) !== -1) {
                             //@ts-ignore
                             this[`${f.funcName}`]();
                         }
@@ -48,9 +49,9 @@ namespace TRouter {
                 }
 
                 private TRouter_Generate_EmitTo() {
-                    const to = (eval(`this['tRouter_To_NeedCreate']`) || []) as Array<{ funcName: string; to: string }>;
+                    const to = (eval(`this['tRouter_To_NeedCreate']`) || []) as Array<{ funcName: string; to: string | ((instance: Object) => string) }>;
                     for (let t of to) {
-                        if (currentPath.indexOf(t.to) !== -1) {
+                        if (currentPath.indexOf(typeof t.to === 'function' ? t.to(this) : t.to) !== -1) {
                             //@ts-ignore
                             this[`${t.funcName}`]();
                         }
@@ -89,7 +90,7 @@ namespace TRouter {
     /**
      * 如果从 from 路由进来 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( from 为 '/' 即只要进来就会触发)
      */
-    export function WhenFrom(from: string) {
+    export function WhenFrom<T extends EventSystem>(from: string | ((instance: T) => string)) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_From_NeedCreate']) {
@@ -113,7 +114,7 @@ namespace TRouter {
     /**
      * 如果进入 to 路由 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( To 为 '/' 即只要离开就会触发)
      */
-    export function WhenTo(to: string) {
+    export function WhenTo<T extends EventSystem>(to: string | ((instance: T) => string)) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_To_NeedCreate']) {
