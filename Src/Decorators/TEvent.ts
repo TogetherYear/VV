@@ -64,18 +64,13 @@ namespace TEvent {
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            if (typeof e.listenTarget === 'function') {
-                                const t = e.listenTarget(this);
+                            const t = typeof e.listenTarget === 'function' ? e.listenTarget(this) : e.listenTarget;
+                            if (t.hasOwnProperty('unique_Id')) {
+                                //@ts-ignore
+                                t.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
+                            } else {
                                 //@ts-ignore
                                 t.addEventListener(e.eventName, this[`${e.funcName}`]);
-                            } else {
-                                if (e.listenTarget.hasOwnProperty('unique_Id')) {
-                                    //@ts-ignore
-                                    e.listenTarget.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
-                                } else {
-                                    //@ts-ignore
-                                    e.listenTarget.addEventListener(e.eventName, this[`${e.funcName}`]);
-                                }
                             }
                         }
                     });
@@ -95,18 +90,13 @@ namespace TEvent {
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            if (typeof e.listenTarget === 'function') {
-                                const t = e.listenTarget(this);
+                            const t = typeof e.listenTarget === 'function' ? e.listenTarget(this) : e.listenTarget;
+                            if (t.hasOwnProperty('unique_Id')) {
+                                //@ts-ignore
+                                t.RemoveListen(e.eventName, this, this[`${e.funcName}`], e.once);
+                            } else {
                                 //@ts-ignore
                                 t.removeEventListener(e.eventName, this[`${e.funcName}`]);
-                            } else {
-                                if (e.listenTarget.hasOwnProperty('unique_Id')) {
-                                    //@ts-ignore
-                                    e.listenTarget.RemoveListen(e.eventName, this, this[`${e.funcName}`]);
-                                } else {
-                                    //@ts-ignore
-                                    e.listenTarget.removeEventListener(e.eventName, this[`${e.funcName}`]);
-                                }
                             }
                         }
                     });
@@ -142,7 +132,7 @@ namespace TEvent {
     }
 
     /**
-     * 监听事件
+     * 监听事件 es 可以是 继承 Manager 的 也可以是 HTMLElement 或者 window ......
      */
     export function Listen<T>(es: Object | ((instance: T) => Object), eventName: string, once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
