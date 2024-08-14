@@ -4,7 +4,6 @@ import { Test } from './Test';
 
 const { isShow } = Test.InitStates();
 const { functionMap, propertyMap } = TTest;
-Test.InitHooks();
 Test.Run();
 </script>
 

@@ -22,6 +22,9 @@ class Try extends Component {
     @TTest.BindProperty('Try数量')
     public currentCount = ref<number>(0);
 
+    @TTool.Watch<Try, string>((instance, newValue, oldValue) => {
+        console.log(instance.currentCount.value);
+    })
     @TTool.LimitLength(20)
     public inputName = ref<string>('TSingleton');
 
@@ -31,8 +34,6 @@ class Try extends Component {
             inputName: this.inputName
         };
     }
-
-    public InitHooks() {}
 
     public Run() {
         onMounted(() => {});
@@ -72,11 +73,6 @@ class Try extends Component {
         router.push({
             path: '/Empty'
         });
-    }
-
-    @TTool.Watch('inputName', false)
-    public WatchInputName(newValue: string, oldValue: string) {
-        console.log(newValue);
     }
 }
 

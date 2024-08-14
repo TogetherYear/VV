@@ -10,8 +10,6 @@ class App extends Manager {
         return {};
     }
 
-    public InitHooks() {}
-
     public Run() {
         onMounted(() => {
             setInterval(() => {

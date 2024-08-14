@@ -3,7 +3,6 @@ import { Empty } from './Empty';
 const instance = new Empty();
 
 const {} = instance.InitStates();
-instance.InitHooks();
 instance.Run();
 </script>
 

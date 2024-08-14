@@ -10,8 +10,6 @@ class Test extends Manager {
         };
     }
 
-    public InitHooks() {}
-
     public Run() {
         this.isShow.value = Config.env === 'Local';
         onMounted(() => {});

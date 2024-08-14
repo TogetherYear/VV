@@ -16,8 +16,6 @@ class Application extends Component {
         return {};
     }
 
-    public InitHooks() {}
-
     public try = new Try(this);
 
     @TTest.BindProperty('Application数量')

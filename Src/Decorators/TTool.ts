@@ -3,6 +3,7 @@ import { isRef, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Resolve } from './index';
 import { TEvent } from './TEvent';
+import { EventSystem } from '@/Libs/EventSystem';
 
 namespace TTool {
     const debounceMap = new Map<string, number>();
@@ -129,13 +130,17 @@ namespace TTool {
 
                 private TTool_Generate_MountWatch() {
                     Resolve.then(() => {
-                        const needWatch = (eval(`this['tTool_Watch_Need']`) || []) as Array<{ targetKey: string; deep: boolean; propertyKey: string }>;
+                        const needWatch = (eval(`this['tTool_Watch_Need']`) || []) as Array<{
+                            Callback: (instance: Object, newValue: unknown, oldValue: unknown) => void;
+                            deep: boolean;
+                            propertyKey: string;
+                        }>;
                         for (let w of needWatch) {
                             this.tTool_Generate_Watch.push(
                                 watch(
-                                    eval(`this['${w.targetKey}']`),
+                                    eval(`this['${w.propertyKey}']`),
                                     (newValue, oldValue) => {
-                                        eval(`this['${w.propertyKey}']('${newValue}','${oldValue}')`);
+                                        w.Callback(this, newValue, oldValue);
                                     },
                                     { deep: w.deep }
                                 )
@@ -145,20 +150,20 @@ namespace TTool {
                 }
 
                 private TTool_Generate_UnMountRange() {
-                    for (let stopHandle of this.tTool_Generate_Range) {
-                        stopHandle();
+                    for (let StopHandle of this.tTool_Generate_Range) {
+                        StopHandle();
                     }
                 }
 
                 private TTool_Generate_UnMountLength() {
-                    for (let stopHandle of this.tTool_Generate_Length) {
-                        stopHandle();
+                    for (let StopHandle of this.tTool_Generate_Length) {
+                        StopHandle();
                     }
                 }
 
                 private TTool_Generate_UnMountWatch() {
-                    for (let stopHandle of this.tTool_Generate_Watch) {
-                        stopHandle();
+                    for (let StopHandle of this.tTool_Generate_Watch) {
+                        StopHandle();
                     }
                 }
             };
@@ -346,17 +351,17 @@ namespace TTool {
     }
 
     /**
-     * 监听变量的变化 只接受 ref 和 reactive 定义的 ( deep：是否深度监听 )
+     * 监听变量的变化 只接受 ref 和 reactive 定义的 ( T：当前类类型 K：变量类型 deep：是否深度监听 )
      */
-    export function Watch(targetKey: string, deep = false) {
-        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+    export function Watch<T extends EventSystem, K>(Callback: (instance: T, newValue: K, oldValue: K) => void, deep = false) {
+        return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Watch_Need']) {
                 //@ts-ignore
-                target['tTool_Watch_Need'].push({ targetKey, deep, propertyKey });
+                target['tTool_Watch_Need'].push({ Callback, deep, propertyKey });
             } else {
                 //@ts-ignore
-                target['tTool_Watch_Need'] = [{ targetKey, deep, propertyKey }];
+                target['tTool_Watch_Need'] = [{ Callback, deep, propertyKey }];
             }
         };
     }

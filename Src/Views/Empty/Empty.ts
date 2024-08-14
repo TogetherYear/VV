@@ -12,8 +12,6 @@ class Empty extends Component {
         return {};
     }
 
-    public InitHooks() {}
-
     public Run() {
         onMounted(() => {});
 

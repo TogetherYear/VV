@@ -6,8 +6,6 @@ const instance = inject('instance') as Application;
 
 const { currentCount, inputName } = instance.try.InitStates();
 
-instance.try.InitHooks();
-
 instance.try.Run();
 </script>
 

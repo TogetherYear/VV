@@ -2,7 +2,6 @@
 import { App } from './App';
 
 const {} = App.InitStates();
-App.InitHooks();
 App.Run();
 </script>
 
