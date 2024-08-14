@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Component } from '@/Libs/Component';
 import { TEvent } from '@/Decorators/TEvent';
 import { TRouter } from '@/Decorators/TRouter';
@@ -10,18 +10,21 @@ import { App } from '@/App/App';
 import { TTest } from '@/Decorators/TTest';
 
 @TRouter.Root()
-@TTool.Cache(['currentCount'])
+@TTool.Cache(['current'])
 class Application extends Component {
     public try = new Try(this);
 
     private dom = ref<HTMLElement | null>(null);
 
-    @TTest.BindProperty('Application数量')
-    public currentCount = ref<number>(0);
+    @TTest.BindProperty('Application')
+    public current = reactive({
+        count: 0
+    });
 
     public InitStates() {
         return {
-            dom: this.dom
+            dom: this.dom,
+            current: this.current
         };
     }
 
@@ -37,13 +40,13 @@ class Application extends Component {
 
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
-        this.currentCount.value++;
-        console.log(`OnUpdate:Application:${this.currentCount.value}`);
+        this.current.count++;
+        console.log(`OnUpdate:Application:${this.current.count}`);
     }
 
     @TTool.Debounce(1000)
     public OnBtnClick() {
-        console.log('Application:', this.currentCount.value);
+        console.log('Application:', this.current.count);
         return;
         ElMessageBox.confirm('是否关闭?', '提示')
             .then(() => {

@@ -18,7 +18,7 @@ class Try extends Component {
     private parent!: Application;
 
     @TTool.LimitRange<Try>((instance) => 0, ~~(Math.random() * 10 + 10))
-    @TTest.BindProperty('Try数量')
+    @TTest.BindProperty('Try')
     public currentCount = ref<number>(0);
 
     @TTool.LimitLength<Try>((instance) => instance.currentCount.value + 10)

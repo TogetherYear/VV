@@ -249,7 +249,7 @@ namespace TTool {
     }
 
     /**
-     * 缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串 支持 普通类型 对象类型 ref reactive (不支持嵌套) 可以缓存对象单个属性 或者整个对象 比如 Object 或者 Object.pro 不需要写 .value
+     * 简单缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串
      */
     export function Cache(needs: Array<string>) {
         return function <T extends new (...args: Array<any>) => Object>(C: T) {
@@ -277,8 +277,10 @@ namespace TTool {
                     const current = cacheMap.get(this.currentUrl);
                     if (current) {
                         for (let c of current) {
-                            const es = `${c.key} = ${typeof c.value == 'string' ? `'${c.value}'` : c.value}`;
-                            eval(es);
+                            if (this.hasOwnProperty(c.key)) {
+                                //@ts-ignore
+                                this[`${c.key}`] = c.value;
+                            }
                         }
                     }
                 }
@@ -286,59 +288,11 @@ namespace TTool {
                 private Cache_Set() {
                     const cache: Array<{ key: string; value: unknown }> = [];
                     for (let c of this.needCache) {
-                        const deep = c.split('.');
-                        if (deep.length == 1) {
-                            let es = `this['${deep}']`;
-                            if (typeof eval(es) == 'object') {
-                                if (isRef(eval(es))) {
-                                    es += '.value';
-                                    const temp = eval(es);
-                                    if (typeof temp == 'object') {
-                                        if (temp != null) {
-                                            const keys = Object.keys(eval(es));
-                                            for (let k of keys) {
-                                                const c = `${es}['${k}']`;
-                                                cache.push({
-                                                    key: c,
-                                                    value: eval(c)
-                                                });
-                                            }
-                                        }
-                                    } else {
-                                        cache.push({
-                                            key: es,
-                                            value: temp
-                                        });
-                                    }
-                                } else {
-                                    if (eval(es) != null) {
-                                        const keys = Object.keys(eval(es));
-                                        for (let k of keys) {
-                                            const c = `${es}['${k}']`;
-                                            cache.push({
-                                                key: c,
-                                                value: eval(c)
-                                            });
-                                        }
-                                    }
-                                }
-                            } else {
-                                cache.push({
-                                    key: es,
-                                    value: eval(es)
-                                });
-                            }
-                        } else {
-                            let es = 'this';
-                            deep.forEach((d) => {
-                                es += `['${d}']`;
-                                if (isRef(eval(es))) {
-                                    es += `.value`;
-                                }
-                            });
+                        if (this.hasOwnProperty(c)) {
                             cache.push({
-                                key: es,
-                                value: eval(es)
+                                key: c,
+                                //@ts-ignore
+                                value: this[`${c}`]
                             });
                         }
                     }
