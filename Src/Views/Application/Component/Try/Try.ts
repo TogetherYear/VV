@@ -3,7 +3,6 @@ import { Component } from '@/Libs/Component';
 import { Application } from '../../Application';
 import { TEvent } from '@/Decorators/TEvent';
 import { App } from '@/App/App';
-import { ElMessage } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
@@ -48,10 +47,7 @@ class Try extends Component {
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
         this.currentCount.value++;
-        ElMessage({
-            type: 'error',
-            message: `OnUpdate:Try:${this.currentCount.value}`
-        });
+        console.log(`OnUpdate:Try:${this.currentCount.value}`);
     }
 
     @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)
@@ -61,10 +57,7 @@ class Try extends Component {
 
     @TRouter.WhenTo<Try>((instance) => 'Empty')
     public OnTo() {
-        ElMessage({
-            type: 'info',
-            message: `To:Empty:Try`
-        });
+        console.log(`To:Empty:Try`);
     }
 
     @TTest.BindFunction('测试:Try', { value: 'TSingleton' }, (instance: Try) => instance.currentCount.value)
