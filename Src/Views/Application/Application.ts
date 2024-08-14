@@ -41,7 +41,6 @@ class Application extends Component {
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
         this.current.count++;
-        console.log(`OnUpdate:Application:${this.current.count}`);
     }
 
     @TTool.Debounce(1000)

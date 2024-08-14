@@ -47,7 +47,6 @@ class Try extends Component {
     @TEvent.Listen(App, 'Update')
     public OnUpdate() {
         this.currentCount.value++;
-        console.log(`OnUpdate:Try:${this.currentCount.value}`);
     }
 
     @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)
