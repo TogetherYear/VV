@@ -30,7 +30,8 @@ class Test extends Manager {
                 return a;
             }
         });
-        eval(`r.scope['${r.funcName}'](...args)`);
+        //@ts-ignore
+        r.scope[`${r.funcName}`](...args);
     }
 }
 

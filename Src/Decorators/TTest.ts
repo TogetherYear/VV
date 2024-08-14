@@ -23,19 +23,22 @@ namespace TTest {
                     super(...args);
                     this.TTest_Generate_BindFunction();
                     this.TTest_Generate_BindProperty();
-                    if (eval(`this.tEvent_Generate_Type`) === TEvent.Lifecycle.Temporary) {
+                    //@ts-ignore
+                    if (this['tEvent_Generate_Type'] === TEvent.Lifecycle.Temporary) {
                         this.TTest_Generate_Hooks();
                     }
                 }
 
                 private TTest_Generate_BindFunction() {
-                    const bind = (eval(`this['tTest_Bind_Function']`) || []) as Array<{
+                    //@ts-ignore
+                    const bind = (this['tTest_Bind_Function'] || []) as Array<{
                         label: string;
                         funcName: string;
                         args: Array<unknown>;
                     }>;
                     for (let b of bind) {
-                        functionMap.value.set(`${eval(`this.unique_Id`)}:${b.funcName}`, {
+                        //@ts-ignore
+                        functionMap.value.set(`${this['unique_Id']}:${b.funcName}`, {
                             label: b.label,
                             funcName: b.funcName,
                             args: b.args,
@@ -46,12 +49,14 @@ namespace TTest {
 
                 private TTest_Generate_BindProperty() {
                     Resolve.then(() => {
-                        const bind = (eval(`this['tTest_Bind_Property']`) || []) as Array<{
+                        //@ts-ignore
+                        const bind = (this['tTest_Bind_Property'] || []) as Array<{
                             label: string;
                             propertyKey: string;
                         }>;
                         for (let b of bind) {
-                            propertyMap.value.set(`${eval(`this.unique_Id`)}:${b.propertyKey}`, {
+                            //@ts-ignore
+                            propertyMap.value.set(`${this['unique_Id']}:${b.propertyKey}`, {
                                 label: b.label,
                                 //@ts-ignore
                                 property: this[`${b.propertyKey}`]
@@ -68,23 +73,27 @@ namespace TTest {
                 }
 
                 private TTest_Generate_UnBindFunction() {
-                    const bind = (eval(`this['tTest_Bind_Function']`) || []) as Array<{
+                    //@ts-ignore
+                    const bind = (this['tTest_Bind_Function'] || []) as Array<{
                         label: string;
                         funcName: string;
                         args: Array<unknown>;
                     }>;
                     for (let b of bind) {
-                        functionMap.value.delete(`${eval(`this.unique_Id`)}:${b.funcName}`);
+                        //@ts-ignore
+                        functionMap.value.delete(`${this['unique_Id']}:${b.funcName}`);
                     }
                 }
 
                 private TTest_Generate_UnBindProperty() {
-                    const bind = (eval(`this['tTest_Bind_Property']`) || []) as Array<{
+                    //@ts-ignore
+                    const bind = (this['tTest_Bind_Property'] || []) as Array<{
                         label: string;
                         propertyKey: string;
                     }>;
                     for (let b of bind) {
-                        propertyMap.value.delete(`${eval(`this.unique_Id`)}:${b.propertyKey}`);
+                        //@ts-ignore
+                        propertyMap.value.delete(`${this['unique_Id']}:${b.propertyKey}`);
                     }
                 }
             };

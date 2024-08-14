@@ -36,7 +36,8 @@ namespace TEvent {
                     } else {
                         this.TEvent_Generate_Temporary_Hooks();
                     }
-                    if (eval(`this['tEvent_Create_IsFinish']`)) {
+                    //@ts-ignore
+                    if (this['tEvent_Create_IsFinish']) {
                         this.TEvent_Generate_CreatEvents();
                     }
                 }
@@ -46,7 +47,8 @@ namespace TEvent {
                 public tEvent_Generate_IsFinish = false;
 
                 public TEvent_Generate_CreatEvents() {
-                    const create = (eval(`this['tEvent_Create_NeedCreate']`) || []) as Array<string>;
+                    //@ts-ignore
+                    const create = (this['tEvent_Create_NeedCreate'] || []) as Array<string>;
                     for (let e of create) {
                         this.AddKey(e);
                     }
@@ -54,7 +56,8 @@ namespace TEvent {
 
                 private TEvent_Generate_ListenEvents() {
                     Resolve.then(() => {
-                        const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
+                        //@ts-ignore
+                        const listen = (this['tEvent_Listen_NeedListen'] || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             funcName: string;
@@ -73,7 +76,8 @@ namespace TEvent {
                     onMounted(() => {});
 
                     onUnmounted(() => {
-                        const listen = (eval(`this['tEvent_Listen_NeedListen']`) || []) as Array<{
+                        //@ts-ignore
+                        const listen = (this['tEvent_Listen_NeedListen'] || []) as Array<{
                             listenTarget: EventSystem;
                             eventName: string;
                             funcName: string;
@@ -101,8 +105,10 @@ namespace TEvent {
                     super(...args);
                     this.tEvent_Create_NeedCreate = events;
                     this.tEvent_Create_IsFinish = true;
-                    if (eval(`this['tEvent_Generate_IsFinish']`)) {
-                        eval(`this['TEvent_Generate_CreatEvents']()`);
+                    //@ts-ignore
+                    if (this['tEvent_Generate_IsFinish']) {
+                        //@ts-ignore
+                        this['TEvent_Generate_CreatEvents']();
                     }
                 }
 

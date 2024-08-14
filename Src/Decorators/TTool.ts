@@ -25,7 +25,8 @@ namespace TTool {
                     this.TTool_Generate_MountRange();
                     this.TTool_Generate_MountLength();
                     this.TTool_Generate_MountWatch();
-                    if (eval(`this.tEvent_Generate_Type`) === TEvent.Lifecycle.Temporary) {
+                    //@ts-ignore
+                    if (this['tEvent_Generate_Type'] === TEvent.Lifecycle.Temporary) {
                         this.TTool_Generate_Hooks();
                     }
                 }
@@ -37,7 +38,8 @@ namespace TTool {
                 private tTool_Generate_Watch: Array<() => void> = [];
 
                 private TTool_Generate_Debounce() {
-                    const create = (eval(`this['tTool_Debounce_NeedCreate']`) || []) as Array<{
+                    //@ts-ignore
+                    const create = (this['tTool_Debounce_NeedCreate'] || []) as Array<{
                         funcName: string;
                         delta: number | ((instance: Object) => number);
                     }>;
@@ -46,7 +48,8 @@ namespace TTool {
                         const original = this[`${e.funcName}`].bind(this);
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
-                            const key = `${eval(`this.unique_Id`)}:${e.funcName}`;
+                            //@ts-ignore
+                            const key = `${this['unique_Id']}:${e.funcName}`;
                             let timer = debounceMap.get(key);
                             if (timer) {
                                 clearTimeout(timer);
@@ -72,7 +75,8 @@ namespace TTool {
                 }
 
                 private TTool_Generate_Throttle() {
-                    const create = (eval(`this['tTool_Throttle_NeedCreate']`) || []) as Array<{
+                    //@ts-ignore
+                    const create = (this['tTool_Throttle_NeedCreate'] || []) as Array<{
                         funcName: string;
                         delta: number | ((instance: Object) => number);
                     }>;
@@ -81,7 +85,8 @@ namespace TTool {
                         const original = this[`${e.funcName}`].bind(this);
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
-                            const key = `${eval(`this.unique_Id`)}:${e.funcName}`;
+                            //@ts-ignore
+                            const key = `${this['unique_Id']}:${e.funcName}`;
                             let lastTime = throttleMap.get(key);
                             if (lastTime) {
                                 const currentTime = Date.now();
@@ -108,7 +113,8 @@ namespace TTool {
 
                 private TTool_Generate_MountRange() {
                     Resolve.then(() => {
-                        const range = (eval(`this['tTool_Range_Need']`) || []) as Array<{
+                        //@ts-ignore
+                        const range = (this['tTool_Range_Need'] || []) as Array<{
                             propertyKey: string;
                             immediate: boolean;
                             min: number | ((instance: Object) => number);
@@ -117,7 +123,8 @@ namespace TTool {
                         for (let r of range) {
                             this.tTool_Generate_Range.push(
                                 watch(
-                                    eval(`this['${r.propertyKey}']`),
+                                    //@ts-ignore
+                                    this[`${r.propertyKey}`],
                                     (newValue) => {
                                         //@ts-ignore
                                         this[`${r.propertyKey}`].value = Mathf.Clamp(typeof r.min === 'function' ? r.min(this) : r.min, typeof r.max === 'function' ? r.max(this) : r.max, newValue);
@@ -131,11 +138,13 @@ namespace TTool {
 
                 private TTool_Generate_MountLength() {
                     Resolve.then(() => {
-                        const length = (eval(`this['tTool_Length_Need']`) || []) as Array<{ propertyKey: string; immediate: boolean; length: number | ((instance: Object) => number) }>;
+                        //@ts-ignore
+                        const length = (this['tTool_Length_Need'] || []) as Array<{ propertyKey: string; immediate: boolean; length: number | ((instance: Object) => number) }>;
                         for (let l of length) {
                             this.tTool_Generate_Length.push(
                                 watch(
-                                    eval(`this['${l.propertyKey}']`),
+                                    //@ts-ignore
+                                    this[`${l.propertyKey}`],
                                     (newValue: string) => {
                                         //@ts-ignore
                                         this[`${l.propertyKey}`].value = newValue.slice(0, typeof l.length === 'function' ? l.length(this) : l.length);
@@ -149,7 +158,8 @@ namespace TTool {
 
                 private TTool_Generate_MountWatch() {
                     Resolve.then(() => {
-                        const needWatch = (eval(`this['tTool_Watch_Need']`) || []) as Array<{
+                        //@ts-ignore
+                        const needWatch = (this['tTool_Watch_Need'] || []) as Array<{
                             Callback: (instance: Object, newValue: unknown, oldValue: unknown) => void;
                             deep: boolean;
                             propertyKey: string;
@@ -157,7 +167,8 @@ namespace TTool {
                         for (let w of needWatch) {
                             this.tTool_Generate_Watch.push(
                                 watch(
-                                    eval(`this['${w.propertyKey}']`),
+                                    //@ts-ignore
+                                    this[`${w.propertyKey}`],
                                     (newValue, oldValue) => {
                                         w.Callback(this, newValue, oldValue);
                                     },

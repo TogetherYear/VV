@@ -26,7 +26,8 @@ namespace TView {
                 }
 
                 private TView_Generate_CreateListen() {
-                    const listen = (eval(`this['tView_Observer_NeedListen']`) || []) as Array<{
+                    //@ts-ignore
+                    const listen = (this['tView_Observer_NeedListen'] || []) as Array<{
                         dom: HTMLElement | ((instance: Object) => HTMLElement);
                         funcName: string;
                         once: boolean;

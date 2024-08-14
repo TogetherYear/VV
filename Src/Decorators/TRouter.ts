@@ -39,7 +39,8 @@ namespace TRouter {
                 }
 
                 private TRouter_Generate_EmitFrom() {
-                    const from = (eval(`this['tRouter_From_NeedCreate']`) || []) as Array<{ funcName: string; from: string | ((instance: Object) => string) }>;
+                    //@ts-ignore
+                    const from = (this['tRouter_From_NeedCreate'] || []) as Array<{ funcName: string; from: string | ((instance: Object) => string) }>;
                     for (let f of from) {
                         if (lastPath.indexOf(typeof f.from === 'function' ? f.from(this) : f.from) !== -1) {
                             //@ts-ignore
@@ -49,7 +50,8 @@ namespace TRouter {
                 }
 
                 private TRouter_Generate_EmitTo() {
-                    const to = (eval(`this['tRouter_To_NeedCreate']`) || []) as Array<{ funcName: string; to: string | ((instance: Object) => string) }>;
+                    //@ts-ignore
+                    const to = (this['tRouter_To_NeedCreate'] || []) as Array<{ funcName: string; to: string | ((instance: Object) => string) }>;
                     for (let t of to) {
                         if (currentPath.indexOf(typeof t.to === 'function' ? t.to(this) : t.to) !== -1) {
                             //@ts-ignore
