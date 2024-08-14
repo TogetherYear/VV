@@ -45,8 +45,13 @@ class Try extends Component {
     public Destroy() {}
 
     @TEvent.Listen(App, 'Update')
-    public OnUpdate() {
+    public OnUpdate(e: { type: string }) {
         this.currentCount.value++;
+    }
+
+    @TEvent.Listen(window, 'click')
+    public OnClick(e: MouseEvent) {
+        console.log('ClickWindow', e);
     }
 
     @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)

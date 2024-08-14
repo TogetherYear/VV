@@ -13,7 +13,7 @@ class App extends Manager {
     public Run() {
         onMounted(() => {
             setInterval(() => {
-                this.Emit('Update');
+                this.Emit('Update', { type: 'Update' });
             }, 1000);
         });
 

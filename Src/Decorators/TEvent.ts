@@ -1,5 +1,5 @@
 import { EventSystem } from '@/Libs/EventSystem';
-import { onMounted, onUnmounted } from 'vue';
+import { onBeforeUnmount, onMounted, onUnmounted } from 'vue';
 import { Resolve } from './index';
 
 /**
@@ -58,14 +58,25 @@ namespace TEvent {
                     Resolve.then(() => {
                         //@ts-ignore
                         const listen = (this['tEvent_Listen_NeedListen'] || []) as Array<{
-                            listenTarget: EventSystem;
+                            listenTarget: Object | ((instance: Object) => Object);
                             eventName: string;
                             funcName: string;
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            //@ts-ignore
-                            e.listenTarget.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
+                            if (typeof e.listenTarget === 'function') {
+                                const t = e.listenTarget(this);
+                                //@ts-ignore
+                                t.addEventListener(e.eventName, this[`${e.funcName}`]);
+                            } else {
+                                if (e.listenTarget.hasOwnProperty('unique_Id')) {
+                                    //@ts-ignore
+                                    e.listenTarget.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
+                                } else {
+                                    //@ts-ignore
+                                    e.listenTarget.addEventListener(e.eventName, this[`${e.funcName}`]);
+                                }
+                            }
                         }
                     });
                 }
@@ -75,17 +86,28 @@ namespace TEvent {
                 private TEvent_Generate_Temporary_Hooks() {
                     onMounted(() => {});
 
-                    onUnmounted(() => {
+                    onBeforeUnmount(() => {
                         //@ts-ignore
                         const listen = (this['tEvent_Listen_NeedListen'] || []) as Array<{
-                            listenTarget: EventSystem;
+                            listenTarget: Object | ((instance: Object) => Object);
                             eventName: string;
                             funcName: string;
                             once: boolean;
                         }>;
                         for (let e of listen) {
-                            //@ts-ignore
-                            e.listenTarget.RemoveListen(e.eventName, this, this[`${e.funcName}`]);
+                            if (typeof e.listenTarget === 'function') {
+                                const t = e.listenTarget(this);
+                                //@ts-ignore
+                                t.removeEventListener(e.eventName, this[`${e.funcName}`]);
+                            } else {
+                                if (e.listenTarget.hasOwnProperty('unique_Id')) {
+                                    //@ts-ignore
+                                    e.listenTarget.RemoveListen(e.eventName, this, this[`${e.funcName}`]);
+                                } else {
+                                    //@ts-ignore
+                                    e.listenTarget.removeEventListener(e.eventName, this[`${e.funcName}`]);
+                                }
+                            }
                         }
                     });
                 }
@@ -122,7 +144,7 @@ namespace TEvent {
     /**
      * 监听事件
      */
-    export function Listen(es: EventSystem, eventName: string, once?: boolean) {
+    export function Listen<T>(es: Object | ((instance: T) => Object), eventName: string, once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tEvent_Listen_NeedListen']) {
