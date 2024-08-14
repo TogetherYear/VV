@@ -29,7 +29,8 @@ export default defineConfig(({ command, mode }) => {
             }
         },
         esbuild: {
-            drop: command === 'serve' ? [] : ['console', 'debugger']
+            drop: command === 'serve' ? [] : ['debugger'],
+            pure: command === 'serve' ? [] : ['console.log']
         },
         build: {
             outDir: path.join(__dirname, 'Dist'),

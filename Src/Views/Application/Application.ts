@@ -69,7 +69,7 @@ class Application extends Component {
     @TEvent.Listen<Application>((instance) => instance.dom.value as HTMLElement, 'click')
     public OnClickObserver(e: MouseEvent) {
         e.stopPropagation();
-        console.log('ClickObserver', e);
+        console.warn('ClickObserver', e);
     }
 }
 
