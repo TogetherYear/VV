@@ -50,7 +50,7 @@ class Try extends Component {
     }
 
     @TEvent.Listen(window, 'click')
-    public OnClick(e: MouseEvent) {
+    public OnClick(e: PointerEvent) {
         console.log('ClickWindow', e);
     }
 
