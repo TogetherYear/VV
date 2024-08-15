@@ -15,11 +15,13 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/Empty',
         name: 'Empty',
+        meta: {},
         component: () => import('@/Views/Empty/Empty.vue')
     },
     {
         path: '/Application',
         name: 'Application',
+        meta: {},
         component: () => import('@/Views/Application/Application.vue')
     }
 ];
@@ -33,4 +35,4 @@ router.afterEach((to, from) => {
     TRouter.RefreshRoute(to, from);
 });
 
-export default router;
+export { router, routes };

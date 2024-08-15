@@ -6,7 +6,7 @@ import { App } from '@/App/App';
 import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
-import router from '@/Router';
+import { router } from '@/Router';
 
 @TTool.Cache<Try>(['inputName'])
 class Try extends Component<Application> {

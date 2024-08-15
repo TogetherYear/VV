@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 
 import RootVue from './Root.vue';
 
-import router from './Router';
+import { router } from './Router';
 
 import './Plugins/AppRequest';
 
