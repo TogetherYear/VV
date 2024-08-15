@@ -14,11 +14,6 @@ namespace TRouter {
     export let currentPath = '';
 
     /**
-     * 是否初始化路由 刚打开此网页需要执行的
-     */
-    let isInit = false;
-
-    /**
      * 路由生成
      */
     export function Generate() {
@@ -69,10 +64,7 @@ namespace TRouter {
                 }
 
                 private SetDefaultRoute() {
-                    if (!isInit) {
-                        isInit = true;
-                        currentPath = useRoute().path;
-                    }
+                    currentPath = useRoute().path;
                 }
             };
         };
