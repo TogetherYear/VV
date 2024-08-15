@@ -2,7 +2,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { Component } from '@/Libs/Component';
 import { Application } from '../../Application';
 import { TEvent } from '@/Decorators/TEvent';
-import { App } from '@/App/App';
+import { App, AppType } from '@/App/App';
 import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
@@ -58,6 +58,11 @@ class Try extends Component<Application> {
             'Component:',
             this.GetAllComponent(),
             this.GetComponent<Try>((instance) => instance.hasOwnProperty('inputName'))
+        );
+        console.log(
+            'Manager:',
+            this.GetAllManager(),
+            this.GetManager<AppType>((instance) => instance.hasOwnProperty('selfName'))
         );
     }
 

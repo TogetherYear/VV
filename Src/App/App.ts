@@ -7,12 +7,11 @@ import { Try } from '@/Views/Application/Component/Try/Try';
 
 @TEvent.Create(['Update'])
 class App extends Manager {
-    public constructor() {
-        super();
-    }
     public InitStates() {
         return {};
     }
+
+    public selfName = 'App';
 
     public Run() {
         onMounted(() => {
@@ -36,16 +35,23 @@ class App extends Manager {
         });
     }
 
-    @TTest.BindFunction('组件:App')
-    public BindTestComponent() {
+    @TTest.BindFunction('实例:App')
+    public BindTestComponentAndManager() {
         console.log(
             'Component:',
             this.GetAllComponent(),
             this.GetComponent<Try>((instance) => instance.hasOwnProperty('inputName'))
+        );
+        console.log(
+            'Manager:',
+            this.GetAllManager(),
+            this.GetManager<AppType>((instance) => instance.hasOwnProperty('selfName'))
         );
     }
 }
 
 const AppInstance = new App();
 
-export { AppInstance as App };
+type AppType = App;
+
+export { AppInstance as App, AppType };
