@@ -8,7 +8,7 @@ import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
 import router from '@/Router';
 
-@TTool.Cache(['inputName'])
+@TTool.Cache<Try>(['inputName'])
 class Try extends Component<Application> {
     public constructor(parent: Application) {
         super(parent);

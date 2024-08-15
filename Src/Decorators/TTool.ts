@@ -251,7 +251,7 @@ namespace TTool {
     /**
      * 简单缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串
      */
-    export function Cache(needs: Array<string>) {
+    export function Cache<V>(needs: Array<keyof V>) {
         return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
@@ -262,7 +262,7 @@ namespace TTool {
 
                 private currentUrl = '';
 
-                private needCache: Array<string> = [];
+                private needCache: Array<keyof V> = [];
 
                 private Cache_Hooks() {
                     this.Cache_Get();
@@ -290,7 +290,7 @@ namespace TTool {
                     for (let c of this.needCache) {
                         if (this.hasOwnProperty(c)) {
                             cache.push({
-                                key: c,
+                                key: c as string,
                                 //@ts-ignore
                                 value: this[`${c}`]
                             });
