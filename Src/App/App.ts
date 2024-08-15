@@ -40,18 +40,11 @@ class App extends Manager {
         console.log(
             'Component:',
             this.GetAllComponent(),
-            this.GetComponent<Try>((instance) => instance.hasOwnProperty('inputName'))
-        );
-        console.log(
-            'Manager:',
-            this.GetAllManager(),
-            this.GetManager<AppType>((instance) => instance.hasOwnProperty('selfName'))
+            this.GetComponent<Try>((component) => component.hasOwnProperty('inputName'))
         );
     }
 }
 
 const AppInstance = new App();
 
-type AppType = App;
-
-export { AppInstance as App, AppType };
+export { AppInstance as App };
