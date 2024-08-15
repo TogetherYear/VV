@@ -9,13 +9,10 @@ import { TTest } from '@/Decorators/TTest';
 import router from '@/Router';
 
 @TTool.Cache(['inputName'])
-class Try extends Component {
+class Try extends Component<Application> {
     public constructor(parent: Application) {
-        super();
-        this.parent = parent;
+        super(parent);
     }
-
-    private parent!: Application;
 
     @TTool.LimitRange<Try>((instance) => 0, ~~(Math.random() * 10 + 10))
     @TTest.BindProperty('Try')

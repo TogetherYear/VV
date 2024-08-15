@@ -16,7 +16,18 @@ import { Time } from '@/Utils/Time';
 @TView.Generate()
 @TEvent.Generate(TEvent.Lifecycle.Temporary)
 @TComponent.Generate()
-class Component extends EventSystem {
+class Component<T extends Component<T> | null = null> extends EventSystem {
+    public constructor(parent: T | null = null) {
+        super();
+        this.parent = parent;
+    }
+
+    public parent: T | null = null;
+
+    public get P() {
+        return this.parent!;
+    }
+
     /**
      * 当前页面路由
      */
