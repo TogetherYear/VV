@@ -1,4 +1,4 @@
-import { EventSystem } from '@/Libs/EventSystem';
+import { Entity } from '@/Libs/Entity';
 import { onMounted, onUnmounted } from 'vue';
 
 namespace TView {
@@ -6,7 +6,7 @@ namespace TView {
      * 页面生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -66,7 +66,7 @@ namespace TView {
     /**
      * Dom 观察 是否在视图可视区域内 被装饰器修饰的函数需要一个参数 为当前状态
      */
-    export function Observer<T extends EventSystem>(dom: HTMLElement | ((instance: T) => HTMLElement), once?: boolean) {
+    export function Observer<T extends Entity>(dom: HTMLElement | ((instance: T) => HTMLElement), once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tView_Observer_NeedListen']) {

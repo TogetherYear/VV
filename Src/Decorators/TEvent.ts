@@ -1,6 +1,6 @@
-import { EventSystem } from '@/Libs/EventSystem';
 import { onBeforeUnmount, onMounted } from 'vue';
 import { Resolve } from './index';
+import { Entity } from '@/Libs/Entity';
 
 /**
  * 事件相关
@@ -24,7 +24,7 @@ namespace TEvent {
      * 事件循环生成
      */
     export function Generate(type = Lifecycle.Temporary) {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -111,7 +111,7 @@ namespace TEvent {
      * @description 生成事件列表
      */
     export function Create(events: Array<string>) {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);

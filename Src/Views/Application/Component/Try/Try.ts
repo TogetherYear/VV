@@ -70,7 +70,11 @@ class Try extends Component<Application> {
     public BindTest(options: { value: string }, count: number) {
         console.log(this, options, count);
         router.push({
-            path: '/Empty'
+            path: '/Empty',
+            query: {
+                type: 'Try',
+                count: 24
+            }
         });
     }
 }

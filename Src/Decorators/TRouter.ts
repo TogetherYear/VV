@@ -1,6 +1,6 @@
-import { EventSystem } from '@/Libs/EventSystem';
-import { onMounted, onUnmounted } from 'vue';
-import { onBeforeRouteLeave, useRoute } from 'vue-router';
+import { Entity } from '@/Libs/Entity';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { RouteLocationNormalizedGeneric } from 'vue-router';
 
 namespace TRouter {
     /**
@@ -14,20 +14,29 @@ namespace TRouter {
     export let currentPath = '';
 
     /**
-     * 第一次进入这个网页调用一次
+     * 路由历史
      */
-    let isInit = false;
+    export const routeHistory = ref<Array<{ path: string; query: Record<string, string> }>>([]);
+
+    export function RefreshRoute(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
+        lastPath = from.path;
+        currentPath = to.path;
+        const index = routeHistory.value.findIndex((r) => r.path === to.path);
+        if (index === -1) {
+            routeHistory.value.push({ path: to.path, query: { ...to.query } as Record<string, string> });
+        } else {
+        }
+    }
 
     /**
      * 路由生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.TRouter_Generate_Hooks();
-                    this.SetDefaultRoute();
                 }
 
                 private TRouter_Generate_Hooks() {
@@ -37,14 +46,6 @@ namespace TRouter {
 
                     onUnmounted(() => {
                         this.TRouter_Generate_EmitTo();
-                    });
-
-                    onBeforeRouteLeave((to, from, next) => {
-                        if (to.path !== currentPath) {
-                            lastPath = from.path;
-                            currentPath = to.path;
-                        }
-                        next();
                     });
                 }
 
@@ -69,13 +70,6 @@ namespace TRouter {
                         }
                     }
                 }
-
-                private SetDefaultRoute() {
-                    if (!isInit) {
-                        isInit = true;
-                        currentPath = useRoute().path;
-                    }
-                }
             };
         };
     }
@@ -84,7 +78,7 @@ namespace TRouter {
      * 给根路由使用 比如在登录页 和 进去后的根页面使用 用来做 Loading 也就是 路由最外面那一层才需要加
      */
     export function Root() {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -109,7 +103,7 @@ namespace TRouter {
     /**
      * 如果从 from 路由进来 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( from 为 '/' 即只要进来就会触发)
      */
-    export function WhenFrom<T extends EventSystem>(from: string | ((instance: T) => string)) {
+    export function WhenFrom<T extends Entity>(from: string | ((instance: T) => string)) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_From_NeedCreate']) {
@@ -133,7 +127,7 @@ namespace TRouter {
     /**
      * 如果进入 to 路由 会触发的函数 我会进行匹配 只要传入参数被包含在路由中 触发函数不支持传参 ( To 为 '/' 即只要离开就会触发)
      */
-    export function WhenTo<T extends EventSystem>(to: string | ((instance: T) => string)) {
+    export function WhenTo<T extends Entity>(to: string | ((instance: T) => string)) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tRouter_To_NeedCreate']) {

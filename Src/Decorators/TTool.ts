@@ -3,7 +3,7 @@ import { isRef, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Resolve } from './index';
 import { TEvent } from './TEvent';
-import { EventSystem } from '@/Libs/EventSystem';
+import { Entity } from '@/Libs/Entity';
 
 namespace TTool {
     const debounceMap = new Map<string, number>();
@@ -16,7 +16,7 @@ namespace TTool {
      * 工具生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -49,7 +49,7 @@ namespace TTool {
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
                             //@ts-ignore
-                            const key = `${this['unique_Id']}:${e.funcName}`;
+                            const key = `${this.unique_Id}:${e.funcName}`;
                             let timer = debounceMap.get(key);
                             if (timer) {
                                 clearTimeout(timer);
@@ -86,7 +86,7 @@ namespace TTool {
                         //@ts-ignore
                         this[`${e.funcName}`] = function (...args: Array<unknown>) {
                             //@ts-ignore
-                            const key = `${this['unique_Id']}:${e.funcName}`;
+                            const key = `${this.unique_Id}:${e.funcName}`;
                             let lastTime = throttleMap.get(key);
                             if (lastTime) {
                                 const currentTime = Date.now();
@@ -203,7 +203,7 @@ namespace TTool {
     /**
      * 防抖 默认 500 毫秒
      */
-    export function Debounce<T extends EventSystem>(delta: number | ((instance: T) => number) = 500) {
+    export function Debounce<T extends Entity>(delta: number | ((instance: T) => number) = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tTool_Debounce_NeedCreate']) {
@@ -227,7 +227,7 @@ namespace TTool {
     /**
      * 节流 默认 500 毫秒
      */
-    export function Throttle<T extends EventSystem>(delta: number | ((instance: T) => number) = 500) {
+    export function Throttle<T extends Entity>(delta: number | ((instance: T) => number) = 500) {
         return function (target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tTool_Throttle_NeedCreate']) {
@@ -252,7 +252,7 @@ namespace TTool {
      * 简单缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串
      */
     export function Cache<V>(needs: Array<keyof V>) {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -305,7 +305,7 @@ namespace TTool {
     /**
      * 限制变量范围 只支持 ref 定义的
      */
-    export function LimitRange<T extends EventSystem>(min: number | ((instance: T) => number), max: number | ((instance: T) => number), immediate = true) {
+    export function LimitRange<T extends Entity>(min: number | ((instance: T) => number), max: number | ((instance: T) => number), immediate = true) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Range_Need']) {
@@ -321,7 +321,7 @@ namespace TTool {
     /**
      * 限制字符串长度 只支持 ref 定义的
      */
-    export function LimitLength<T extends EventSystem>(length: number | ((instance: T) => number), immediate = true) {
+    export function LimitLength<T extends Entity>(length: number | ((instance: T) => number), immediate = true) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Length_Need']) {
@@ -337,7 +337,7 @@ namespace TTool {
     /**
      * 监听变量的变化 只接受 ref 和 reactive 定义的 ( T：当前类类型 K：变量类型 deep：是否深度监听 )
      */
-    export function Watch<T extends EventSystem, K>(Callback: (instance: T, newValue: K, oldValue: K) => void, deep = false) {
+    export function Watch<T extends Entity, K>(Callback: (instance: T, newValue: K, oldValue: K) => void, deep = false) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Watch_Need']) {

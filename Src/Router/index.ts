@@ -1,3 +1,4 @@
+import { TRouter } from '@/Decorators/TRouter';
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
@@ -26,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+});
+
+router.afterEach((to, from) => {
+    TRouter.RefreshRoute(to, from);
 });
 
 export default router;

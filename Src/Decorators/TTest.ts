@@ -1,7 +1,7 @@
 import { onUnmounted, ref } from 'vue';
 import { TEvent } from './TEvent';
 import { Resolve } from './index';
-import { EventSystem } from '@/Libs/EventSystem';
+import { Entity } from '@/Libs/Entity';
 
 namespace TTest {
     /**
@@ -18,7 +18,7 @@ namespace TTest {
      * 测试生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
+        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -39,7 +39,7 @@ namespace TTest {
                     }>;
                     for (let b of bind) {
                         //@ts-ignore
-                        functionMap.value.set(`${this['unique_Id']}:${b.funcName}`, {
+                        functionMap.value.set(`${this.unique_Id}:${b.funcName}`, {
                             label: b.label,
                             funcName: b.funcName,
                             args: b.args,
@@ -57,7 +57,7 @@ namespace TTest {
                         }>;
                         for (let b of bind) {
                             //@ts-ignore
-                            propertyMap.value.set(`${this['unique_Id']}:${b.propertyKey}`, {
+                            propertyMap.value.set(`${this.unique_Id}:${b.propertyKey}`, {
                                 label: b.label,
                                 //@ts-ignore
                                 property: this[`${b.propertyKey}`]
@@ -82,7 +82,7 @@ namespace TTest {
                     }>;
                     for (let b of bind) {
                         //@ts-ignore
-                        functionMap.value.delete(`${this['unique_Id']}:${b.funcName}`);
+                        functionMap.value.delete(`${this.unique_Id}:${b.funcName}`);
                     }
                 }
 
@@ -94,7 +94,7 @@ namespace TTest {
                     }>;
                     for (let b of bind) {
                         //@ts-ignore
-                        propertyMap.value.delete(`${this['unique_Id']}:${b.propertyKey}`);
+                        propertyMap.value.delete(`${this.unique_Id}:${b.propertyKey}`);
                     }
                 }
             };
