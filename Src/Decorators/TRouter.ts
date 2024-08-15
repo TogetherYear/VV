@@ -6,12 +6,12 @@ namespace TRouter {
     /**
      * 上一次路由
      */
-    export let lastPath = '';
+    let lastPath = '';
 
     /**
      * 当前路由
      */
-    export let currentPath = '';
+    let currentPath = '';
 
     /**
      * 路由生成

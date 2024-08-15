@@ -37,6 +37,4 @@ class Test extends Manager {
 
 const TestInstance = new Test();
 
-type TestType = Test;
-
-export { TestInstance as Test, TestType };
+export { TestInstance as Test };

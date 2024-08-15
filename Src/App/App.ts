@@ -3,13 +3,11 @@ import { Manager } from '../Libs/Manager';
 import { TEvent } from '../Decorators/TEvent';
 import { TTest } from '@/Decorators/TTest';
 import router from '@/Router';
-import { Try } from '@/Views/Application/Component/Try/Try';
 
 @TEvent.Create(['Update'])
 class App extends Manager {
     public constructor() {
         super();
-        this.selfName = 'App';
     }
     public InitStates() {
         return {};
@@ -32,16 +30,6 @@ class App extends Manager {
     @TTest.BindFunction('测试:App', 'App', '测试', true)
     public BindTest(label: string, title: string, type: boolean) {
         console.log(this, label, title, type);
-        console.log(
-            'Component:',
-            this.GetAllComponent(),
-            this.GetComponent<Try>((instance) => instance.selfName === 'Try')
-        );
-        console.log(
-            'Manager:',
-            this.GetAllManager(),
-            this.GetManager<AppType>((manager) => manager.selfName === 'App')
-        );
         router.push({
             path: '/Application'
         });
@@ -50,6 +38,4 @@ class App extends Manager {
 
 const AppInstance = new App();
 
-type AppType = App;
-
-export { AppInstance as App, AppType };
+export { AppInstance as App };
