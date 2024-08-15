@@ -1,6 +1,8 @@
 import { Time } from '@/Utils/Time';
 import { EventSystem } from './EventSystem';
 import { TEntity } from '@/Decorators/TEntity';
+import { TComponent } from '@/Decorators/TComponent';
+import { TRouter } from '@/Decorators/TRouter';
 
 /**
  * 根 我用来代理一些变量的
@@ -11,6 +13,26 @@ class Entity extends EventSystem {
      * 唯一ID
      */
     public unique_Id = Time.GenerateRandomUid();
+
+    /**
+     * 获取当前页面所有存活的 Component
+     */
+    public GetAllComponent() {
+        return TComponent.ComponentMap.get(TRouter.currentPath);
+    }
+
+    /**
+     * 根据条件获取 Component
+     */
+    public GetComponent<T>(Condition: (instance: T & Record<string, unknown>) => boolean): T | null {
+        const current = TComponent.ComponentMap.get(TRouter.currentPath)!;
+        for (let c of current) {
+            if (Condition(c as any)) {
+                return c as T;
+            }
+        }
+        return null;
+    }
 }
 
 export { Entity };

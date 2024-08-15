@@ -6,12 +6,17 @@ namespace TRouter {
     /**
      * 上一次路由
      */
-    let lastPath = '';
+    export let lastPath = '';
 
     /**
      * 当前路由
      */
-    let currentPath = '';
+    export let currentPath = '';
+
+    /**
+     * 第一次进入这个网页调用一次
+     */
+    let isInit = false;
 
     /**
      * 路由生成
@@ -35,8 +40,10 @@ namespace TRouter {
                     });
 
                     onBeforeRouteLeave((to, from, next) => {
-                        lastPath = from.path;
-                        currentPath = to.path;
+                        if (to.path !== currentPath) {
+                            lastPath = from.path;
+                            currentPath = to.path;
+                        }
                         next();
                     });
                 }
@@ -64,7 +71,10 @@ namespace TRouter {
                 }
 
                 private SetDefaultRoute() {
-                    currentPath = useRoute().path;
+                    if (!isInit) {
+                        isInit = true;
+                        currentPath = useRoute().path;
+                    }
                 }
             };
         };

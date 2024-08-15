@@ -3,6 +3,7 @@ import { Manager } from '../Libs/Manager';
 import { TEvent } from '../Decorators/TEvent';
 import { TTest } from '@/Decorators/TTest';
 import router from '@/Router';
+import { Try } from '@/Views/Application/Component/Try/Try';
 
 @TEvent.Create(['Update'])
 class App extends Manager {
@@ -33,6 +34,15 @@ class App extends Manager {
         router.push({
             path: '/Application'
         });
+    }
+
+    @TTest.BindFunction('组件:App')
+    public BindTestComponent() {
+        console.log(
+            'Component:',
+            this.GetAllComponent(),
+            this.GetComponent<Try>((instance) => instance.hasOwnProperty('inputName'))
+        );
     }
 }
 

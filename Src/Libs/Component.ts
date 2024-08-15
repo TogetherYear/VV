@@ -36,26 +36,6 @@ class Component<T extends Component<T> | null = null> extends Entity {
      * 当前页面参数
      */
     public tComponent_Generate_Query!: Record<string, unknown>;
-
-    /**
-     * 获取当前页面所有存活的 Component
-     */
-    public GetAllComponent() {
-        return TComponent.ComponentMap.get(this.tComponent_Generate_Route);
-    }
-
-    /**
-     * 根据条件获取 Component
-     */
-    public GetComponent<K>(Condition: (instance: K & Record<string, unknown>) => boolean): K | null {
-        const current = TComponent.ComponentMap.get(this.tComponent_Generate_Route)!;
-        for (let c of current) {
-            if (Condition(c as any)) {
-                return c as K;
-            }
-        }
-        return null;
-    }
 }
 
 export { Component };
