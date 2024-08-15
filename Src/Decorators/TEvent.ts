@@ -1,5 +1,5 @@
 import { EventSystem } from '@/Libs/EventSystem';
-import { onBeforeUnmount, onMounted, onUnmounted } from 'vue';
+import { onBeforeUnmount, onMounted } from 'vue';
 import { Resolve } from './index';
 
 /**
