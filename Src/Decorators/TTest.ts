@@ -1,6 +1,7 @@
 import { onUnmounted, ref } from 'vue';
 import { TEvent } from './TEvent';
 import { Resolve } from './index';
+import { EventSystem } from '@/Libs/EventSystem';
 
 namespace TTest {
     /**
@@ -17,7 +18,7 @@ namespace TTest {
      * 测试生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);

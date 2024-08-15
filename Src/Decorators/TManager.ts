@@ -1,8 +1,10 @@
+import { Manager } from '@/Libs/Manager';
+
 namespace TManager {
     const Manager: Array<Object> = [];
 
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+        return function <T extends new (...args: Array<any>) => Manager>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);

@@ -16,7 +16,7 @@ namespace TTool {
      * 工具生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
@@ -252,7 +252,7 @@ namespace TTool {
      * 简单缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串
      */
     export function Cache(needs: Array<string>) {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);

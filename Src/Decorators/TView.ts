@@ -6,7 +6,7 @@ namespace TView {
      * 页面生成
      */
     export function Generate() {
-        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+        return function <T extends new (...args: Array<any>) => EventSystem>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
                     super(...args);
