@@ -3,7 +3,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 namespace TComponent {
-    const ComponentMap = new Map<string, Array<Object>>();
+    export const ComponentMap = new Map<string, Array<Object>>();
 
     export function Generate() {
         return function <T extends new (...args: Array<any>) => Component>(C: T) {

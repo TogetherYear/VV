@@ -54,6 +54,7 @@ class Try extends Component<Application> {
     @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)
     public OnBtnClick() {
         console.log('Try:', this.currentCount.value);
+        console.log(this.GetAllComponent());
     }
 
     @TRouter.WhenTo<Try>((instance) => 'Empty')

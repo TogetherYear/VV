@@ -4,8 +4,7 @@ import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
 import { TView } from '@/Decorators/TView';
-import { EventSystem } from '@/Libs/EventSystem';
-import { Time } from '@/Utils/Time';
+import { Entity } from './Entity';
 
 /**
  * 页面组件
@@ -16,7 +15,7 @@ import { Time } from '@/Utils/Time';
 @TView.Generate()
 @TEvent.Generate(TEvent.Lifecycle.Temporary)
 @TComponent.Generate()
-class Component<T extends Component<T> | null = null> extends EventSystem {
+class Component<T extends Component<T> | null = null> extends Entity {
     public constructor(parent: T | null = null) {
         super();
         this.parent = parent;
@@ -39,9 +38,24 @@ class Component<T extends Component<T> | null = null> extends EventSystem {
     public tComponent_Generate_Query!: Record<string, unknown>;
 
     /**
-     * 唯一ID
+     * 获取当前页面所有存活的 COmponent
      */
-    public unique_Id = Time.GenerateRandomUid();
+    public GetAllComponent() {
+        return TComponent.ComponentMap.get(this.tComponent_Generate_Route);
+    }
+
+    /**
+     * 根据条件获取组件
+     */
+    public GetComponent<K>(Condition: (instance: K & Record<string, unknown>) => boolean): K | null {
+        const current = TComponent.ComponentMap.get(this.tComponent_Generate_Route)!;
+        for (let c of current) {
+            if (Condition(c as any)) {
+                return c as K;
+            }
+        }
+        return null;
+    }
 }
 
 export { Component };

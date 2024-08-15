@@ -46,6 +46,7 @@ class Application extends Component {
     @TTool.Debounce(1000)
     public OnBtnClick() {
         console.log('Application:', this.current.count);
+        console.log(this.GetComponent<Try>((instance) => instance.hasOwnProperty('inputName')));
         return;
         ElMessageBox.confirm('是否关闭?', '提示')
             .then(() => {
