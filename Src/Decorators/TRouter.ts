@@ -6,12 +6,12 @@ namespace TRouter {
     /**
      * 上一次路由
      */
-    export let lastPath = '';
+    export let lastPath = ref<string>('');
 
     /**
      * 当前路由
      */
-    export let currentPath = '';
+    export let currentPath = ref<string>('');
 
     /**
      * 路由历史
@@ -19,13 +19,13 @@ namespace TRouter {
     export const routeHistory = ref<Array<{ path: string; query: Record<string, string> }>>([]);
 
     export function RefreshRoute(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
-        lastPath = from.path;
-        currentPath = to.path;
+        lastPath.value = from.path;
+        currentPath.value = to.path;
         const index = routeHistory.value.findIndex((r) => r.path === to.path);
-        if (index === -1) {
-            routeHistory.value.push({ path: to.path, query: { ...to.query } as Record<string, string> });
-        } else {
+        if (index !== -1) {
+            routeHistory.value.splice(index, 1);
         }
+        routeHistory.value.push({ path: to.path, query: { ...to.query } as Record<string, string> });
     }
 
     /**
@@ -53,7 +53,7 @@ namespace TRouter {
                     //@ts-ignore
                     const from = (this['tRouter_From_NeedCreate'] || []) as Array<{ funcName: string; from: string | ((instance: Object) => string) }>;
                     for (let f of from) {
-                        if (lastPath.indexOf(typeof f.from === 'function' ? f.from(this) : f.from) !== -1) {
+                        if (lastPath.value.indexOf(typeof f.from === 'function' ? f.from(this) : f.from) !== -1) {
                             //@ts-ignore
                             this[`${f.funcName}`]();
                         }
@@ -64,7 +64,7 @@ namespace TRouter {
                     //@ts-ignore
                     const to = (this['tRouter_To_NeedCreate'] || []) as Array<{ funcName: string; to: string | ((instance: Object) => string) }>;
                     for (let t of to) {
-                        if (currentPath.indexOf(typeof t.to === 'function' ? t.to(this) : t.to) !== -1) {
+                        if (currentPath.value.indexOf(typeof t.to === 'function' ? t.to(this) : t.to) !== -1) {
                             //@ts-ignore
                             this[`${t.funcName}`]();
                         }
