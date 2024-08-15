@@ -115,4 +115,6 @@ class AppRequest extends Manager {
 
 const AppRequestInstance = new AppRequest();
 
-export { AppRequestInstance as AppRequest };
+type AppRequestType = AppRequest;
+
+export { AppRequestInstance as AppRequest, AppRequestType };

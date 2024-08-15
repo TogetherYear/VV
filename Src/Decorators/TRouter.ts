@@ -6,11 +6,18 @@ namespace TRouter {
     /**
      * 上一次路由
      */
-    let lastPath = '';
+    export let lastPath = '';
+
     /**
      * 当前路由
      */
-    let currentPath = '';
+    export let currentPath = '';
+
+    /**
+     * 是否初始化路由 刚打开此网页需要执行的
+     */
+    let isInit = false;
+
     /**
      * 路由生成
      */
@@ -20,6 +27,7 @@ namespace TRouter {
                 constructor(...args: Array<any>) {
                     super(...args);
                     this.TRouter_Generate_Hooks();
+                    this.SetDefaultRoute();
                 }
 
                 private TRouter_Generate_Hooks() {
@@ -57,6 +65,13 @@ namespace TRouter {
                             //@ts-ignore
                             this[`${t.funcName}`]();
                         }
+                    }
+                }
+
+                private SetDefaultRoute() {
+                    if (!isInit) {
+                        isInit = true;
+                        currentPath = useRoute().path;
                     }
                 }
             };

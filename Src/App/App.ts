@@ -6,6 +6,10 @@ import router from '@/Router';
 
 @TEvent.Create(['Update'])
 class App extends Manager {
+    public constructor() {
+        super();
+        this.selfName = 'App';
+    }
     public InitStates() {
         return {};
     }
@@ -35,4 +39,6 @@ class App extends Manager {
 
 const AppInstance = new App();
 
-export { AppInstance as App };
+type AppType = App;
+
+export { AppInstance as App, AppType };

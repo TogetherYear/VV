@@ -12,6 +12,7 @@ import router from '@/Router';
 class Try extends Component<Application> {
     public constructor(parent: Application) {
         super(parent);
+        this.selfName = 'Try';
     }
 
     @TTool.LimitRange<Try>((instance) => 0, ~~(Math.random() * 10 + 10))
@@ -54,7 +55,11 @@ class Try extends Component<Application> {
     @TTool.Throttle<Try>((instance) => (11 - instance.currentCount.value) * 100)
     public OnBtnClick() {
         console.log('Try:', this.currentCount.value);
-        console.log(this.GetAllComponent());
+        console.log(
+            'Component:',
+            this.GetAllComponent(),
+            this.GetComponent<Try>((instance) => instance.selfName === 'Try')
+        );
     }
 
     @TRouter.WhenTo<Try>((instance) => 'Empty')
