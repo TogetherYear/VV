@@ -1,5 +1,5 @@
 import { Mathf } from '@/Utils/Mathf';
-import { isRef, onUnmounted, watch } from 'vue';
+import { isRef, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Resolve } from './index';
 import { TEvent } from './TEvent';
@@ -36,6 +36,8 @@ namespace TTool {
                 private tTool_Generate_Length: Array<() => void> = [];
 
                 private tTool_Generate_Watch: Array<() => void> = [];
+
+                private tTool_Generate_Observers = new Map<HTMLElement, IntersectionObserver>();
 
                 private TTool_Generate_Debounce() {
                     //@ts-ignore
@@ -104,10 +106,14 @@ namespace TTool {
                 }
 
                 private TTool_Generate_Hooks() {
+                    onMounted(() => {
+                        this.TTool_Generate_CreateListen();
+                    });
                     onUnmounted(() => {
                         this.TTool_Generate_UnMountRange();
                         this.TTool_Generate_UnMountLength();
                         this.TTool_Generate_UnMountWatch();
+                        this.TTool_Generate_DestroyListen();
                     });
                 }
 
@@ -195,6 +201,41 @@ namespace TTool {
                     for (let StopHandle of this.tTool_Generate_Watch) {
                         StopHandle();
                     }
+                }
+
+                private TTool_Generate_CreateListen() {
+                    //@ts-ignore
+                    const listen = (this['tTool_Observer_NeedListen'] || []) as Array<{
+                        dom: HTMLElement | ((instance: Object) => HTMLElement);
+                        funcName: string;
+                        once: boolean;
+                    }>;
+
+                    for (let l of listen) {
+                        const element = typeof l.dom === 'function' ? l.dom(this) : l.dom;
+                        const observer = new IntersectionObserver((entries) => {
+                            if (entries[0].intersectionRatio <= 0) {
+                                //@ts-ignore
+                                this[`${l.funcName}`](false);
+                            } else {
+                                //@ts-ignore
+                                this[`${l.funcName}`](true);
+                                if (l.once) {
+                                    observer.disconnect();
+                                    this.tTool_Generate_Observers.delete(element);
+                                }
+                            }
+                        });
+                        observer.observe(element);
+                        this.tTool_Generate_Observers.set(element, observer);
+                    }
+                }
+
+                private TTool_Generate_DestroyListen() {
+                    for (let o of this.tTool_Generate_Observers) {
+                        o[1].disconnect();
+                    }
+                    this.tTool_Generate_Observers.clear();
                 }
             };
         };
@@ -299,6 +340,26 @@ namespace TTool {
                     cacheMap.set(this.currentUrl, cache);
                 }
             };
+        };
+    }
+
+    /**
+     * Dom 观察 是否在视图可视区域内 被装饰器修饰的函数需要一个参数 为当前状态 ( Manager 用不了 )
+     */
+    export function Observer<T extends Entity>(dom: HTMLElement | ((instance: T) => HTMLElement), once?: boolean) {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+            //@ts-ignore
+            if (target['tTool_Observer_NeedListen']) {
+                //@ts-ignore
+                target['tTool_Observer_NeedListen'].push({
+                    dom,
+                    funcName: propertyKey,
+                    once: once || false
+                });
+            } else {
+                //@ts-ignore
+                target['tTool_Observer_NeedListen'] = [{ dom, funcName: propertyKey, once: once || false }];
+            }
         };
     }
 

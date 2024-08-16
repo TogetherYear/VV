@@ -5,7 +5,6 @@ import { TRouter } from '@/Decorators/TRouter';
 import { ElMessageBox } from 'element-plus';
 import { TTool } from '@/Decorators/TTool';
 import { Try } from './Component/Try/Try';
-import { TView } from '@/Decorators/TView';
 import { App } from '@/App/App';
 import { TTest } from '@/Decorators/TTest';
 
@@ -61,7 +60,7 @@ class Application extends Component {
         console.log(`From:Empty:Application`);
     }
 
-    @TView.Observer<Application>((instane) => instane.dom.value as HTMLElement)
+    @TTool.Observer<Application>((instane) => instane.dom.value as HTMLElement)
     public OnNeedState(flag: boolean) {
         console.log(`OnNeedState:${flag}`);
     }
