@@ -8,7 +8,6 @@ import { Try } from './Component/Try/Try';
 import { App } from '@/App/App';
 import { TTest } from '@/Decorators/TTest';
 
-@TRouter.Root()
 @TTool.Cache<Application>(['current'])
 class Application extends Component {
     public try = new Try(this);

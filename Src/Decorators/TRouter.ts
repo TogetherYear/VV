@@ -18,6 +18,11 @@ namespace TRouter {
      */
     export const routeHistory = ref<Array<{ path: string; query: Record<string, string> }>>([]);
 
+    /**
+     * 系统资源是否加载完毕可以显示第一个页面
+     */
+    let isLoad = false;
+
     export function RefreshRoute(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
         lastPath.value = from.path;
         currentPath.value = to.path;
@@ -42,6 +47,7 @@ namespace TRouter {
                 private TRouter_Generate_Hooks() {
                     onMounted(() => {
                         this.TRouter_Generate_EmitFrom();
+                        this.TRouter_Generate_Loading();
                     });
 
                     onUnmounted(() => {
@@ -70,31 +76,13 @@ namespace TRouter {
                         }
                     }
                 }
-            };
-        };
-    }
 
-    /**
-     * 给根路由使用 比如在登录页 和 进去后的根页面使用 用来做 Loading 也就是 路由最外面那一层才需要加
-     */
-    export function Root() {
-        return function <T extends new (...args: Array<any>) => Entity>(C: T) {
-            return class extends C {
-                constructor(...args: Array<any>) {
-                    super(...args);
-                    this.TRouter_Root_Hooks();
-                }
-
-                private TRouter_Root_Hooks() {
-                    onMounted(() => {
+                private TRouter_Generate_Loading() {
+                    if (!isLoad) {
+                        isLoad = true;
                         //@ts-ignore
                         window.HideLoading();
-                    });
-
-                    onUnmounted(() => {
-                        //@ts-ignore
-                        window.ShowLoading();
-                    });
+                    }
                 }
             };
         };
