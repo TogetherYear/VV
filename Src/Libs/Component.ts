@@ -3,7 +3,6 @@ import { TEvent } from '@/Decorators/TEvent';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
-import { TView } from '@/Decorators/TView';
 import { Entity } from './Entity';
 
 /**
@@ -12,7 +11,6 @@ import { Entity } from './Entity';
 @TTest.Generate()
 @TTool.Generate()
 @TRouter.Generate()
-@TView.Generate()
 @TEvent.Generate(TEvent.Lifecycle.Temporary)
 @TComponent.Generate()
 class Component<T extends Component<T> | null = null> extends Entity {
