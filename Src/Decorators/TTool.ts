@@ -109,6 +109,7 @@ namespace TTool {
                     onMounted(() => {
                         this.TTool_Generate_CreateListen();
                     });
+
                     onUnmounted(() => {
                         this.TTool_Generate_UnMountRange();
                         this.TTool_Generate_UnMountLength();
@@ -344,7 +345,7 @@ namespace TTool {
     }
 
     /**
-     * Dom 观察 是否在视图可视区域内 被装饰器修饰的函数需要一个参数 为当前状态 ( Manager 用不了 )
+     * Dom 观察 是否在视图可视区域内 被装饰器修饰的函数需要一个参数 为当前状态 ( Manager 用不了 因为它没有生命周期 只有 Component 有 最好只去监听用 ref 定义的 dom )
      */
     export function Observer<T extends Entity>(dom: HTMLElement | ((instance: T) => HTMLElement), once?: boolean) {
         return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
