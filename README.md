@@ -19,3 +19,9 @@ npm run dev
 ```
 npm run build
 ```
+
+### 装饰器
+
+```
+如果类没有对应类装饰器的 Generate 则里面的方法也不可用
+```
