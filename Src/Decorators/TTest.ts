@@ -1,4 +1,4 @@
-import { onUnmounted, ref } from 'vue';
+import { onUnmounted, ref, Ref, Reactive } from 'vue';
 import { TEvent } from './TEvent';
 import { Resolve } from './index';
 import { Entity } from '@/Libs/Entity';
@@ -12,7 +12,7 @@ namespace TTest {
     /**
      * 属性列表
      */
-    export const propertyMap = ref<Map<string, { label: string; property: string }>>(new Map());
+    export const propertyMap = ref<Map<string, { label: string; property: Ref<unknown> | Reactive<Record<string, unknown>> }>>(new Map());
 
     /**
      * 测试生成
