@@ -10,10 +10,6 @@ import { router } from '@/Router';
 
 @TTool.Cache<Try>(['inputName'])
 class Try extends Component<Application> {
-    public constructor(parent: Application) {
-        super(parent);
-    }
-
     @TTool.LimitRange<Try>((instance) => 0, ~~(Math.random() * 10 + 10))
     @TTest.BindProperty('Try')
     public currentCount = ref<number>(0);
