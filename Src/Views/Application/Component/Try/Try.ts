@@ -7,6 +7,7 @@ import { TTool } from '@/Decorators/TTool';
 import { TRouter } from '@/Decorators/TRouter';
 import { TTest } from '@/Decorators/TTest';
 import { router } from '@/Router';
+import { T } from '@/Demands/T';
 
 @TTool.Cache<Try>(['inputName'])
 class Try extends Component<Application> {
@@ -37,7 +38,7 @@ class Try extends Component<Application> {
 
     public Destroy() {}
 
-    @TEvent.Listen(App, 'Update')
+    @TEvent.Listen(App, T.AppEvent.Update)
     public OnUpdate(e: { type: string }) {
         this.currentCount.value++;
     }
