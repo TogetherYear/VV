@@ -6,10 +6,19 @@ import { TEvent } from './TEvent';
 import { Entity } from '@/Libs/Entity';
 
 namespace TTool {
+    /**
+     * 防抖列表
+     */
     const debounceMap = new Map<string, number>();
 
+    /**
+     * 节流列表
+     */
     const throttleMap = new Map<string, number>();
 
+    /**
+     * 缓存列表
+     */
     const cacheMap = new Map<string, Array<{ key: string; value: unknown }>>();
 
     /**
