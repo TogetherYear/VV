@@ -178,6 +178,7 @@ namespace TTool {
                         const needWatch = (this['tTool_Watch_Need'] || []) as Array<{
                             Callback: (instance: Object, newValue: unknown, oldValue: unknown) => void;
                             deep: boolean;
+                            immediate: boolean;
                             propertyKey: string;
                         }>;
                         for (let w of needWatch) {
@@ -188,7 +189,7 @@ namespace TTool {
                                     (newValue, oldValue) => {
                                         w.Callback(this, newValue, oldValue);
                                     },
-                                    { deep: w.deep }
+                                    { deep: w.deep, immediate: w.immediate }
                                 )
                             );
                         }
@@ -407,17 +408,17 @@ namespace TTool {
     }
 
     /**
-     * 监听变量的变化 只接受 ref 和 reactive 定义的 ( T：当前类类型 K：变量类型 deep：是否深度监听 )
+     * 监听变量的变化 只接受 ref 和 reactive 定义的 ( T：当前类类型 K：变量类型 )
      */
-    export function Watch<T extends Entity, K>(Callback: (instance: T, newValue: K, oldValue: K) => void, deep = false) {
+    export function Watch<T extends Entity, K>(Callback: (instance: T, newValue: K, oldValue: K) => void, deep = false, immediate = false) {
         return function (target: Object, propertyKey: string | symbol) {
             //@ts-ignore
             if (target['tTool_Watch_Need']) {
                 //@ts-ignore
-                target['tTool_Watch_Need'].push({ Callback, deep, propertyKey });
+                target['tTool_Watch_Need'].push({ Callback, deep, immediate, propertyKey });
             } else {
                 //@ts-ignore
-                target['tTool_Watch_Need'] = [{ Callback, deep, propertyKey }];
+                target['tTool_Watch_Need'] = [{ Callback, deep, immediate, propertyKey }];
             }
         };
     }
