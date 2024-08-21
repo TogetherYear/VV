@@ -55,6 +55,9 @@ namespace TRouter {
      */
     export const activeView = reactive<View>({ module: Module.None, duty: Duty.None });
 
+    /**
+     * 路由菜单
+     */
     export const routes: Array<RouteRecordRaw & { meta?: RouterMeta }> = [
         {
             path: '/',
@@ -86,6 +89,9 @@ namespace TRouter {
         }
     ];
 
+    /**
+     * 系统菜单
+     */
     export const menu = ref<Map<Module, Array<RouterMeta>>>(new Map());
 
     function InitMenu() {
