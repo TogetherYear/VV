@@ -1,32 +1,9 @@
 import { TRouter } from '@/Decorators/TRouter';
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-
-const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        name: 'Default',
-        redirect: '/Application'
-    },
-    {
-        path: '/:pathMatch(.*)',
-        name: '404',
-        redirect: '/Empty'
-    },
-    {
-        path: '/Empty',
-        name: 'Empty',
-        component: () => import('@/Views/Empty/Empty.vue')
-    },
-    {
-        path: '/Application',
-        name: 'Application',
-        component: () => import('@/Views/Application/Application.vue')
-    }
-];
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes
+    routes: TRouter.routes
 });
 
 router.afterEach((to, from) => {

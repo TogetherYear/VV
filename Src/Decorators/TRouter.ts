@@ -1,8 +1,130 @@
 import { Entity } from '@/Libs/Entity';
-import { onMounted, onUnmounted, ref } from 'vue';
-import { RouteLocationNormalizedGeneric } from 'vue-router';
+import { onMounted, onUnmounted, reactive, ref } from 'vue';
+import { RouteLocationNormalizedGeneric, RouteRecordRaw } from 'vue-router';
 
 namespace TRouter {
+    //#region 模块
+
+    /**
+     * 最外层所属模块
+     */
+    export const enum Module {
+        None,
+        Default
+    }
+
+    /**
+     * 职责
+     */
+    export const enum Duty {
+        None,
+        Application
+    }
+
+    /**
+     * 页面
+     */
+    export type View = {
+        module: Module;
+        duty: Duty;
+    };
+
+    export type ViewMeta = {
+        /**
+         * 后台对应字段
+         */
+        menuName: string;
+        /**
+         * 菜单显示字段
+         */
+        menuLabel: string;
+        /**
+         * 菜单图标
+         */
+        menuIcon: string;
+        /**
+         * 是否在菜单显示
+         */
+        visibility: boolean;
+    };
+
+    export type RouterMeta = View & ViewMeta;
+
+    /**
+     * 当前活动页面
+     */
+    export const activeView = reactive<View>({ module: Module.None, duty: Duty.None });
+
+    export const routes: Array<RouteRecordRaw & { meta?: RouterMeta }> = [
+        {
+            path: '/',
+            name: 'Default',
+            redirect: '/Application'
+        },
+        {
+            path: '/:pathMatch(.*)',
+            name: '404',
+            redirect: '/Empty'
+        },
+        {
+            path: '/Empty',
+            name: 'Empty',
+            component: () => import('@/Views/Empty/Empty.vue')
+        },
+        {
+            path: '/Application',
+            name: 'Application',
+            meta: {
+                module: TRouter.Module.Default,
+                duty: TRouter.Duty.Application,
+                menuName: '',
+                menuLabel: '',
+                menuIcon: '',
+                visibility: true
+            },
+            component: () => import('@/Views/Application/Application.vue')
+        }
+    ];
+
+    export const menu = ref<Map<Module, Array<RouterMeta>>>(new Map());
+
+    function InitMenu() {
+        for (let r of routes) {
+            if (r.meta) {
+                let children = menu.value.get(r.meta.module);
+                if (!children) {
+                    children = menu.value.set(r.meta.module, []).get(r.meta.module);
+                }
+                children!.push({ ...r.meta });
+            }
+        }
+    }
+
+    InitMenu();
+
+    /**
+     * 显示路由模块
+     */
+    export function View(v: View) {
+        return function <T extends new (...args: Array<any>) => Object>(C: T) {
+            return class extends C {
+                constructor(...args: Array<any>) {
+                    super(...args);
+                    this.TRouter_View_Set();
+                }
+
+                private TRouter_View_Set() {
+                    activeView.module = v.module;
+                    activeView.duty = v.duty;
+                }
+            };
+        };
+    }
+
+    //#endregion
+
+    //#region 工具
+
     /**
      * 上一次路由
      */
@@ -135,6 +257,8 @@ namespace TRouter {
             }
         };
     }
+
+    //#endregion
 }
 
 export { TRouter };

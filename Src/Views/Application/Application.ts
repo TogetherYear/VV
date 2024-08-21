@@ -9,6 +9,10 @@ import { App } from '@/App/App';
 import { TTest } from '@/Decorators/TTest';
 import { T } from '@/Demands/T';
 
+@TRouter.View({
+    module: TRouter.Module.Default,
+    duty: TRouter.Duty.Application
+})
 @TTool.Cache<Application>(['current'])
 class Application extends Component {
     public try = new Try(this);
