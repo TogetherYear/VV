@@ -10,4 +10,6 @@ router.afterEach((to, from) => {
     TRouter.RefreshRoute(to, from);
 });
 
+TRouter.InitMenu(router.getRoutes());
+
 export { router };

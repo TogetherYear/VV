@@ -1,6 +1,6 @@
 import { Entity } from '@/Libs/Entity';
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
-import { RouteLocationNormalizedGeneric, RouteRecordRaw } from 'vue-router';
+import { RouteLocationNormalizedGeneric, RouteRecordNormalized, RouteRecordRaw } from 'vue-router';
 
 namespace TRouter {
     //#region 模块
@@ -48,7 +48,7 @@ namespace TRouter {
         visibility: boolean;
     };
 
-    export type RouterMeta = View & ViewMeta;
+    export type TRouteMeta = View & ViewMeta;
 
     /**
      * 当前活动页面
@@ -58,7 +58,7 @@ namespace TRouter {
     /**
      * 路由菜单
      */
-    export const routes: Array<RouteRecordRaw & { meta?: RouterMeta }> = [
+    export const routes: Array<RouteRecordRaw & { meta?: TRouteMeta }> = [
         {
             path: '/',
             name: 'Default',
@@ -92,21 +92,20 @@ namespace TRouter {
     /**
      * 系统菜单
      */
-    export const menu = ref<Map<Module, Array<RouterMeta>>>(new Map());
+    export const menu = ref<Map<Module, Array<TRouteMeta & { path: string }>>>(new Map());
 
-    function InitMenu() {
-        for (let r of routes) {
-            if (r.meta) {
-                let children = menu.value.get(r.meta.module);
+    export function InitMenu(rs: Array<RouteRecordNormalized & { meta: TRouteMeta | {} }>) {
+        for (let r of rs) {
+            if (Object.keys(r.meta).length !== 0) {
+                const meta = r.meta as TRouteMeta;
+                let children = menu.value.get(meta.module);
                 if (!children) {
-                    children = menu.value.set(r.meta.module, []).get(r.meta.module);
+                    children = menu.value.set(meta.module, []).get(meta.module);
                 }
-                children!.push({ ...r.meta });
+                children!.push({ ...meta, path: r.path });
             }
         }
     }
-
-    InitMenu();
 
     /**
      * 显示路由模块

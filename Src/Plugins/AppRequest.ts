@@ -58,7 +58,7 @@ class AppRequest extends Manager {
                 return response;
             },
             (err) => {
-                if (err.response?.status == AppRequest.outCode) {
+                if (err.response?.status === AppRequest.outCode) {
                     if (!this.isOut) {
                         this.ResetAccount();
                         console.error('登录凭证过期');
@@ -97,7 +97,7 @@ class AppRequest extends Manager {
 
     public GetRemember() {
         const r = localStorage.getItem('ORIGINREMEMBER');
-        return !r || r == '1';
+        return !r || r === '1';
     }
 
     public Get(url: string, config?: AxiosRequestConfig) {
