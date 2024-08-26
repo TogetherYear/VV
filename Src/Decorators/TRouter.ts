@@ -3,6 +3,40 @@ import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { RouteLocationNormalizedGeneric, RouteRecordNormalized, RouteRecordRaw } from 'vue-router';
 
 namespace TRouter {
+    /**
+     * 路由菜单
+     */
+    export const routes: Array<RouteRecordRaw & { meta?: TRouteMeta }> = [
+        {
+            path: '/',
+            name: 'Default',
+            redirect: '/Application'
+        },
+        {
+            path: '/:pathMatch(.*)',
+            name: '404',
+            redirect: '/Empty'
+        },
+        {
+            path: '/Empty',
+            name: 'Empty',
+            component: () => import('@/Views/Empty/Empty.vue')
+        },
+        {
+            path: '/Application',
+            name: 'Application',
+            meta: {
+                module: TRouter.Module.Default,
+                duty: TRouter.Duty.Application,
+                menuName: '',
+                menuLabel: '',
+                menuIcon: '',
+                visibility: true
+            },
+            component: () => import('@/Views/Application/Application.vue')
+        }
+    ];
+
     //#region 模块
 
     /**
@@ -54,40 +88,6 @@ namespace TRouter {
      * 当前活动页面
      */
     export const activeView = reactive<View>({ module: Module.None, duty: Duty.None });
-
-    /**
-     * 路由菜单
-     */
-    export const routes: Array<RouteRecordRaw & { meta?: TRouteMeta }> = [
-        {
-            path: '/',
-            name: 'Default',
-            redirect: '/Application'
-        },
-        {
-            path: '/:pathMatch(.*)',
-            name: '404',
-            redirect: '/Empty'
-        },
-        {
-            path: '/Empty',
-            name: 'Empty',
-            component: () => import('@/Views/Empty/Empty.vue')
-        },
-        {
-            path: '/Application',
-            name: 'Application',
-            meta: {
-                module: TRouter.Module.Default,
-                duty: TRouter.Duty.Application,
-                menuName: '',
-                menuLabel: '',
-                menuIcon: '',
-                visibility: true
-            },
-            component: () => import('@/Views/Application/Application.vue')
-        }
-    ];
 
     /**
      * 系统菜单
