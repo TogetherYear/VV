@@ -46,6 +46,8 @@ namespace TEvent {
 
                 public tEvent_Generate_IsFinish = false;
 
+                public tEvent_Generate_OtherEvents = new Map<string, Function>();
+
                 public TEvent_Generate_CreatEvents() {
                     //@ts-ignore
                     const create = (this['tEvent_Create_NeedCreate'] || []) as Array<string>;
@@ -70,7 +72,10 @@ namespace TEvent {
                                 t.AddListen(e.eventName, this, this[`${e.funcName}`], e.once);
                             } else {
                                 //@ts-ignore
-                                t.addEventListener(e.eventName, this[`${e.funcName}`]);
+                                const bindEvent = this[`${e.funcName}`].bind(this);
+                                this.tEvent_Generate_OtherEvents.set(e.eventName, bindEvent);
+                                //@ts-ignore
+                                t.addEventListener(e.eventName, bindEvent);
                             }
                         }
                     });
@@ -95,8 +100,9 @@ namespace TEvent {
                                 //@ts-ignore
                                 t.RemoveListen(e.eventName, this, this[`${e.funcName}`], e.once);
                             } else {
+                                const bindEvent = this.tEvent_Generate_OtherEvents.get(e.eventName)!;
                                 //@ts-ignore
-                                t.removeEventListener(e.eventName, this[`${e.funcName}`]);
+                                t.removeEventListener(e.eventName, bindEvent);
                             }
                         }
                     });
