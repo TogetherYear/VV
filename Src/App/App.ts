@@ -4,9 +4,9 @@ import { TEvent } from '../Decorators/TEvent';
 import { TTest } from '@/Decorators/TTest';
 import { router } from '@/Router';
 import { Try } from '@/Views/Application/Component/Try/Try';
-import { T } from '@/Demands/T';
+import { I } from '@/Instructions/I';
 
-@TEvent.Create([T.AppEvent.Update])
+@TEvent.Create([I.AppEvent.Update])
 class App extends Manager {
     public InitStates() {
         return {};
@@ -17,7 +17,7 @@ class App extends Manager {
     public Run() {
         onMounted(() => {
             setInterval(() => {
-                this.Emit(T.AppEvent.Update, { type: 'Update' });
+                this.Emit(I.AppEvent.Update, { type: 'Update' });
             }, 1000);
         });
 

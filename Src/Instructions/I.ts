@@ -1,7 +1,7 @@
-namespace T {
+namespace I {
     export const enum AppEvent {
         Update = 'Update'
     }
 }
 
-export { T };
+export { I };
