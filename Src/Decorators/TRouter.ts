@@ -26,7 +26,7 @@ namespace TRouter {
                 menuName: '',
                 menuLabel: '',
                 menuIcon: '',
-                visibility: true
+                visibility: false
             },
             component: () => import('@/Views/Empty/Empty.vue')
         },
