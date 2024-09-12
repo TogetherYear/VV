@@ -1,6 +1,8 @@
 import { onMounted, onUnmounted } from 'vue';
 import { Component } from '@/Libs/Component';
 import { TWorker } from '@/Decorators/TWorker';
+import { TTest } from '@/Decorators/TTest';
+import { TTool } from '@/Decorators/TTool';
 
 class Application extends Component {
     public InitStates() {
@@ -8,9 +10,7 @@ class Application extends Component {
     }
 
     public Run() {
-        onMounted(() => {
-            this.GetWorkerData({ need: 'white' });
-        });
+        onMounted(() => {});
 
         onUnmounted(() => {
             this.Destroy();
@@ -20,6 +20,8 @@ class Application extends Component {
     public Destroy() {}
 
     @TWorker.Await('Color')
+    @TTest.BindFunction('Worker', { need: 'White' })
+    @TTool.Debounce(500)
     public GetWorkerData(data: Record<string, unknown>) {
         console.error('Get:', data);
     }
