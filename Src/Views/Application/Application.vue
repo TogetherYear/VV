@@ -1,25 +1,18 @@
 <script lang="ts" setup>
 import { provide } from 'vue';
 import { Application } from './Application';
-import TryVue from './Component/Try/Try.vue';
 
 const instance = new Application();
 
 provide('instance', instance);
 
-const { dom, current } = instance.InitStates();
+const {} = instance.InitStates();
 
 instance.Run();
 </script>
 
 <template>
-    <div class="Application">
-        <el-button type="success" @click="instance.OnBtnClick()">Application:Click Me!</el-button>
-        <br />
-        <el-input v-model="current.count" type="number" style="width: 200px"></el-input>
-        <TryVue></TryVue>
-        <span class="Observer" ref="dom"></span>
-    </div>
+    <div class="Application"></div>
 </template>
 
 <style lang="scss" scoped>
