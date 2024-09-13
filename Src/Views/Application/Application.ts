@@ -19,7 +19,7 @@ class Application extends Component {
 
     public Destroy() {}
 
-    @TWorker.Await('Color')
+    @TWorker.Await(TWorker.Type.Color)
     @TTest.BindFunction('Worker', { need: 'White' })
     @TTool.Debounce(500)
     public GetWorkerData(data: Record<string, unknown>) {

@@ -4,7 +4,9 @@ import { onUnmounted } from 'vue';
 import { TEvent } from './TEvent';
 
 namespace TWorker {
-    export type Type = 'Color';
+    export enum Type {
+        Color
+    }
 
     export function Generate() {
         return function <T extends new (...args: Array<any>) => Entity>(C: T) {
@@ -75,7 +77,7 @@ namespace TWorker {
     }
 
     function GetWorkerByName(worker: Type) {
-        if (worker === 'Color') {
+        if (worker === Type.Color) {
             return colorWorker;
         } else {
             return colorWorker;
