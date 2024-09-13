@@ -1,4 +1,4 @@
-import colorWorker from '@/../Workers/Color.js?worker';
+import colorWorker from '@/Workers/Color?worker';
 import { Entity } from '@/Libs/Entity';
 import { onUnmounted } from 'vue';
 import { TEvent } from './TEvent';
