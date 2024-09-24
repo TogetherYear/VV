@@ -8,6 +8,8 @@ namespace TWasm {
         Color
     }
 
+    export const wasmMap = new Map<Type, Record<string, unknown>>();
+
     export function Generate() {
         return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
@@ -20,8 +22,6 @@ namespace TWasm {
                         this.TWasm_Generate_Hooks();
                     }
                 }
-
-                private tWasm_Generate_Wasm_Map = new Map<Type, Record<string, unknown>>();
 
                 private TWasm_Generate_Hooks() {}
 
@@ -36,7 +36,7 @@ namespace TWasm {
                         const original = this[`${a.propertyKey}`].bind(this);
                         //@ts-ignore
                         this[`${a.propertyKey}`] = async function (data: Record<string, unknown>) {
-                            const current = this.tWasm_Generate_Wasm_Map.get(a.wasm);
+                            const current = wasmMap.get(a.wasm);
                             if (current) {
                                 //@ts-ignore
                                 const result = current.Run(data);
@@ -44,7 +44,7 @@ namespace TWasm {
                             } else {
                                 const temp = new Object();
                                 const target = GetWasmByName(a.wasm);
-                                this.tWasm_Generate_Wasm_Map.set(a.wasm, target);
+                                wasmMap.set(a.wasm, target);
                                 await target.init(temp);
                                 const result = target.Run(data);
                                 original({ result });
