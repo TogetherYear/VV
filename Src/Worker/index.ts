@@ -1,3 +1,5 @@
+import Color from './Color/Color?worker';
+
 /**
  * 传递需要运行的函数 参数为主进程发送的数据
  */
@@ -14,4 +16,4 @@ const Finish = (data: Record<string, unknown>) => {
     self.postMessage(data);
 };
 
-export { Run, Finish };
+export { Color, Run, Finish };

@@ -1,7 +1,6 @@
-import { Run, Finish } from './Default';
+import { Run, Finish } from '../index';
 
 Run((data) => {
-    console.error('From:', data);
     setTimeout(() => {
         Finish({
             result: '#ffffff'

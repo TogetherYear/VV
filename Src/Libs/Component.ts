@@ -5,6 +5,7 @@ import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
 import { Entity } from './Entity';
 import { TWorker } from '@/Decorators/TWorker';
+import { TWasm } from '@/Decorators/TWasm';
 
 /**
  * 页面组件
@@ -12,6 +13,7 @@ import { TWorker } from '@/Decorators/TWorker';
 @TTest.Generate()
 @TTool.Generate()
 @TRouter.Generate()
+@TWasm.Generate()
 @TWorker.Generate()
 @TEvent.Generate(TEvent.Lifecycle.Temporary)
 @TComponent.Generate()
