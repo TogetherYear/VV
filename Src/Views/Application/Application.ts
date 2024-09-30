@@ -4,6 +4,9 @@ import { TWorker } from '@/Decorators/TWorker';
 import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
 import { TWasm } from '@/Decorators/TWasm';
+import { Broadcast } from '@/Plugins/Broadcast';
+import { TEvent } from '@/Decorators/TEvent';
+import { T } from '@/Instructions/T';
 
 class Application extends Component {
     public InitStates() {
@@ -32,6 +35,16 @@ class Application extends Component {
     @TTool.Debounce(500)
     private GetWasmData(data: Record<string, unknown>) {
         console.error('Get:', data);
+    }
+
+    @TEvent.Listen(Broadcast, T.BroadcastEvent.Message)
+    private OnBroadcastMessage(e: Record<string, unknown>) {
+        console.log('Broadcast', e);
+    }
+
+    @TTest.BindFunction('TestBroadcast')
+    private TestBroadcast() {
+        Broadcast.Send({ type: 'Test' });
     }
 }
 
