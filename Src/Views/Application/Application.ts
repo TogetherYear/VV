@@ -23,14 +23,14 @@ class Application extends Component {
     @TWorker.Await(TWorker.Type.Color)
     @TTest.BindFunction('Worker', { need: '...' })
     @TTool.Debounce(500)
-    public GetWorkerData(data: Record<string, unknown>) {
+    private GetWorkerData(data: Record<string, unknown>) {
         console.error('Get:', data);
     }
 
     @TWasm.Await(TWorker.Type.Color)
     @TTest.BindFunction('Wasm', { need: '...' })
     @TTool.Debounce(500)
-    public GetWasmData(data: Record<string, unknown>) {
+    private GetWasmData(data: Record<string, unknown>) {
         console.error('Get:', data);
     }
 }

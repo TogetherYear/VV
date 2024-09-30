@@ -9,6 +9,7 @@ class AppRequest extends Manager {
         super();
         this.CreatRequest();
     }
+
     private request!: AxiosInstance;
 
     public get R() {
