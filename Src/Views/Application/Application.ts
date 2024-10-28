@@ -37,7 +37,7 @@ class Application extends Component {
         console.error('Get:', data);
     }
 
-    @TEvent.Listen(Broadcast, T.BroadcastEvent.Message)
+    @TEvent.Listen(Broadcast, T.Broadcast.BroadcastEvent.Message)
     private OnBroadcastMessage(e: Record<string, unknown>) {
         console.log('Broadcast', e);
     }

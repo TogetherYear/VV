@@ -5,7 +5,7 @@ import { Manager } from '@/Libs/Manager';
 /**
  * 多窗口广播
  */
-@TEvent.Create([T.BroadcastEvent.Message])
+@TEvent.Create([T.Broadcast.BroadcastEvent.Message])
 class Broadcast extends Manager {
     constructor() {
         super();
@@ -17,7 +17,7 @@ class Broadcast extends Manager {
     private CreateChannel() {
         this.broadcast = new BroadcastChannel('VVChannel');
         this.broadcast.onmessage = (e) => {
-            this.Emit(T.BroadcastEvent.Message, e.data);
+            this.Emit(T.Broadcast.BroadcastEvent.Message, e.data);
         };
     }
 
@@ -25,7 +25,7 @@ class Broadcast extends Manager {
      * 广播消息
      */
     public Send(data: Record<string, unknown>) {
-        this.Emit(T.BroadcastEvent.Message, { ...data, fromRoute: this.Route, routeQuery: this.Query, self: true });
+        this.Emit(T.Broadcast.BroadcastEvent.Message, { ...data, fromRoute: this.Route, routeQuery: this.Query, self: true });
         this.broadcast.postMessage({ ...data, fromRoute: this.Route, routeQuery: this.Query, self: false });
     }
 }

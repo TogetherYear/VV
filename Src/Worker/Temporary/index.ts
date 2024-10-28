@@ -1,4 +1,4 @@
-import Color from './Color/Color?worker';
+import Color from './Color/index?worker';
 
 /**
  * 传递需要运行的函数 参数为主进程发送的数据

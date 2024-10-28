@@ -1,6 +1,24 @@
 namespace T {
-    export const enum BroadcastEvent {
-        Message = 'Message'
+    export namespace Broadcast {
+        export const enum BroadcastEvent {
+            Message = 'Message'
+        }
+    }
+
+    export namespace WebWorker {
+        export namespace WebSocket {
+            export const enum WebSocketEvent {
+                Open = 'Open',
+                Close = 'Close',
+                Error = 'Error',
+                Message = 'Message'
+            }
+
+            export type WebSocketMessage = {
+                type: WebSocketEvent;
+                data: Record<string, unknown>;
+            };
+        }
     }
 }
 

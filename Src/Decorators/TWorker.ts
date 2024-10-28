@@ -1,4 +1,4 @@
-import * as Work from '@/Worker/index';
+import * as Work from '@/Worker/Temporary/index';
 
 import { Entity } from '@/Libs/Entity';
 import { onUnmounted } from 'vue';
