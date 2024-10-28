@@ -67,14 +67,14 @@ export default defineConfig(({ command, mode }) => {
             host: '0.0.0.0',
             port: 6768,
             open: true,
-            strictPort: true
-            // proxy: {
-            //   '^/Application': {
-            //     target: 'http://192.168.0.76:6789',
-            //     changeOrigin: true,
-            //     rewrite: (t) => t.replace(/^\/Application/, '')
-            //   }
-            // }
+            strictPort: true,
+            proxy: {
+                '^/Application': {
+                    target: 'http://plus.xinkongan.com/prod-api',
+                    changeOrigin: true,
+                    rewrite: (t) => t.replace(/^\/Application/, '')
+                }
+            }
         }
     };
 });

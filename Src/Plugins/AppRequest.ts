@@ -1,3 +1,4 @@
+import { TTool } from '@/Decorators/TTool';
 import { Manager } from '@/Libs/Manager';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -15,8 +16,6 @@ class AppRequest extends Manager {
     public get R() {
         return this.request;
     }
-
-    private static isLogSuccess = false;
 
     private static outCode = 401;
 
@@ -50,11 +49,8 @@ class AppRequest extends Manager {
     private SetResponse() {
         this.R.interceptors.response.use(
             (response) => {
-                if (AppRequest.isLogSuccess) {
-                    console.warn('URL: ' + response.config.baseURL + response.config.url, '\nData: ', response.data, '\nResponse:', response);
-                }
                 if (response.data.code && response.data.code !== 0) {
-                    console.error(response.data.message);
+                    console.error('AppRequest:', response.data);
                 }
                 return response;
             },
@@ -101,16 +97,14 @@ class AppRequest extends Manager {
         return !r || r === '1';
     }
 
+    @TTool.Retry(10, 1000, (e) => e.data.code === 0)
     public Get(url: string, config?: AxiosRequestConfig) {
-        if (this.R) {
-            return this.R.get(url, config);
-        }
+        return this.R.get(url, config);
     }
 
+    @TTool.Retry(10, 1000, (e) => e.data.code === 0)
     public Post(url: string, data?: Record<string, unknown>, config?: AxiosRequestConfig) {
-        if (this.R) {
-            return this.R.post(url, data, config);
-        }
+        return this.R.post(url, data, config);
     }
 }
 
