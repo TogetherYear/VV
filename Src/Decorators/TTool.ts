@@ -66,6 +66,7 @@ namespace TTool {
                             let timer = debounceMap.get(key);
                             if (timer) {
                                 clearTimeout(timer);
+                                //@ts-ignore
                                 timer = setTimeout(
                                     () => {
                                         original(...args);
@@ -74,6 +75,7 @@ namespace TTool {
                                     typeof e.delta === 'function' ? e.delta(this) : e.delta
                                 );
                             } else {
+                                //@ts-ignore
                                 timer = setTimeout(
                                     () => {
                                         original(...args);
@@ -82,6 +84,7 @@ namespace TTool {
                                     typeof e.delta === 'function' ? e.delta(this) : e.delta
                                 );
                             }
+                            //@ts-ignore
                             debounceMap.set(key, timer);
                         };
                     }
