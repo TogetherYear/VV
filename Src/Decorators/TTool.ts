@@ -1,5 +1,5 @@
 import { Mathf } from '@/Utils/Mathf';
-import { isRef, onMounted, onUnmounted, watch } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Resolve } from './index';
 import { TEvent } from './TEvent';
@@ -164,9 +164,100 @@ namespace TTool {
                     }
                 }
 
+                private TTool_Generate_SelectFile() {
+                    //@ts-ignore
+                    const select = (this['tTool_SelectFile_Need'] || []) as Array<{
+                        propertyKey: string;
+                        dom: HTMLElement | ((instance: Object) => HTMLElement);
+                        options?: SelectFileDialogOptions;
+                    }>;
+
+                    for (let s of select) {
+                        //@ts-ignore
+                        const original = this[`${s.propertyKey}`].bind(this);
+
+                        const dom = typeof s.dom === 'function' ? s.dom(this) : s.dom;
+
+                        const deal = (fileList: FileList) => {
+                            const files: Array<File> = [];
+
+                            for (let i = 0; i < fileList.length; ++i) {
+                                const current = fileList.item(i)!;
+                                if (!s.options?.accept) {
+                                    files.push(fileList.item(i)!);
+                                } else {
+                                    if (s.options.accept.findIndex((a) => current.name.indexOf(a) !== -1) !== -1) {
+                                        files.push(fileList.item(i)!);
+                                    }
+                                }
+                            }
+
+                            const result: Array<File> = [];
+
+                            for (let f of files) {
+                                if (!s.options?.maxSize || s.options.maxSize * 1024 > f.size) {
+                                    result.push(f);
+                                }
+                            }
+
+                            if (s.options?.multiple === false) {
+                                const first = result.length !== 0 ? [result[0]] : [];
+                                if (fileList.length !== 1) {
+                                    if (result.length !== files.length) {
+                                        original(first, 'multiple,maxSize');
+                                    } else {
+                                        original(first, 'multiple');
+                                    }
+                                } else {
+                                    original(first);
+                                }
+                            } else {
+                                if (result.length !== files.length) {
+                                    original(result, 'maxSize');
+                                } else {
+                                    original(result);
+                                }
+                            }
+                        };
+
+                        dom.addEventListener('dragenter', (e) => {
+                            e.preventDefault();
+                        });
+
+                        dom.addEventListener('dragover', (e) => {
+                            e.preventDefault();
+                        });
+
+                        dom.addEventListener('drop', (e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            deal(e.dataTransfer?.files!);
+                        });
+
+                        dom.addEventListener('click', () => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.multiple = true;
+                            input.accept = s.options?.accept ? s.options.accept.join(',') : '';
+                            input.addEventListener('change', (e) => {
+                                //@ts-ignore
+                                deal(e.target.files);
+                            });
+                            input.click();
+                        });
+
+                        //这里没重写 后面可能会根据需求变更
+                        //@ts-ignore
+                        this[`${s.propertyKey}`] = function (...args: Array<unknown>) {
+                            original(...args);
+                        };
+                    }
+                }
+
                 private TTool_Generate_Hooks() {
                     onMounted(() => {
                         this.TTool_Generate_CreateListen();
+                        this.TTool_Generate_SelectFile();
                     });
 
                     onUnmounted(() => {
@@ -489,6 +580,38 @@ namespace TTool {
             } else {
                 //@ts-ignore
                 target['tTool_Retry_Need'] = [{ retryCount, retryDelay, PassRetryCondition, propertyKey }];
+            }
+        };
+    }
+
+    export type SelectFileDialogOptions = {
+        /**
+         * 多选 默认 true
+         */
+        multiple?: boolean;
+        /**
+         * 文件后缀 默认接受所有
+         */
+        accept?: Array<string>;
+        /**
+         * 文件最大kb
+         */
+        maxSize?: number;
+    };
+
+    /**
+     * 使元素支持点击和拖拽选择文件 同 Observer 被装饰器修饰的函数有俩个参数 一个 为 得到的文件 一个是错误 先去判断有没有错误在去后续操作 如果有错误 第一个参数返回的就是第一个符合条件的
+     * 被装饰函数参数示例：files: Array<File>, error?:string
+     */
+    export function SelectFile<T extends Entity>(dom: HTMLElement | ((instance: T) => HTMLElement), options?: SelectFileDialogOptions) {
+        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+            //@ts-ignore
+            if (target['tTool_SelectFile_Need']) {
+                //@ts-ignore
+                target['tTool_SelectFile_Need'].push({ propertyKey, dom, options });
+            } else {
+                //@ts-ignore
+                target['tTool_SelectFile_Need'] = [{ propertyKey, dom, options }];
             }
         };
     }

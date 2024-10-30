@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { Component } from '@/Libs/Component';
 import { TWorker } from '@/Decorators/TWorker';
 import { TTest } from '@/Decorators/TTest';
@@ -9,8 +9,12 @@ import { TEvent } from '@/Decorators/TEvent';
 import { T } from '@/Instructions/T';
 
 class Application extends Component {
+    private select = ref<HTMLSpanElement | null>(null);
+
     public InitStates() {
-        return {};
+        return {
+            select: this.select
+        };
     }
 
     public Run() {
@@ -45,6 +49,15 @@ class Application extends Component {
     @TTest.BindFunction('TestBroadcast')
     private TestBroadcast() {
         Broadcast.Send({ type: 'Test' });
+    }
+
+    @TTool.SelectFile<Application>((instance) => instance.select.value!, {
+        accept: ['.png', '.jpg'],
+        multiple: false,
+        maxSize: 100
+    })
+    private GetSelectFile(files: Array<File>, error?: string) {
+        console.log(files, error);
     }
 }
 
