@@ -70,7 +70,7 @@ export default defineConfig(({ command, mode }) => {
             strictPort: true,
             proxy: {
                 '^/Application': {
-                    target: 'http://plus.xinkongan.com/prod-api',
+                    target: 'http://192.168.58/api',
                     changeOrigin: true,
                     rewrite: (t) => t.replace(/^\/Application/, '')
                 }
