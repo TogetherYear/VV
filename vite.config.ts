@@ -70,7 +70,7 @@ export default defineConfig(({ command, mode }) => {
             strictPort: true,
             proxy: {
                 '^/Application': {
-                    target: 'http://192.168.58/api',
+                    target: 'http://192.168.58:8676/api',
                     changeOrigin: true,
                     rewrite: (t) => t.replace(/^\/Application/, '')
                 }
