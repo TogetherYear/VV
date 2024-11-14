@@ -1,3 +1,4 @@
+import { TRouter } from '@/Decorators/TRouter';
 import { TTool } from '@/Decorators/TTool';
 import { Manager } from '@/Libs/Manager';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
@@ -35,7 +36,7 @@ class AppRequest extends Manager {
         this.R.interceptors.request.use(
             (config: any) => {
                 if (config && config.headers) {
-                    config.headers['x-auth-token'] = this.GetAuthToken();
+                    config.headers['x-auth-token'] = '';
                     config.baseURL = import.meta.env.VITE_APP_SERVER_PORT;
                     return config;
                 }
@@ -51,6 +52,14 @@ class AppRequest extends Manager {
             (response) => {
                 if (response.data.code && response.data.code !== 0) {
                     console.error('AppRequest:', response.data);
+                    if (response.data.code === AppRequest.outCode) {
+                        if (!this.isOut) {
+                            this.ResetAccount();
+                            console.error('登录凭证过期');
+                            this.isOut = true;
+                        }
+                        return Promise.reject(response);
+                    }
                 }
                 return response;
             },
@@ -67,44 +76,38 @@ class AppRequest extends Manager {
         );
     }
 
-    private ResetAccount() {
-        this.SetAuthToken('');
-        this.SetUserName('');
+    private ResetAccount() {}
+
+    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e.message === 'canceled')
+    public Get(url: string, config?: Omit<AxiosRequestConfig, 'signal'>) {
+        const ac = new AbortController();
+        const request = this.R.get(url, { ...config, signal: ac.signal });
+        TRouter.requestAbort.push(ac);
+        return request;
     }
 
-    public GetAuthToken() {
-        return localStorage.getItem('ORIGINTOKEN') || '';
+    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    public Post(url: string, data?: Record<string, unknown>, config?: Omit<AxiosRequestConfig, 'signal'>) {
+        const ac = new AbortController();
+        const request = this.R.post(url, data, { ...config, signal: ac.signal });
+        TRouter.requestAbort.push(ac);
+        return request;
     }
 
-    public SetAuthToken(token: string) {
-        localStorage.setItem('ORIGINTOKEN', token);
+    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    public Delete(url: string, config?: Omit<AxiosRequestConfig, 'signal'>) {
+        const ac = new AbortController();
+        const request = this.R.delete(url, { ...config, signal: ac.signal });
+        TRouter.requestAbort.push(ac);
+        return request;
     }
 
-    public GetUserName() {
-        return localStorage.getItem('ORIGINUSERNAME') || '';
-    }
-
-    public SetUserName(name: string) {
-        localStorage.setItem('ORIGINUSERNAME', name);
-    }
-
-    public SetRemember(e: boolean) {
-        localStorage.setItem('ORIGINREMEMBER', e ? '1' : '0');
-    }
-
-    public GetRemember() {
-        const r = localStorage.getItem('ORIGINREMEMBER');
-        return !r || r === '1';
-    }
-
-    @TTool.Retry(10, 1000, (e) => e.data.code === 0)
-    public Get(url: string, config?: AxiosRequestConfig) {
-        return this.R.get(url, config);
-    }
-
-    @TTool.Retry(10, 1000, (e) => e.data.code === 0)
-    public Post(url: string, data?: Record<string, unknown>, config?: AxiosRequestConfig) {
-        return this.R.post(url, data, config);
+    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    public Put(url: string, data?: Record<string, unknown>, config?: Omit<AxiosRequestConfig, 'signal'>) {
+        const ac = new AbortController();
+        const request = this.R.put(url, data, { ...config, signal: ac.signal });
+        TRouter.requestAbort.push(ac);
+        return request;
     }
 }
 

@@ -144,7 +144,26 @@ namespace TRouter {
      */
     let isLoad = false;
 
-    export function RefreshRoute(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
+    export const requestAbort: Array<AbortController> = [];
+
+    export function BeforeRouteHandler(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
+        RequestCancelHandler();
+    }
+
+    function RequestCancelHandler() {
+        for (let ra of requestAbort) {
+            if (!ra.signal.aborted) {
+                ra.abort();
+            }
+        }
+        requestAbort.splice(0, requestAbort.length);
+    }
+
+    export function AfterRouteHandler(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
+        HistoryAndQueryHandler(to, from);
+    }
+
+    function HistoryAndQueryHandler(to: RouteLocationNormalizedGeneric, from: RouteLocationNormalizedGeneric) {
         lastPath.value = from.path;
         currentPath.value = to.path;
         const index = routeHistory.value.findIndex((r) => r.path === to.path);
