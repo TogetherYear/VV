@@ -14,6 +14,8 @@ class AppRequest extends Manager {
 
     private request!: AxiosInstance;
 
+    private passCode = [0, 401, 404, 500];
+
     public get R() {
         return this.request;
     }
@@ -36,7 +38,7 @@ class AppRequest extends Manager {
         this.R.interceptors.request.use(
             (config: any) => {
                 if (config && config.headers) {
-                    config.headers['x-auth-token'] = '';
+                    config.headers['Authorization'] = `Bearer xxx`;
                     config.baseURL = import.meta.env.VITE_APP_SERVER_PORT;
                     return config;
                 }
@@ -58,8 +60,8 @@ class AppRequest extends Manager {
                             console.error('登录凭证过期');
                             this.isOut = true;
                         }
-                        return Promise.reject(response);
                     }
+                    return Promise.reject(response);
                 }
                 return response;
             },
@@ -78,7 +80,23 @@ class AppRequest extends Manager {
 
     private ResetAccount() {}
 
-    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e.message === 'canceled')
+    private PassRequest(e: any) {
+        if (e.status === 404) {
+            return true;
+        }
+        if (e.message === 'canceled') {
+            return true;
+        }
+        if (e.data && this.passCode.indexOf(e.data.code) !== -1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 这里到时候根据需求 如果要加上自动刷新 token 的逻辑的话 要在这四个 Retry 里面加上
+     */
+    @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
     public Get(url: string, config?: Omit<AxiosRequestConfig, 'signal'>) {
         const ac = new AbortController();
         const request = this.R.get(url, { ...config, signal: ac.signal });
@@ -86,7 +104,7 @@ class AppRequest extends Manager {
         return request;
     }
 
-    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
     public Post(url: string, data?: Record<string, unknown>, config?: Omit<AxiosRequestConfig, 'signal'>) {
         const ac = new AbortController();
         const request = this.R.post(url, data, { ...config, signal: ac.signal });
@@ -94,7 +112,7 @@ class AppRequest extends Manager {
         return request;
     }
 
-    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
     public Delete(url: string, config?: Omit<AxiosRequestConfig, 'signal'>) {
         const ac = new AbortController();
         const request = this.R.delete(url, { ...config, signal: ac.signal });
@@ -102,7 +120,7 @@ class AppRequest extends Manager {
         return request;
     }
 
-    @TTool.Retry(10, 1000, (e) => e.data?.code === 0 || e.data?.code === 401 || e?.message === 'canceled')
+    @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
     public Put(url: string, data?: Record<string, unknown>, config?: Omit<AxiosRequestConfig, 'signal'>) {
         const ac = new AbortController();
         const request = this.R.put(url, data, { ...config, signal: ac.signal });
