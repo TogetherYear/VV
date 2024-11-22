@@ -68,6 +68,13 @@ export default defineConfig(({ command, mode }) => {
             port: 6768,
             open: true,
             strictPort: true,
+            /**
+             * 启动 SharedArrayBuffer 打包后 服务端也要配置
+             */
+            headers: {
+                'Cross-Origin-Opener-Policy': 'same-origin',
+                'Cross-Origin-Embedder-Policy': 'require-corp'
+            },
             proxy: {
                 '^/Application': {
                     target: 'http://192.168.58:8676/api',
