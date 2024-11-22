@@ -93,9 +93,6 @@ class AppRequest extends Manager {
         return false;
     }
 
-    /**
-     * 这里到时候根据需求 如果要加上自动刷新 token 的逻辑的话 要在这四个 Retry 里面加上
-     */
     @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
     public Get(url: string, config?: Omit<AxiosRequestConfig, 'signal'>) {
         const ac = new AbortController();
