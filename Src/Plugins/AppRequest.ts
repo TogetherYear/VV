@@ -78,12 +78,16 @@ class AppRequest extends Manager {
         if (e.message === 'canceled') {
             return true;
         }
-        if (e.data && e.data.code === 401 && LocalStore.GetLocal('Token')) {
-            /**
-             * 我这里会自动刷新 Token
-             */
-            await this.RefreshToken();
-            return false;
+        if (e.data && e.data.code === 401) {
+            if (LocalStore.GetLocal('Token')) {
+                /**
+                 * 我这里会自动刷新 Token 不会跳回登录
+                 */
+                await this.RefreshToken();
+                return false;
+            } else {
+                return true;
+            }
         }
         if (e.data && this.passCode.indexOf(e.data.code) !== -1) {
             return true;
