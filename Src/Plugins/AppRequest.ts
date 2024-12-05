@@ -2,6 +2,8 @@ import { TRouter } from '@/Decorators/TRouter';
 import { TTool } from '@/Decorators/TTool';
 import { Manager } from '@/Libs/Manager';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { LocalStore } from './LocalStore';
+import { ElMessage } from 'element-plus';
 
 /**
  * Axios请求
@@ -14,15 +16,15 @@ class AppRequest extends Manager {
 
     private request!: AxiosInstance;
 
-    private passCode = [0, 401, 404, 500];
+    private passCode = [0, 404, 500];
 
     public get R() {
         return this.request;
     }
 
-    private static outCode = 401;
+    private firstRequest = true;
 
-    private isOut = false;
+    private refreshing = false;
 
     private CreatRequest() {
         this.request = axios.create({
@@ -38,7 +40,7 @@ class AppRequest extends Manager {
         this.R.interceptors.request.use(
             (config: any) => {
                 if (config && config.headers) {
-                    config.headers['Authorization'] = `Bearer xxx`;
+                    config.headers['Authorization'] = `Bearer ${LocalStore.GetLocal('Token')}`;
                     config.baseURL = import.meta.env.VITE_APP_SERVER_PORT;
                     return config;
                 }
@@ -53,44 +55,80 @@ class AppRequest extends Manager {
         this.R.interceptors.response.use(
             (response) => {
                 if (response.data.code && response.data.code !== 0) {
-                    console.error('AppRequest:', response.data);
-                    if (response.data.code === AppRequest.outCode) {
-                        if (!this.isOut) {
-                            this.ResetAccount();
-                            console.error('登录凭证过期');
-                            this.isOut = true;
-                        }
+                    /**
+                     * 防止第一个接口登录过期提示
+                     */
+                    if (!this.firstRequest) {
+                        ElMessage({
+                            type: 'error',
+                            message: response.data.msg
+                        });
                     }
+                    this.firstRequest = false;
                     return Promise.reject(response);
                 }
                 return response;
             },
             (err) => {
-                if (err.response?.status === AppRequest.outCode) {
-                    if (!this.isOut) {
-                        this.ResetAccount();
-                        console.error('登录凭证过期');
-                        this.isOut = true;
-                    }
-                }
                 return Promise.reject(err);
             }
         );
     }
 
-    private ResetAccount() {}
+    private ResetAccount() {
+        LocalStore.SetLocal('Token', '');
+    }
 
-    private PassRequest(e: any) {
+    private async PassRequest(e: any) {
         if (e.status === 404) {
             return true;
         }
         if (e.message === 'canceled') {
             return true;
         }
+        if (e.data && e.data.code === 401 && LocalStore.GetLocal('Token')) {
+            /**
+             * 我这里会自动刷新 Token
+             */
+            await this.RefreshToken();
+            return false;
+        }
         if (e.data && this.passCode.indexOf(e.data.code) !== -1) {
             return true;
         }
         return false;
+    }
+
+    private async RefreshToken() {
+        return new Promise((resolve, reject) => {
+            if (!this.refreshing) {
+                /**
+                 * 第一个进入的接口去刷新 Token
+                 */
+                this.refreshing = true;
+                const data = {
+                    username: LocalStore.GetLocal('Account'),
+                    password: LocalStore.GetLocal('Password')
+                };
+                // ToLogin(data).then((res) => {
+                //     if (res.data.code === 0) {
+                //         LocalStore.SetLocal('Token', res.data.data.accessToken);
+                //         this.refreshing = false;
+                //         resolve({});
+                //     }
+                // });
+            } else {
+                /**
+                 * 其余的接口去等待 Token 刷新
+                 */
+                const timer = setInterval(() => {
+                    if (!this.refreshing) {
+                        resolve('');
+                        clearInterval(timer);
+                    }
+                }, 500);
+            }
+        });
     }
 
     @TTool.Retry<AppRequest>(10, 1000, (instance, e) => instance.PassRequest(e))
