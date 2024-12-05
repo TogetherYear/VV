@@ -16,7 +16,20 @@ class AppRequest extends Manager {
 
     private request!: AxiosInstance;
 
+    /**
+     * 这里放不需要重复请求接口的 code  ( 其实一般除了 401 没有权限需要重新请求 其他基本都不需要 但还是把这里做个中间层 )
+     */
     private passCode = [0, 400, 404, 500];
+
+    /**
+     * 这里放不需要加 Token 的接口 参数不需要加上
+     */
+    private passToken = ['/system/auth/rsa/public/key'];
+
+    /**
+     * 这里放不需要显示错误信息的
+     */
+    private passMessage = [401];
 
     public get R() {
         return this.request;
@@ -39,6 +52,12 @@ class AppRequest extends Manager {
             (config: any) => {
                 if (config && config.headers) {
                     config.headers['Authorization'] = `Bearer ${LocalStore.GetLocal('Token')}`;
+                    for (let t of this.passToken) {
+                        if (config.url.indexOf(t) !== -1) {
+                            delete config.headers.Authorization;
+                            break;
+                        }
+                    }
                     config.baseURL = import.meta.env.VITE_APP_SERVER_PORT;
                     return config;
                 }
@@ -53,10 +72,12 @@ class AppRequest extends Manager {
         this.R.interceptors.response.use(
             (response) => {
                 if (response.data.code && response.data.code !== 0) {
-                    ElMessage({
-                        type: 'error',
-                        message: response.data.msg
-                    });
+                    if (this.passMessage.indexOf(response.data.code) === -1) {
+                        ElMessage({
+                            type: 'error',
+                            message: response.data.msg
+                        });
+                    }
                     return Promise.reject(response);
                 }
                 return response;
