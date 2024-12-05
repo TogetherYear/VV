@@ -100,7 +100,7 @@ class AppRequest extends Manager {
             return true;
         }
         if (e.data && e.data.code === 401) {
-            if (LocalStore.GetLocal('Token')) {
+            if (LocalStore.GetLocal('Token') && LocalStore.GetLocal('Account')) {
                 /**
                  * 我这里会自动刷新 Token 不会跳回登录
                  */
