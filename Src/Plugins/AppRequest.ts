@@ -110,6 +110,7 @@ class AppRequest extends Manager {
                     username: LocalStore.GetLocal('Account'),
                     password: LocalStore.GetLocal('Password')
                 };
+                // 根据具体接口 改下面注释
                 // ToLogin(data).then((res) => {
                 //     if (res.data.code === 0) {
                 //         LocalStore.SetLocal('Token', res.data.data.accessToken);
