@@ -16,13 +16,11 @@ class AppRequest extends Manager {
 
     private request!: AxiosInstance;
 
-    private passCode = [0, 404, 500];
+    private passCode = [0, 400, 404, 500];
 
     public get R() {
         return this.request;
     }
-
-    private firstRequest = true;
 
     private refreshing = false;
 
@@ -55,16 +53,10 @@ class AppRequest extends Manager {
         this.R.interceptors.response.use(
             (response) => {
                 if (response.data.code && response.data.code !== 0) {
-                    /**
-                     * 防止第一个接口登录过期提示
-                     */
-                    if (!this.firstRequest) {
-                        ElMessage({
-                            type: 'error',
-                            message: response.data.msg
-                        });
-                    }
-                    this.firstRequest = false;
+                    ElMessage({
+                        type: 'error',
+                        message: response.data.msg
+                    });
                     return Promise.reject(response);
                 }
                 return response;
