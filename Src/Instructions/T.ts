@@ -32,7 +32,6 @@ namespace T {
         export type LocalStoreKey = {
             Account: string;
             Password: string;
-            Remember: string;
             Token: string;
         };
     }
