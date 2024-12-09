@@ -4,6 +4,7 @@ import { Manager } from '@/Libs/Manager';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LocalStore } from './LocalStore';
 import { ElMessage } from 'element-plus';
+import { ToLogin } from '@/Demands/Login';
 
 /**
  * Axios请求
@@ -124,18 +125,19 @@ class AppRequest extends Manager {
                  * 第一个进入的接口去刷新 Token
                  */
                 this.refreshing = true;
+
+                // 根据具体接口 改下面
                 const data = {
                     username: LocalStore.GetLocal('Account'),
                     password: LocalStore.GetLocal('Password')
                 };
-                // 根据具体接口 改下面注释
-                // ToLogin(data).then((res) => {
-                //     if (res.data.code === 0) {
-                //         LocalStore.SetLocal('Token', res.data.data.accessToken);
-                //         this.refreshing = false;
-                //         resolve({});
-                //     }
-                // });
+                ToLogin(data).then((res) => {
+                    if (res.data.code === 0) {
+                        LocalStore.SetLocal('Token', res.data.data.accessToken);
+                        this.refreshing = false;
+                        resolve({});
+                    }
+                });
             } else {
                 /**
                  * 其余的接口去等待 Token 刷新
