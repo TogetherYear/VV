@@ -72,7 +72,7 @@ class AppRequest extends Manager {
     private SetResponse() {
         this.R.interceptors.response.use(
             (response) => {
-                if (response.data.code && response.data.code === 0) {
+                if (response.data.code === 0) {
                     return response;
                 } else {
                     if (this.passMessage.indexOf(response.data.code) === -1) {
