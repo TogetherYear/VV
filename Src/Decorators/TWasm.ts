@@ -60,8 +60,8 @@ namespace TWasm {
      * 执行 Wasm 并且返回结果 函数有一个参数 为传递给 Wasm 的 执行完成后 Wasm 会再次给参数赋值 你即可使用
      * ( 真遇到性能问题 再去考虑用这个 Wasm 会复用 如果已加载则使用之前的 )
      */
-    export function Await(wasm: Type) {
-        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+    export function Await<T extends Entity>(wasm: Type) {
+        return function (target: T, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tWasm_Await_Need']) {
                 //@ts-ignore

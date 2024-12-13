@@ -64,8 +64,8 @@ namespace TWorker {
      * 执行 Worker 并且返回结果 函数有一个参数 为传递给 Worker 的 执行完成后 Worker 会再次给参数赋值 你即可使用
      * ( 真遇到性能问题 再去考虑用这个 Worker 不会复用 每次都是重新生成 )
      */
-    export function Await(worker: Type) {
-        return function (target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+    export function Await<T extends Entity>(worker: Type) {
+        return function (target: T, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
             //@ts-ignore
             if (target['tWorker_Await_Need']) {
                 //@ts-ignore
