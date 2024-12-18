@@ -205,29 +205,25 @@ namespace TTool {
 
                             const result: Array<File> = [];
 
+                            let outSize = false;
+
                             for (let f of files) {
-                                if (!s.options?.maxSize || s.options.maxSize * 1024 > f.size) {
+                                if (!s.options?.maxSize || s.options.maxSize * 1024 > ~~(f.size / 1024)) {
                                     result.push(f);
+                                } else {
+                                    outSize = true;
                                 }
                             }
 
                             if (s.options?.multiple === false) {
                                 const first = result.length !== 0 ? [result[0]] : [];
                                 if (fileList.length !== 1) {
-                                    if (result.length !== files.length) {
-                                        original(first, 'multiple,maxSize');
-                                    } else {
-                                        original(first, 'multiple');
-                                    }
+                                    original(first, outSize ? 'multiple,maxSize' : 'multiple');
                                 } else {
-                                    original(first);
+                                    original(first, outSize ? 'maxSize' : '');
                                 }
                             } else {
-                                if (result.length !== files.length) {
-                                    original(result, 'maxSize');
-                                } else {
-                                    original(result);
-                                }
+                                original(result, outSize ? 'maxSize' : '');
                             }
                         };
 
@@ -646,11 +642,11 @@ namespace TTool {
          */
         multiple?: boolean;
         /**
-         * 文件后缀 默认接受所有
+         * 文件后缀 默认接受所有 例如 ['.jpg]
          */
         accept?: Array<string>;
         /**
-         * 文件最大kb
+         * 文件最大 m
          */
         maxSize?: number;
     };
