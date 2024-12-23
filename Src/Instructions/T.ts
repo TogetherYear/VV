@@ -21,13 +21,6 @@ namespace T {
         }
     }
 
-    export namespace Theme {
-        export const enum Style {
-            Dark = 'Dark',
-            Light = 'Light'
-        }
-    }
-
     export namespace LocalStore {
         export type LocalStoreKey = {
             Account: string;
