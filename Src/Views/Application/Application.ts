@@ -4,9 +4,6 @@ import { TWorker } from '@/Decorators/TWorker';
 import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
 import { TWasm } from '@/Decorators/TWasm';
-import { Broadcast } from '@/Plugins/Broadcast';
-import { TEvent } from '@/Decorators/TEvent';
-import { T } from '@/Instructions/T';
 
 class Application extends Component {
     private select = ref<HTMLSpanElement | null>(null);
