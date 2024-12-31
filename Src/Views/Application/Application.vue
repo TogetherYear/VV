@@ -6,15 +6,13 @@ const instance = new Application();
 
 provide('instance', instance);
 
-const { select } = instance.InitStates();
+const {} = instance.InitStates();
 
 instance.Run();
 </script>
 
 <template>
-    <div class="Application">
-        <span class="Select" ref="select"></span>
-    </div>
+    <div class="Application"></div>
 </template>
 
 <style lang="scss" scoped>

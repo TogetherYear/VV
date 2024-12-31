@@ -40,25 +40,6 @@ class Application extends Component {
     private GetWasmData(data: Record<string, unknown>) {
         console.error('Get:', data);
     }
-
-    @TEvent.Listen(Broadcast, T.Broadcast.BroadcastEvent.Message)
-    private OnBroadcastMessage(e: Record<string, unknown>) {
-        console.log('Broadcast', e);
-    }
-
-    @TTest.BindFunction('TestBroadcast')
-    private TestBroadcast() {
-        Broadcast.Send({ type: 'Test' });
-    }
-
-    @TTool.SelectFile<Application>((instance) => instance.select.value!, {
-        accept: ['.png', '.jpg'],
-        multiple: false,
-        maxSize: 100
-    })
-    private GetSelectFile(files: Array<File>, error?: string) {
-        console.log(files, error);
-    }
 }
 
 export { Application };
