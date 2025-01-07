@@ -185,8 +185,10 @@ namespace TRouter {
                 private TRouter_Generate_Loading() {
                     if (!isLoad) {
                         isLoad = true;
-                        //@ts-ignore
-                        window.HideLoading();
+                        setTimeout(() => {
+                            //@ts-ignore
+                            window.HideLoading();
+                        }, 500);
                     }
                 }
             };
