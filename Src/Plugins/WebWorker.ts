@@ -20,7 +20,7 @@ class WebWorker extends Manager {
         this.webSocket = new WS();
 
         this.webSocket.postMessage({
-            url: 'wss://plus.xinkongan.com/socket/connect/1/6dc86bf07f414fe499c61d42ca7133bc',
+            url: import.meta.env.VITE_APP_SERVER_WS,
             retryCount: 10
         });
 

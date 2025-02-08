@@ -76,8 +76,8 @@ export default defineConfig(({ command, mode }) => {
                 'Cross-Origin-Embedder-Policy': 'require-corp'
             },
             proxy: {
-                '^/Application': {
-                    target: 'http://192.168.58:8676/api',
+                '^/dev-api': {
+                    target: 'https://xxx',
                     changeOrigin: true,
                     rewrite: (t) => t.replace(/^\/Application/, '')
                 }
