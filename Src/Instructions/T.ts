@@ -5,20 +5,18 @@ namespace T {
         }
     }
 
-    export namespace WebWorker {
-        export namespace WebSocket {
-            export const enum WebSocketEvent {
-                Open = 'Open',
-                Close = 'Close',
-                Error = 'Error',
-                Message = 'Message'
-            }
-
-            export type WebSocketMessage = {
-                type: WebSocketEvent;
-                data: Record<string, unknown>;
-            };
+    export namespace WebSocket {
+        export const enum Event {
+            Open = 'Open',
+            Close = 'Close',
+            Error = 'Error',
+            Message = 'Message'
         }
+
+        export type WebSocketMessage = {
+            type: Event;
+            data: Record<string, unknown>;
+        };
     }
 
     export namespace LocalStore {
