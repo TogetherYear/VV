@@ -6,6 +6,4 @@ import { router } from './Router';
 
 import '@/Plugins/WebSocket';
 
-import '@/Plugins/ServiceWorker';
-
 createApp(RootVue).use(router).mount('#App');
