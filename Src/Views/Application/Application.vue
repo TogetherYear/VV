@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { provide } from 'vue';
 import { Application } from './Application';
+import SubPage from './Components/SubPage/SubPage.vue';
 
 const instance = new Application();
 
@@ -12,7 +13,9 @@ instance.Run();
 </script>
 
 <template>
-    <div class="Application"></div>
+    <div class="Application">
+        <SubPage></SubPage>
+    </div>
 </template>
 
 <style lang="scss" scoped>

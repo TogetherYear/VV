@@ -4,9 +4,12 @@ import { TWorker } from '@/Decorators/TWorker';
 import { TTest } from '@/Decorators/TTest';
 import { TTool } from '@/Decorators/TTool';
 import { TWasm } from '@/Decorators/TWasm';
+import { SubPage } from './Components/SubPage/SubPage';
 
 class Application extends Component {
     private select = ref<HTMLSpanElement | null>(null);
+
+    public subPage = new SubPage(this);
 
     public InitStates() {
         return {
