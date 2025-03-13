@@ -197,7 +197,7 @@ namespace TTool {
                                 if (!s.options?.accept) {
                                     files.push(fileList.item(i)!);
                                 } else {
-                                    if (s.options.accept.findIndex((a) => current.name.indexOf(a) !== -1) !== -1) {
+                                    if (s.options.accept.findIndex((a) => current.name.toLowerCase().indexOf(a) !== -1) !== -1) {
                                         files.push(fileList.item(i)!);
                                     }
                                 }
