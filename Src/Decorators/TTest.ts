@@ -174,7 +174,7 @@ namespace TTest {
     }
 
     export function WatchMemory() {
-        if (typeof performance !== 'undefined' && 'memory' in performance) {
+        if (typeof performance !== 'undefined' && 'memory' in performance && Config.env === 'Local') {
             setInterval(() => {
                 //@ts-ignore
                 memory.jsHeapSizeLimit = (performance.memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2);
