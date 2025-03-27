@@ -22,3 +22,7 @@ body {
 .el-message-box {
     box-shadow: 0px 0px 10px 0px #80dd80 !important;
 }
+
+img {
+    user-select: none;
+}
