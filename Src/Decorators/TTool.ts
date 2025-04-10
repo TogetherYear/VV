@@ -197,7 +197,7 @@ namespace TTool {
                                 if (!s.options?.accept) {
                                     files.push(fileList.item(i)!);
                                 } else {
-                                    if (s.options.accept.findIndex((a) => current.name.indexOf(a) !== -1) !== -1) {
+                                    if (s.options.accept.findIndex((a) => current.name.toLowerCase().indexOf(a) !== -1) !== -1) {
                                         files.push(fileList.item(i)!);
                                     }
                                 }
@@ -496,7 +496,7 @@ namespace TTool {
     /**
      * 简单缓存页面 ( 此装饰器需要放在最下面 ) 参数为字符串
      */
-    export function Cache<V extends Component>(needs: Array<keyof V>) {
+    export function Cache<V extends Component<Component>>(needs: Array<keyof V>) {
         return function <T extends new (...args: Array<any>) => Entity>(C: T) {
             return class extends C {
                 constructor(...args: Array<any>) {
